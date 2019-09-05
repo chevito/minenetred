@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Redmine.library
 {
-    class Constants
+    static class Constants
     {
         public static string baseAddress = "https://dev.unosquare.com/redmine/";
         public static string projects = "projects";

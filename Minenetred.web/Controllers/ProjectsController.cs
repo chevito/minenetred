@@ -14,12 +14,12 @@ namespace Minenetred.web.Controllers
     
     public class ProjectsController : Controller
     {
-        public Projects _apiProjects { get; set; }
+        public ProjectsService _apiProjects { get; set; }
         private MapperConfiguration _config { get; set; }
         private IMapper _mapper { get; set; }
         public ProjectsController()
         {
-            _apiProjects = new Projects();
+           // _apiProjects = new ProjectsService();
             _config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Project, ProjectDto>();
                 cfg.CreateMap<ProjectsContent, ProjectsViewModel>()
@@ -32,7 +32,7 @@ namespace Minenetred.web.Controllers
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> ProjectsAsync()
         {
-            var apiContent = await _apiProjects.GetProjects();
+            var apiContent = await _apiProjects.GetProjectsAsync();
             var projectsList = _mapper.Map<ProjectsContent, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
             {
