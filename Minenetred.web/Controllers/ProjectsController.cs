@@ -29,7 +29,7 @@ namespace Minenetred.web.Controllers
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> ProjectsAsync()
         {
-            var apiContent = await _service.GetProjectsAsync("6b57002a51deedcb04866c0775c6cb7ee35e8613");
+            var apiContent = await _service.GetProjectsAsync("Try your own key");
             var projectsList = _mapper.Map<ProjectListResponse, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
             {
