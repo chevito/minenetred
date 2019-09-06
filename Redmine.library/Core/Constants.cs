@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Redmine.library
+namespace Redmine.library.Core
 {
-    static class Constants
+    public static class Constants
     {
-        public static string baseAddress = "https://dev.unosquare.com/redmine/";
-        public static string projects = "projects";
-        public static string json = ".json";
-        public static string basicAuth = "Basic";
-        public static string testToken = "am9yZ2UuZG9taW5ndWV6QHVub3NxdWFyZS5jb206SnVhIzg2NDI=";
-
-
+        public const string projects = "projects";
+        public const string json = ".json";
     }
 }

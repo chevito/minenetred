@@ -12,7 +12,7 @@ namespace Redmine.library.Services.Implementations
 {
     public class ProjectService : IProjectService
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public ProjectService(HttpClient client)
         {
@@ -25,18 +25,22 @@ namespace Redmine.library.Services.Implementations
   
             try
             {
+                if (authKey == null || authKey.Equals(""))
+                    throw new ArgumentNullException("Key hasn't been implemented yet");
+
                 var toReturn = "";
                 var requestUri = Constants.projects + Constants.json+ "?key=" + authKey;
                 HttpResponseMessage response = await _client.GetAsync(requestUri);
                 if (response.IsSuccessStatusCode)
                 {
                     toReturn = await response.Content.ReadAsStringAsync();
-                    ProjectListResponse projectListResponse = JsonConvert.DeserializeObject<ProjectListResponse>(toReturn);
+                    var projectListResponse = JsonConvert.DeserializeObject<ProjectListResponse>(toReturn);
                     return projectListResponse;
                 }
                 else
                 {
-                    throw new Exception();
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception(errorMessage);
                 }
             }
             catch (Exception ex)

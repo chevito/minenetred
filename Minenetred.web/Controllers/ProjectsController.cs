@@ -16,20 +16,20 @@ namespace Minenetred.web.Controllers
     
     public class ProjectsController : Controller
     {
-        private IProjectService _service;
+        private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
         public ProjectsController(IMapper mapper, IProjectService service)
         {
             _mapper = mapper;
-            _service = service;
+            _projectService = service;
             
         }
 
-        [Route("Projects")]
+        [Route("/")]
         [HttpGet]
-        public async Task<ActionResult<ProjectsViewModel>> ProjectsAsync()
+        public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
         {
-            var apiContent = await _service.GetProjectsAsync("Try your own key");
+            var apiContent = await _projectService.GetProjectsAsync("Try your own key");
             var projectsList = _mapper.Map<ProjectListResponse, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
             {
