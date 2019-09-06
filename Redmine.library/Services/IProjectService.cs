@@ -8,7 +8,9 @@ namespace Redmine.library.Services
 {
     public interface IProjectService
     {
-        Task<ProjectsContent> GetProjectsAsync();
+        
+
+        Task<ProjectListResponse> GetProjectsAsync(string authKey);
 
     }
 }

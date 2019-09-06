@@ -8,31 +8,28 @@ using Minenetred.web.Models;
 using Redmine.library.Models;
 using Minenetred.web.ViewModels;
 using AutoMapper;
+using System.Net.Http;
+using Redmine.library.Services;
 
 namespace Minenetred.web.Controllers
 {
     
     public class ProjectsController : Controller
     {
-        public ProjectsService _apiProjects { get; set; }
-        private MapperConfiguration _config { get; set; }
-        private IMapper _mapper { get; set; }
-        public ProjectsController()
+        private IProjectService _service;
+        private readonly IMapper _mapper;
+        public ProjectsController(IMapper mapper, IProjectService service)
         {
-           // _apiProjects = new ProjectsService();
-            _config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Project, ProjectDto>();
-                cfg.CreateMap<ProjectsContent, ProjectsViewModel>()
-                .ForMember(dto => dto.Projects, opt => opt.MapFrom(src => src.Projects));
-            });
-            _mapper = _config.CreateMapper();
+            _mapper = mapper;
+            _service = service;
+            
         }
 
         [Route("Projects")]
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> ProjectsAsync()
         {
-            var apiContent = await _apiProjects.GetProjectsAsync();
+            var apiContent = await _service.GetProjectsAsync("6b57002a51deedcb04866c0775c6cb7ee35e8613");
             var projectsList = _mapper.Map<ProjectsContent, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
             {

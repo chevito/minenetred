@@ -8,36 +8,31 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Redmine.library
+namespace Redmine.library.Services.Implementations
 {
-    // todo: rename to Project Service and IProjectService interface
-    public class ProjectsService : IProjectService
+    public class ProjectService : IProjectService
     {
-        private HttpClient _client { get; set; }
-        private string _authKey { get; set; }
+        private HttpClient _client;
 
-        public ProjectsService(HttpClient client, string authKey)
+        public ProjectService(HttpClient client)
         {
             _client = client;
-            _authKey = authKey; 
-            //Please refer to https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-2.2
-
         }
 
 
-        public async Task<ProjectsContent> GetProjectsAsync()
+        public async Task<ProjectListResponse> GetProjectsAsync(string authKey)
         {
   
             try
             {
                 var toReturn = "";
-                var requestUri = Constants.projects + Constants.json+ "?key=" +_authKey;
+                var requestUri = Constants.projects + Constants.json+ "?key=" + authKey;
                 HttpResponseMessage response = await _client.GetAsync(requestUri);
                 if (response.IsSuccessStatusCode)
                 {
                     toReturn = await response.Content.ReadAsStringAsync();
-                    ProjectsContent projectsContent = JsonConvert.DeserializeObject<ProjectsContent>(toReturn);
-                    return projectsContent;
+                    ProjectListResponse projectListResponse = JsonConvert.DeserializeObject<ProjectListResponse>(toReturn);
+                    return projectListResponse;
                 }
                 else
                 {
