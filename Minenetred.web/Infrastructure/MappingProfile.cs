@@ -14,7 +14,7 @@ namespace Minenetred.web.Infrastructure
         public MappingProfile()
         {
             CreateMap<Project, ProjectDto>();
-            CreateMap<ProjectsContent, ProjectsViewModel>()
+            CreateMap<ProjectListResponse, ProjectsViewModel>()
                 .ForMember(dto => dto.Projects, opt => opt.MapFrom(src => src.Projects));
         }
     }
