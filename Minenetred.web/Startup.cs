@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
 using Redmine.library.Services;
 using Redmine.library.Services.Implementations;
@@ -49,7 +51,11 @@ namespace Minenetred.web
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-            
+           services.AddDbContext<MinenetredContext>(
+                o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) );
+
+
+
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

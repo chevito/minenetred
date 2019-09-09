@@ -39,7 +39,6 @@ namespace Minenetred.web.Controllers
             {
                 if (project.status == 1)
                     shapedList.Projects.Add(project);
-
             }
             return shapedList;
         }
