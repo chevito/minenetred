@@ -30,11 +30,26 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
+                    @{
+                        if (User.Identity.Name != null)
+                        {
+                            <li><a asp-area="" asp-controller="Projects" asp-action="GetProjectsAsync">Projects</a></li>
+                            <li>
+                                <br />
+                                <form asp-action="Logout" asp-controller="Account" method="post">
+                                    <button type="submit" class="btn">Logout</button>
+                                </form>
+                                <br />
+                            </li>
+                  
+
+
+                }
+
+                    }
+
+                    </ul>
+                </div>
         </div>
     </nav>
 

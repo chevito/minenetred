@@ -10,6 +10,7 @@ using Minenetred.web.ViewModels;
 using AutoMapper;
 using System.Net.Http;
 using Redmine.library.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Minenetred.web.Controllers
 {
@@ -24,8 +25,8 @@ namespace Minenetred.web.Controllers
             _projectService = service;
             
         }
-
-        [Route("/")]
+        [Authorize]
+        //[Route("/")]
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
         {

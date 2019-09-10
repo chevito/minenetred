@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using Minenetred.web.Context.ContextModels;
 
 namespace Minenetred.web.Context
 {
     public class MinenetredContext : DbContext
     {
-        //public DbSet<Contact> Contacts { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public MinenetredContext(DbContextOptions<MinenetredContext> options)
             : base(options)
         {
+
 
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +39,7 @@ namespace Minenetred.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IHashHelper, HashHelper>();
 
             services.AddHttpClient<IProjectService, ProjectService>("redmine",
                 c => c.BaseAddress = new Uri("https://dev.unosquare.com/redmine/")
@@ -54,11 +56,9 @@ namespace Minenetred.web
            services.AddDbContext<MinenetredContext>(
                 o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) );
 
+           services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
-
-
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +77,7 @@ namespace Minenetred.web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
