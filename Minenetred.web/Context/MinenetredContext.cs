@@ -10,8 +10,6 @@ namespace Minenetred.web.Context
         public MinenetredContext(DbContextOptions<MinenetredContext> options)
             : base(options)
         {
-
-
         }
     }
 }

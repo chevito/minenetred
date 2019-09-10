@@ -23,6 +23,5 @@ namespace Minenetred.web.Infrastructure
 
             return sb.ToString();
         }
-
     }
 }

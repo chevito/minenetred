@@ -34,7 +34,6 @@ namespace Minenetred.web.Controllers
             if (!User.Identity.IsAuthenticated)
                 return View();
             return RedirectToAction("GetProjectsAsync", "Projects");
-
         }
 
         [HttpPost]
@@ -65,7 +64,6 @@ namespace Minenetred.web.Controllers
             var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             return RedirectToAction("Index", "Home");
-           
         }
         [HttpPost]
         public IActionResult Logout()

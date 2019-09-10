@@ -14,6 +14,5 @@ namespace Minenetred.web.Context.ContextModels
         [Required]
         public string Password { get; set; }
         public string Key { get; set; }
-
     }
 }

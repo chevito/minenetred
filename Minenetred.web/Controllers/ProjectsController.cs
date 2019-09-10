@@ -26,7 +26,6 @@ namespace Minenetred.web.Controllers
             _mapper = mapper;
             _projectService = service;
             _context = context;
-
         }
 
         protected override void Dispose(bool disposing)
@@ -79,8 +78,6 @@ namespace Minenetred.web.Controllers
             _context.Users.Update(user);
             _context.SaveChanges();
             return RedirectToAction("GetProjectsAsync");
-            
         }
-
     }
 }
