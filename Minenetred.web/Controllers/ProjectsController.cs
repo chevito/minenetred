@@ -60,7 +60,7 @@ namespace Minenetred.web.Controllers
             }
             return View(shapedList);
         }
-
+        [Authorize]
         public IActionResult AddKey()
         {
             var userName = HttpContext.User.Identity.Name;
