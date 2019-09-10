@@ -15,7 +15,7 @@ using Minenetred.web.Context;
 
 namespace Minenetred.web.Controllers
 {
-
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly IProjectService _projectService;
@@ -34,7 +34,6 @@ namespace Minenetred.web.Controllers
             base.Dispose(disposing);
         }
 
-        [Authorize]
         [Route("/")]
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
@@ -60,7 +59,7 @@ namespace Minenetred.web.Controllers
             }
             return View(shapedList);
         }
-        [Authorize]
+        
         public IActionResult AddKey()
         {
             var userName = HttpContext.User.Identity.Name;
