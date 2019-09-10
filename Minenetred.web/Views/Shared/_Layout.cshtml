@@ -34,21 +34,13 @@
                         if (User.Identity.Name != null)
                         {
                             <li><a asp-area="" asp-controller="Projects" asp-action="GetProjectsAsync">Projects</a></li>
-                            <li>
-                                <br />
-                                <form asp-action="Logout" asp-controller="Account" method="post">
-                                    <button type="submit" class="btn">Logout</button>
-                                </form>
-                                <br />
-                            </li>
-                  
+                            <li><a asp-area="" asp-controller="Projects" asp-action="AddKey">Api Access Key</a></li>
 
-
-                }
+                        }
 
                     }
 
-                    </ul>
+                </ul>
                 </div>
         </div>
     </nav>
@@ -59,6 +51,15 @@
         @RenderBody()
         <hr />
         <footer>
+            @if (User.Identity.Name != null)
+            {
+                <form asp-action="Logout" asp-controller="Account" method="post">
+                    <button type="submit" class="btn ">Logout</button>
+                </form>
+                <hr />
+            }
+
+
             <p>&copy; 2019 - Minenetred.web</p>
         </footer>
     </div>

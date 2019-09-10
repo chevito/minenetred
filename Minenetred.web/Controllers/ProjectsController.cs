@@ -11,26 +11,44 @@ using AutoMapper;
 using System.Net.Http;
 using Redmine.library.Services;
 using Microsoft.AspNetCore.Authorization;
+using Minenetred.web.Context;
 
 namespace Minenetred.web.Controllers
 {
-    
+
     public class ProjectsController : Controller
     {
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
-        public ProjectsController(IMapper mapper, IProjectService service)
+        private readonly MinenetredContext _context;
+        public ProjectsController(IMapper mapper, IProjectService service, MinenetredContext context)
         {
             _mapper = mapper;
             _projectService = service;
-            
+            _context = context;
+
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+            base.Dispose(disposing);
+        }
+
         [Authorize]
-        //[Route("/")]
+        [Route("/")]
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
         {
-            var apiContent = await _projectService.GetProjectsAsync("Try your own key");
+            var userName = HttpContext.User.Identity.Name;
+            var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
+            var userKey = user.Key;
+            if (userKey == null)
+            {
+                return RedirectToAction("AddKey");
+            }
+
+            var apiContent = await _projectService.GetProjectsAsync(userKey);
             var projectsList = _mapper.Map<ProjectListResponse, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
             {
@@ -43,5 +61,26 @@ namespace Minenetred.web.Controllers
             }
             return shapedList;
         }
+
+        public IActionResult AddKey()
+        {
+            var userName = HttpContext.User.Identity.Name;
+            var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
+            ViewBag.key = user.Key;
+            return View();
+        } 
+
+        [HttpPost]
+        public IActionResult AddKey(string key)
+        {
+            var userName = HttpContext.User.Identity.Name;
+            var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
+            user.Key = key;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return RedirectToAction("GetProjectsAsync");
+            
+        }
+
     }
 }

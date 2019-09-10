@@ -15,8 +15,8 @@ namespace Minenetred.web.Controllers
 {
     public class AccountController : Controller
     {
-        private MinenetredContext _context;
-        private IHashHelper _hashHelper;
+        private readonly MinenetredContext _context;
+        private readonly IHashHelper _hashHelper;
         public AccountController(MinenetredContext context, IHashHelper hashHelper)
         {
             _context = context;
