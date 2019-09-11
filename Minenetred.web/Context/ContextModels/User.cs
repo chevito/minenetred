@@ -14,7 +14,7 @@ namespace Minenetred.web.Context.ContextModels
         public string Key { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
-        [Required]
-        public DateTime LastLoginDate { get; set; }
+        
+        public DateTime LastKeyUpdatedDate{ get; set; }
     }
 }

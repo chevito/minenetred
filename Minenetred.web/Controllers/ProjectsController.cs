@@ -57,7 +57,7 @@ namespace Minenetred.web.Controllers
                 {
                     UserName = userName,
                     CreatedDate = DateTime.Now,
-                    LastLoginDate = DateTime.Now,
+
                 };
 
                 _context.Users.Add(newUser);
@@ -104,7 +104,7 @@ namespace Minenetred.web.Controllers
         } 
 
         [HttpPost]
-        public IActionResult UpdateKey(string key)
+        public IActionResult KeyUpdate(string key)
         {
             if (string.IsNullOrEmpty(key))
                 return RedirectToAction("AddKey");
@@ -113,6 +113,7 @@ namespace Minenetred.web.Controllers
             var userName = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
             user.Key = encryptedKey;
+            user.LastKeyUpdatedDate = DateTime.Now;
             _context.Users.Update(user);
             _context.SaveChanges();
             return RedirectToAction("GetProjectsAsync");

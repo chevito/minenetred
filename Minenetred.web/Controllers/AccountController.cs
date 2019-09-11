@@ -34,10 +34,9 @@ namespace Minenetred.web.Controllers
 
             var userMail = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c=>c.UserName== userMail);
-            user.LastLoginDate = DateTime.Now;
+            _context.Users.Update(user);
             _context.SaveChanges();
             return RedirectToAction("GetProjectsAsync", "Projects");
         }
-
     }
 }
