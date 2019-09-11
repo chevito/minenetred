@@ -41,7 +41,7 @@ namespace Minenetred.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IEncryptionHelper, EncryptionHelper>();
+            services.AddScoped<IEncryptionService, EncryptionService>();
 
             services.AddHttpClient<IProjectService, ProjectService>("redmine",
                 c => c.BaseAddress = new Uri("https://dev.unosquare.com/redmine/")

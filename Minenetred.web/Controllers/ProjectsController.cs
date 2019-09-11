@@ -65,12 +65,12 @@ namespace Minenetred.web.Controllers
                 user = _context.Users.SingleOrDefault(c => c.UserName == userName);
             }
 
-            if (user.Key == null)
+            if (user.RedmineKey == null)
             {
                 return RedirectToAction("AddKey");
             }
 
-            var decryptedKey = _encryptionService.Decrypt(user.Key);
+            var decryptedKey = _encryptionService.Decrypt(user.RedmineKey);
             var apiContent = await _projectService.GetProjectsAsync(decryptedKey);
             var projectsList = _mapper.Map<ProjectListResponse, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
@@ -90,7 +90,7 @@ namespace Minenetred.web.Controllers
             var userName = UserPrincipal.Current.EmailAddress;
             ViewBag.user = userName;
 
-            var userKey = _context.Users.SingleOrDefault(c => c.UserName == userName).Key;
+            var userKey = _context.Users.SingleOrDefault(c => c.UserName == userName).RedmineKey;
             if (userKey == null)
             {
                 ViewBag.key = null;
@@ -112,7 +112,7 @@ namespace Minenetred.web.Controllers
             var encryptedKey = _encryptionService.Encrypt(key);
             var userName = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
-            user.Key = encryptedKey;
+            user.RedmineKey = encryptedKey;
             user.LastKeyUpdatedDate = DateTime.Now;
             _context.Users.Update(user);
             _context.SaveChanges();

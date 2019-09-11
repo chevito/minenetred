@@ -11,7 +11,7 @@ namespace Minenetred.web.Context.ContextModels
         public Guid UserId { get; set; }
         [Required]
         public string UserName { get; set; }
-        public string Key { get; set; }
+        public string RedmineKey { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
         
