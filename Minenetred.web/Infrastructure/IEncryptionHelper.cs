@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Minenetred.web.Infrastructure
 {
-    public interface IHashHelper
+    public interface IEncryptionHelper
     {
-        byte[] GetHash(string inputString);
-        string GetHashString(string inputString);
+        String encrypt(string encryptString);
+        string Decrypt(string cipherText);
 
     }
 }

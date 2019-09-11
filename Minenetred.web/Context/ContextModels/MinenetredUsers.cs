@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Minenetred.web.Context.ContextModels
 {
-    public class User
+    public class MinenetredUsers
     {
+
+        [Required]
         public Guid UserId { get; set; }
         [Required]
         public string UserName { get; set; }
         public string Key { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; }
+        public DateTime  CreatedDate { get; set; }
         [Required]
         public DateTime LastLoginDate { get; set; }
     }
-
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
 using Redmine.library.Services;
 using Redmine.library.Services.Implementations;
+using System.DirectoryServices.AccountManagement;
 
 namespace Minenetred.web
 {
@@ -39,7 +41,7 @@ namespace Minenetred.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IHashHelper, HashHelper>();
+            services.AddScoped<IEncryptionHelper, EncryptionHelper>();
 
             services.AddHttpClient<IProjectService, ProjectService>("redmine",
                 c => c.BaseAddress = new Uri("https://dev.unosquare.com/redmine/")
@@ -56,9 +58,8 @@ namespace Minenetred.web
            services.AddDbContext<MinenetredContext>(
                 o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) );
 
-           services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-
-           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddAuthentication(IISDefaults.AuthenticationScheme);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,13 +79,14 @@ namespace Minenetred.web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    template: "{controller=Account}/{action=Login}"
+                    );
+
+            });            
 
         }
     }

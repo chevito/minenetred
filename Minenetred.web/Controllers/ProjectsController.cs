@@ -12,6 +12,9 @@ using System.Net.Http;
 using Redmine.library.Services;
 using Microsoft.AspNetCore.Authorization;
 using Minenetred.web.Context;
+using Minenetred.web.Context.ContextModels;
+using Minenetred.web.Infrastructure;
+using System.DirectoryServices.AccountManagement;
 
 namespace Minenetred.web.Controllers
 {
@@ -21,11 +24,19 @@ namespace Minenetred.web.Controllers
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
         private readonly MinenetredContext _context;
-        public ProjectsController(IMapper mapper, IProjectService service, MinenetredContext context)
+        private readonly IEncryptionHelper _encryptionHelper;
+
+        public ProjectsController(
+            IMapper mapper,
+            IProjectService service,
+            MinenetredContext context,
+            IEncryptionHelper encryptionHelper
+            )
         {
             _mapper = mapper;
             _projectService = service;
             _context = context;
+            _encryptionHelper = encryptionHelper;
         }
 
         protected override void Dispose(bool disposing)
@@ -38,15 +49,30 @@ namespace Minenetred.web.Controllers
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
         {
-            var userName = HttpContext.User.Identity.Name;
+
+            var userName = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
-            var userKey = user.Key;
-            if (userKey == null)
+            if (user == null)
+            {
+                var newUser = new User()
+                {
+                    UserName = userName,
+                    CreatedDate = DateTime.Now,
+                    LastLoginDate = DateTime.Now,
+                };
+
+                _context.Users.Add(newUser);
+                _context.SaveChanges();
+                user = _context.Users.SingleOrDefault(c => c.UserName == userName);
+            }
+
+            if (user.Key == null)
             {
                 return RedirectToAction("AddKey");
             }
 
-            var apiContent = await _projectService.GetProjectsAsync(userKey);
+            var decryptedKey = _encryptionHelper.Decrypt(user.Key);
+            var apiContent = await _projectService.GetProjectsAsync(decryptedKey);
             var projectsList = _mapper.Map<ProjectListResponse, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
             {
@@ -59,21 +85,36 @@ namespace Minenetred.web.Controllers
             }
             return View(shapedList);
         }
-        
+        [Route("/AccessKey")]
         public IActionResult AddKey()
         {
-            var userName = HttpContext.User.Identity.Name;
-            var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
-            ViewBag.key = user.Key;
+            var userName = UserPrincipal.Current.EmailAddress;
+            ViewBag.user = userName;
+
+            var userKey = _context.Users.SingleOrDefault(c => c.UserName == userName).Key;
+            if (userKey == null)
+            {
+                ViewBag.key = null;
+            }
+            else
+            {
+                
+                var denryptionKey = _encryptionHelper.Decrypt(userKey);
+                ViewBag.key = denryptionKey;
+            }
             return View();
         } 
 
         [HttpPost]
-        public IActionResult AddKey(string key)
+        public IActionResult UpdateKey(string key)
         {
-            var userName = HttpContext.User.Identity.Name;
+            if (string.IsNullOrEmpty(key))
+                return RedirectToAction("AddKey");
+
+            var encryptedKey = _encryptionHelper.encrypt(key);
+            var userName = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
-            user.Key = key;
+            user.Key = encryptedKey;
             _context.Users.Update(user);
             _context.SaveChanges();
             return RedirectToAction("GetProjectsAsync");
