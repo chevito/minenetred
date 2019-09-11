@@ -17,5 +17,4 @@ namespace Minenetred.web.Context.ContextModels
         [Required]
         public DateTime LastLoginDate { get; set; }
     }
-
 }

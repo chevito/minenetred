@@ -58,6 +58,5 @@ namespace Minenetred.web.Infrastructure
             }
             return cipherText;
         }
-
     }
 }

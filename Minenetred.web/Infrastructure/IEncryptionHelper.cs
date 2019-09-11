@@ -9,6 +9,5 @@ namespace Minenetred.web.Infrastructure
     {
         String encrypt(string encryptString);
         string Decrypt(string cipherText);
-
     }
 }

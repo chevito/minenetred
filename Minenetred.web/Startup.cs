@@ -87,7 +87,6 @@ namespace Minenetred.web
                     );
 
             });            
-
         }
     }
 }

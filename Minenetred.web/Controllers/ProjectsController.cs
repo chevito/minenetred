@@ -49,7 +49,6 @@ namespace Minenetred.web.Controllers
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
         {
-
             var userName = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
             if (user == null)
@@ -97,8 +96,7 @@ namespace Minenetred.web.Controllers
                 ViewBag.key = null;
             }
             else
-            {
-                
+            { 
                 var denryptionKey = _encryptionHelper.Decrypt(userKey);
                 ViewBag.key = denryptionKey;
             }
