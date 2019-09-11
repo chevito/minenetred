@@ -55,7 +55,7 @@ namespace Minenetred.web
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
-           services.AddDbContext<MinenetredContext>(
+            services.AddDbContext<MinenetredContext>(
                 o => o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) );
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
@@ -85,9 +85,7 @@ namespace Minenetred.web
                     name: "default",
                     template: "{controller=Home}/{action=Index}"
                     );
-
-
-            });            
+            });
         }
     }
 }

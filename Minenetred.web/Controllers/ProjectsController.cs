@@ -24,19 +24,19 @@ namespace Minenetred.web.Controllers
         private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
         private readonly MinenetredContext _context;
-        private readonly IEncryptionHelper _encryptionHelper;
+        private readonly IEncryptionService _encryptionService;
 
         public ProjectsController(
             IMapper mapper,
             IProjectService service,
             MinenetredContext context,
-            IEncryptionHelper encryptionHelper
+            IEncryptionService encryptionService
             )
         {
             _mapper = mapper;
             _projectService = service;
             _context = context;
-            _encryptionHelper = encryptionHelper;
+            _encryptionService = encryptionService;
         }
 
         protected override void Dispose(bool disposing)
@@ -70,7 +70,7 @@ namespace Minenetred.web.Controllers
                 return RedirectToAction("AddKey");
             }
 
-            var decryptedKey = _encryptionHelper.Decrypt(user.Key);
+            var decryptedKey = _encryptionService.Decrypt(user.Key);
             var apiContent = await _projectService.GetProjectsAsync(decryptedKey);
             var projectsList = _mapper.Map<ProjectListResponse, ProjectsViewModel>(apiContent);
             var shapedList = new ProjectsViewModel()
@@ -97,7 +97,7 @@ namespace Minenetred.web.Controllers
             }
             else
             { 
-                var denryptionKey = _encryptionHelper.Decrypt(userKey);
+                var denryptionKey = _encryptionService.Decrypt(userKey);
                 ViewBag.key = denryptionKey;
             }
             return View();
@@ -109,7 +109,7 @@ namespace Minenetred.web.Controllers
             if (string.IsNullOrEmpty(key))
                 return RedirectToAction("AddKey");
 
-            var encryptedKey = _encryptionHelper.encrypt(key);
+            var encryptedKey = _encryptionService.Encrypt(key);
             var userName = UserPrincipal.Current.EmailAddress;
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
             user.Key = encryptedKey;

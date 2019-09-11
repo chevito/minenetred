@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Minenetred.web.Infrastructure
 {
-    public class EncryptionHelper : IEncryptionHelper
+    public class EncryptionService : IEncryptionService
     {
-        public string encrypt(string encryptString)
+        public string Encrypt(string encryptString)
         {
             string EncryptionKey = "UNOSQUARE09102019";
             byte[] clearBytes = Encoding.Unicode.GetBytes(encryptString);

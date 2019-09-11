@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Minenetred.web.Infrastructure
 {
-    public interface IEncryptionHelper
+    public interface IEncryptionService
     {
-        String encrypt(string encryptString);
+        String Encrypt(string encryptString);
         string Decrypt(string cipherText);
     }
 }
