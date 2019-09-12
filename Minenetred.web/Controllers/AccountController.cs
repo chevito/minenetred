@@ -25,11 +25,12 @@ namespace Minenetred.web.Controllers
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
-            base.Dispose(disposing);    
+            base.Dispose(disposing);
         }
-        public IActionResult Login(string lastTime)
-        {            
-            if (!User.Identity.IsAuthenticated) 
+
+        public IActionResult Login()
+        {
+            if (!User.Identity.IsAuthenticated)
                 return Content("Needed windows auth");
 
             var userMail = UserPrincipal.Current.EmailAddress;

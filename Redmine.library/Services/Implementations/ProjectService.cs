@@ -20,10 +20,8 @@ namespace Redmine.library.Services.Implementations
             _client = client;
         }
 
-
         public async Task<ProjectListResponse> GetProjectsAsync(string authKey)
         {
-  
             try
             {
                 if (authKey == null || authKey.Equals(""))
@@ -48,12 +46,6 @@ namespace Redmine.library.Services.Implementations
             {
                 throw new Exception(ex.Message); 
             }
-            
-
-           
-
-
         }
-
     }
 }
