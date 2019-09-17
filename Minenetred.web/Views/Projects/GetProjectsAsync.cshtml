@@ -9,7 +9,7 @@
 <script>
     $(document).ready(function () {
         $('#date').change(function () {
-            if ($('.datesTable').css('display')=='none') {
+            if ($('.datesTable').css('display') == 'none') {
                 $('.datesTable').toggle("slide");
             }
             var valueDate = new Date($('#date').val());
@@ -18,6 +18,14 @@
                 $(this).html(valueDate);
                 valueDate.setDate(valueDate.getDate() + 1);
             });
+        });
+
+        $('.btn-add-entry').click(function () {
+            var projectName = $(this).parent("td").parent("tr").find("td:first").text();
+            $('#modalProjectTitle').text(projectName);
+            var hiddenDate = $(this).parent("td").closest('table').find('th').eq($(this).parent("td").index()).text();
+            $('#dateEntry').val(hiddenDate);
+            $('#dateText').text('Date: '+hiddenDate);
         });
     });
 </script>
@@ -50,22 +58,86 @@
 
             </tr>
         </thead>
+
         <tbody>
             @foreach (var project in Model.Projects)
             {
                 <tr>
                     <td scope="row" style="width:25%">@project.Name</td>
-                    <td scope="row"></td>
-                    <td scope="row"></td>
-                    <td scope="row"></td>
-                    <td scope="row"></td>
-                    <td scope="row"></td>
+                    <td scope="row">
+                        Total hours: 0
+                        <button type="button" class="btn btn-success btn-add-entry"  data-toggle="modal" data-target="#timeEntryForm">
+                            Add time entry
+                        </button>
+                    </td>
+                    <td scope="row">
+                        Total hours: 0
+                        <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
+                            Add time entry
+                        </button>
+                    </td>
+                    <td scope="row">
+                        Total hours: 0
+                        <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
+                            Add time entry
+                        </button></td>
+                    <td scope="row">
+                        Total hours: 0
+                        <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
+                            Add time entry
+                        </button></td>
+                    <td scope="row">
+                        Total hours: 0
+                        <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
+                            Add time entry
+                        </button></td>
                 </tr>
             }
+        <tr>
+            <td scope="row" style="width:25%">Total hours per day</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
         </tbody>
     </table>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="timeEntryForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalProjectTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group input-group">
+                    <form action="/" method="post">
+                        <input class="input-group" type="number" min="0" name="hours" placeholder="Enter hours" /><br />
+                        <input class="input-group" type="text" name="description" placeholder="Enter description" /><br />
+                        <select class="input-group" name="issue">
+                            <option value="3">Project Activities</option>
+                        </select><br />
+                        <select class="input-group" name="activity">
+                             <option value="2">Development</option>
+                        </select><br />
+                        <input id="dateEntry" type="hidden" name="id" value="" />
+                        <text class="input-group" id="dateText">Date: </text><br />
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
