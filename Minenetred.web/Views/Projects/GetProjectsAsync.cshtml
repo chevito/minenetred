@@ -25,7 +25,9 @@
             $('#modalProjectTitle').text(projectName);
             var hiddenDate = $(this).parent("td").closest('table').find('th').eq($(this).parent("td").index()).text();
             $('#dateEntry').val(hiddenDate);
-            $('#dateText').text('Date: '+hiddenDate);
+            $('#dateText').text('Date: ' + hiddenDate);
+            var projectId = $(this).parent("td").parent("tr").find("td:first").find('input').val();
+            $('#projectIdInput').val(projectId);
         });
     });
 </script>
@@ -63,7 +65,11 @@
             @foreach (var project in Model.Projects)
             {
                 <tr>
-                    <td scope="row" style="width:25%">@project.Name</td>
+                    <td scope="row" style="width:25%">
+                        @project.Name
+                        <input type="hidden" id="@project.Name" value="@project.Id">
+
+                    </td>
                     <td scope="row">
                         Total hours: 0
                         <button type="button" class="btn btn-success btn-add-entry"  data-toggle="modal" data-target="#timeEntryForm">
@@ -118,15 +124,16 @@
             <div class="modal-body">
                 <div class="form-group input-group">
                     <form action="/" method="post">
+                        <input id="projectIdInput" type="hidden" name="projectId" value="" />
                         <input class="input-group" type="number" min="0" name="hours" placeholder="Enter hours" /><br />
                         <input class="input-group" type="text" name="description" placeholder="Enter description" /><br />
                         <select class="input-group" name="issue">
                             <option value="3">Project Activities</option>
                         </select><br />
                         <select class="input-group" name="activity">
-                             <option value="2">Development</option>
+                            <option value="2">Development</option>
                         </select><br />
-                        <input id="dateEntry" type="hidden" name="id" value="" />
+                        <input id="dateEntry" type="hidden" name="date" value="" />
                         <text class="input-group" id="dateText">Date: </text><br />
                     </form>
                 </div>
