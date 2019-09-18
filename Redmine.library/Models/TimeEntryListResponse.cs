@@ -6,6 +6,6 @@ namespace Redmine.library.Models
 {
     public class TimeEntryListResponse
     {
-        public List<TimeEntry> TimeEntries { get; set; }
+        public List<TimeEntry> Time_Entries { get; set; }
     }
 }
