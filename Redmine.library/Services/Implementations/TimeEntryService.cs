@@ -9,16 +9,15 @@ using System.Threading.Tasks;
 
 namespace Redmine.library.Services.Implementations
 {
-    public class IssueService : IIssueService
+    public class TimeEntryService : ITimeEntryService
     {
-
         private readonly HttpClient _client;
-        public IssueService(HttpClient client)
+        public TimeEntryService(HttpClient client)
         {
             _client = client;
         }
 
-        public async Task<IssueListResponse> GetIssuesAsync(string authKey, int assignedToId, int projectId)
+        public async Task<TimeEntryListResponse> GetTimeEntriesAsync(string authKey, int userId, int projectId, string date)
         {
             try
             {
@@ -26,35 +25,36 @@ namespace Redmine.library.Services.Implementations
                     throw new ArgumentNullException(Constants.nullKeyException);
 
                 var toReturn = "";
-                var requestUri = Constants.issues+
-                    Constants.json+
-                    "?key=" +
-                    authKey +
-                    "&assigned_to_id=" +
-                    assignedToId +
+                var requestUri =
+                    Constants.timeEntries +
+                    Constants.json +
+                    "?key=" + authKey +
                     "&" +
-                    Constants.projectId+
-                    projectId;
+                    Constants.projectId +
+                    projectId +
+                    "&user_id=" +
+                    userId +
+                    "&from=" +
+                    date +
+                    "&to=" +
+                    date;
                 HttpResponseMessage response = await _client.GetAsync(requestUri);
                 if (response.IsSuccessStatusCode)
                 {
                     toReturn = await response.Content.ReadAsStringAsync();
-                    var issueResponse = JsonConvert.DeserializeObject<IssueListResponse>(toReturn);
-                    return issueResponse;
+                    var timeEntryListResponse = JsonConvert.DeserializeObject<TimeEntryListResponse>(toReturn);
+                    return timeEntryListResponse;
                 }
                 else
                 {
-                    var errorMsg = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errorMsg);
+                    var errormsg = await response.Content.ReadAsStringAsync();
+                    throw new Exception(errormsg);
                 }
-
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

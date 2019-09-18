@@ -26,13 +26,12 @@ namespace Redmine.library.Services.Implementations
 
                 var toReturn = "";
                 var requestUri = 
-                    Constants.timeEntry +
+                    Constants.Activites +
                     Constants.json +
                     "?key=" +
                     authKey +
                     "&" +
                     Constants.projectId +
-                    "=" +
                     projectId;
                 HttpResponseMessage response = await _client.GetAsync(requestUri);
                 if (response.IsSuccessStatusCode)
