@@ -39,13 +39,13 @@ namespace Minenetred.web.Controllers
             base.Dispose(disposing);
         }
         [HttpGet]
-        [Route("/issues/{userId}/{projectId}")]
-        public async Task<IssueViewModel> GetIssuesAsync(int userId, int projectId)
+        [Route("/issues/{projectId}")]
+        public async Task<IssueViewModel> GetIssuesAsync(int projectId)
         {
             var userEmail = UserPrincipal.Current.EmailAddress;
-            var encryptedKey = _context.Users.SingleOrDefault(u => u.UserName == userEmail).RedmineKey;
-            var decryptedKey = _encryptionService.Decrypt(encryptedKey);
-            var response = await  _issueService.GetIssuesAsync(decryptedKey, userId, projectId);
+            var user = _context.Users.SingleOrDefault(u => u.UserName == userEmail);
+            var decryptedKey = _encryptionService.Decrypt(user.RedmineKey);
+            var response = await  _issueService.GetIssuesAsync(decryptedKey, user.RedmineId, projectId);
             var toReturn = _mapper.Map<IssueListResponse, IssueViewModel>(response);
             return toReturn;
         }
