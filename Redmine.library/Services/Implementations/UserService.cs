@@ -17,7 +17,7 @@ namespace Redmine.library.Services.Implementations
             _client = client;
         }
 
-        public async Task<UserServiceModel> GetCurrentUserAsync(string authKey)
+        public async Task<UserResponse> GetCurrentUserAsync(string authKey)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Redmine.library.Services.Implementations
                 if (response.IsSuccessStatusCode)
                 {
                     toReturn = await response.Content.ReadAsStringAsync();
-                    var user = JsonConvert.DeserializeObject<UserServiceModel>(toReturn);
+                    var user = JsonConvert.DeserializeObject<UserResponse>(toReturn);
                     return user;
                 }
                 else

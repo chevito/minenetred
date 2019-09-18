@@ -48,7 +48,6 @@ namespace Minenetred.web.Controllers
             var response = await  _issueService.GetIssuesAsync(decryptedKey, userId, projectId);
             var toReturn = _mapper.Map<IssueListResponse, IssueViewModel>(response);
             return toReturn;
-
         }
     }
 }

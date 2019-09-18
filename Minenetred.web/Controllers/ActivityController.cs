@@ -48,7 +48,6 @@ namespace Minenetred.web.Controllers
             var retrievedData = await _activityService.GetActivityListResponseAsync(decryptedKey, projectId);
             var toRetun = _mapper.Map<ActivityListResponse, ActivityViewModel>(retrievedData);
             return toRetun;
-
         }
     }
 }

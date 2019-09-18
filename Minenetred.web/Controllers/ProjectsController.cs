@@ -25,18 +25,21 @@ namespace Minenetred.web.Controllers
         private readonly IMapper _mapper;
         private readonly MinenetredContext _context;
         private readonly IEncryptionService _encryptionService;
+        private readonly IUserService _userService;
 
         public ProjectsController(
             IMapper mapper,
             IProjectService service,
             MinenetredContext context,
-            IEncryptionService encryptionService
+            IEncryptionService encryptionService,
+            IUserService userService
             )
         {
             _mapper = mapper;
             _projectService = service;
             _context = context;
             _encryptionService = encryptionService;
+            _userService = userService;
         }
 
         protected override void Dispose(bool disposing)
@@ -114,6 +117,17 @@ namespace Minenetred.web.Controllers
             var user = _context.Users.SingleOrDefault(c => c.UserName == userName);
             user.RedmineKey = encryptedKey;
             user.LastKeyUpdatedDate = DateTime.Now;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            return RedirectToAction("AddRedmineIdAsync", new {key = key});
+        }
+
+        public async Task<IActionResult> AddRedmineIdAsync(string key)
+        {
+            var userRedmine = await _userService.GetCurrentUserAsync(key);
+            var user = _context.Users.SingleOrDefault(u => u.UserName == UserPrincipal.Current.EmailAddress);
+            user.RedmineId = userRedmine.User.Id;
             _context.Users.Update(user);
             _context.SaveChanges();
             return RedirectToAction("GetProjectsAsync");
