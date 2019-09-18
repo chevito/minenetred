@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Redmine.library.Services.Implementations
 {
-    public class ActivityService
+    public class ActivityService : IActivityService
     {
         private readonly HttpClient _client;
 
@@ -17,7 +17,7 @@ namespace Redmine.library.Services.Implementations
         {
             _client = client;
         }
-        public async Task<ActivityListResponse> GetActivitiesPerProjectAsync(string authKey, int projectId)
+        public async Task<ActivityListResponse> GetActivityListResponseAsync(string authKey, int projectId)
         {
             try
             {
