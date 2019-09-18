@@ -25,7 +25,7 @@ namespace Redmine.library.Services.Implementations
             try
             {
                 if (authKey == null || authKey.Equals(""))
-                    throw new ArgumentNullException("Key hasn't been implemented yet");
+                    throw new ArgumentNullException(Constants.nullKeyException);
 
                 var toReturn = "";
                 var requestUri = Constants.projects + Constants.json+ "?key=" + authKey;
