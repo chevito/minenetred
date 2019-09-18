@@ -13,6 +13,7 @@ namespace Redmine.library.Core
         public const string projectId = "project_id=";
         public const string Activites = "enumerations/time_entry_activities";
         public const string timeEntries = "time_entries";
+        public const string currentUser = "users/current";
 
 
     }
