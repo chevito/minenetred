@@ -16,6 +16,10 @@ namespace Minenetred.web.Infrastructure
             CreateMap<Project, ProjectDto>();
             CreateMap<ProjectListResponse, ProjectsViewModel>()
                 .ForMember(dto => dto.Projects, opt => opt.MapFrom(src => src.Projects));
+
+            CreateMap<Activity, ActivityDto>();
+            CreateMap<ActivityListResponse, ActivityViewModel>()
+                .ForMember(dto => dto.Activities, opt => opt.MapFrom(src => src.Time_Entry_Activities));
         }
     }
 }
