@@ -6,6 +6,6 @@ namespace Redmine.library.Models
 {
     public class IssueListResponse
     {
-        public Issue Issues { get; set; }
+        public List<Issue> Issues { get; set; }
     }
 }
