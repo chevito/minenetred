@@ -30,7 +30,7 @@ namespace Redmine.library.Services.Implementations
                 if (response.IsSuccessStatusCode)
                 {
                     toReturn = await response.Content.ReadAsStringAsync();
-                    var user = JsonConvert.DeserializeObject<User>(toReturn);
+                    var user = JsonConvert.DeserializeObject<UserServiceModel>(toReturn);
                     return user;
                 }
                 else
