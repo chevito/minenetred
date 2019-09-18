@@ -11,5 +11,7 @@ namespace Redmine.library.Core
         public const string nullKeyException = "Key hasn't been implemented yet";
         public const string issues= "issues";
         public const string projectId= "project_id";
+        public const string timeEntry= "enumerations/time_entry_activities";
+
     }
 }
