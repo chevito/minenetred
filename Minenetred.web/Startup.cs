@@ -31,24 +31,26 @@ namespace Minenetred.web
 
         public IConfiguration Configuration { get; }
         private string _secretEncrytionKey;
-
+        private HttpClient _client;
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             _secretEncrytionKey = Configuration["EncryptionKey"];
-
+            _client = new HttpClient();
+            _client.BaseAddress = new Uri("https://dev.unosquare.com/redmine/");
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IIssueService>(s=> new IssueService(_client));
+            services.AddScoped<ITimeEntryService>(s=>new TimeEntryService(_client));
+            services.AddScoped<IUserService>(s=>new UserService(_client));
+            services.AddScoped<IActivityService>(s=> new ActivityService(_client));
+            services.AddScoped<IProjectService>(s=> new ProjectService(_client));
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
 
-            services.AddHttpClient<IProjectService, ProjectService>("redmine",
-                c => c.BaseAddress = new Uri("https://dev.unosquare.com/redmine/")
-                );
 
             var mappingConfig = new MapperConfiguration( mc =>
             {
