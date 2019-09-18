@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Redmine.library.Models
 {
-    public class User
+    public class UserServiceModel
     {
         public int Id { get; set; }
         public string Login { get; set; }

@@ -17,7 +17,7 @@ namespace Redmine.library.Services.Implementations
             _client = client;
         }
 
-        public async Task<User> GetCurrentUserAsync(string authKey)
+        public async Task<UserServiceModel> GetCurrentUserAsync(string authKey)
         {
             try
             {
