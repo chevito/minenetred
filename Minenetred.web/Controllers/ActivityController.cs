@@ -40,7 +40,7 @@ namespace Minenetred.web.Controllers
         }
         [Route("/Activities/{projectId}")]
         [HttpGet]
-        public async Task<ActivityViewModel> IndexAsync(int projectId)
+        public async Task<ActivityViewModel> GetActivitiesAsync(int projectId)
         {
             var userName = UserPrincipal.Current.EmailAddress;
             var encryptedKey = _context.Users.SingleOrDefault(u=> u.UserName == userName).RedmineKey;
