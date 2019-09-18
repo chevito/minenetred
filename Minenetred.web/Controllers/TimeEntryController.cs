@@ -34,6 +34,7 @@ namespace Minenetred.web.Controllers
         }
 
         [Route("/Entries/{projectId}/{date}")]
+        [HttpGet]
         public async Task<TimeEntryViewModel> GetTimeEntriesAsync(int projectId, string date)
         {
             var userEmail = UserPrincipal.Current.EmailAddress;
