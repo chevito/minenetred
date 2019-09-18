@@ -45,10 +45,10 @@ namespace Minenetred.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddScoped<IIssueService>(s=> new IssueService(_client));
-            services.AddScoped<ITimeEntryService>(s=>new TimeEntryService(_client));
-            services.AddScoped<IUserService>(s=>new UserService(_client));
-            services.AddScoped<IActivityService>(s=> new ActivityService(_client));
-            services.AddScoped<IProjectService>(s=> new ProjectService(_client));
+            services.AddScoped<ITimeEntryService>(s => new TimeEntryService(_client));
+            services.AddScoped<IUserService>(s => new UserService(_client));
+            services.AddScoped<IActivityService>(s => new ActivityService(_client));
+            services.AddScoped<IProjectService>(s => new ProjectService(_client));
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
 
 
