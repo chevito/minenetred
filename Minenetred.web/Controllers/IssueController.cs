@@ -39,7 +39,7 @@ namespace Minenetred.web.Controllers
             base.Dispose(disposing);
         }
         [HttpGet]
-        [Route("/issues/{projectId}")]
+        [Route("/Issues/{projectId}")]
         public async Task<IssueViewModel> GetIssuesAsync(int projectId)
         {
             var userEmail = UserPrincipal.Current.EmailAddress;
