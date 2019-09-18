@@ -27,8 +27,6 @@ namespace Minenetred.web.Infrastructure
             CreateMap<TimeEntry, TimeEntryDto>();
             CreateMap<TimeEntryListResponse, TimeEntryViewModel>()
                 .ForMember(dto => dto.TimeEntries, opt => opt.MapFrom(src => src.Time_Entries));
-
-
         }
     }
 }

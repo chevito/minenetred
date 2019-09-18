@@ -13,7 +13,5 @@ namespace Redmine.library.Models
         public float Hours { get; set; }
         public string Comments { get; set; }
         public DateTime SpentOn { get; set; }
-
-
     }
 }

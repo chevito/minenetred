@@ -11,7 +11,6 @@ namespace Redmine.library.Services.Implementations
 {
     public class IssueService : IIssueService
     {
-
         private readonly HttpClient _client;
         public IssueService(HttpClient client)
         {
@@ -51,10 +50,8 @@ namespace Redmine.library.Services.Implementations
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

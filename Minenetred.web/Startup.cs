@@ -51,8 +51,6 @@ namespace Minenetred.web
             services.AddScoped<IActivityService>(s => new ActivityService(_client));
             services.AddScoped<IProjectService>(s => new ProjectService(_client));
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
-
-
             var mappingConfig = new MapperConfiguration( mc =>
             {
                 mc.AddProfile(new MappingProfile());

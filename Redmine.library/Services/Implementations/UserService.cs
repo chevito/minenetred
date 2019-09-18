@@ -41,7 +41,6 @@ namespace Redmine.library.Services.Implementations
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }
