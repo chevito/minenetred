@@ -42,12 +42,19 @@ namespace Minenetred.web.Controllers
         [HttpGet]
         public async Task<ActivityViewModel> GetActivitiesAsync(int projectId)
         {
-            var userName = UserPrincipal.Current.EmailAddress;
-            var encryptedKey = _context.Users.SingleOrDefault(u=> u.UserName == userName).RedmineKey;
-            var decryptedKey = _encryptionService.Decrypt(encryptedKey);
-            var retrievedData = await _activityService.GetActivityListResponseAsync(decryptedKey, projectId);
-            var toRetun = _mapper.Map<ActivityListResponse, ActivityViewModel>(retrievedData);
-            return toRetun;
+            try
+            {
+                var userName = UserPrincipal.Current.EmailAddress;
+                var encryptedKey = _context.Users.SingleOrDefault(u => u.UserName == userName).RedmineKey;
+                var decryptedKey = _encryptionService.Decrypt(encryptedKey);
+                var retrievedData = await _activityService.GetActivityListResponseAsync(decryptedKey, projectId);
+                var toRetun = _mapper.Map<ActivityListResponse, ActivityViewModel>(retrievedData);
+                return toRetun;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
