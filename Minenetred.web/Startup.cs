@@ -51,7 +51,7 @@ namespace Minenetred.web
             services.AddScoped<Redmine.library.Services.IIssueService>(s=> new Redmine.library.Services.Implementations.IssueService(_client));
             services.AddScoped<Redmine.library.Services.ITimeEntryService>(s => new Redmine.library.Services.Implementations.TimeEntryService(_client));
             services.AddScoped<IUserService>(s => new UserService(_client));
-            services.AddScoped<IActivityService>(s => new ActivityService(_client));
+            services.AddScoped<Redmine.library.Services.IActivityService>(s => new Redmine.library.Services.Implementations.ActivityService(_client));
             services.AddScoped<Redmine.library.Services.IProjectService>(s => new Redmine.library.Services.Implementations.ProjectService(_client));
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
             #endregion
@@ -60,6 +60,7 @@ namespace Minenetred.web
             services.AddScoped<Services.IProjectService, Services.Implementations.ProjectService>();
             services.AddScoped<Services.ITimeEntryService, Services.Implementations.TimeEntryService>();
             services.AddScoped<Services.IIssueService, Services.Implementations.IssueService>();
+            services.AddScoped<Services.IActivityService, Services.Implementations.ActivityService>();
             #endregion
             var mappingConfig = new MapperConfiguration( mc =>
             {

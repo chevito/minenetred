@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Minenetred.web.Services
+{
+    public interface IActivityService
+    {
+        Task<ActivityViewModel> GetActivitiesAsync(int projectId);
+    }
+}
