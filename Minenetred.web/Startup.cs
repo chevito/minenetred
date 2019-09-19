@@ -49,7 +49,7 @@ namespace Minenetred.web
             });
             #region Library Services
             services.AddScoped<IIssueService>(s=> new IssueService(_client));
-            services.AddScoped<ITimeEntryService>(s => new TimeEntryService(_client));
+            services.AddScoped<Redmine.library.Services.ITimeEntryService>(s => new Redmine.library.Services.Implementations.TimeEntryService(_client));
             services.AddScoped<IUserService>(s => new UserService(_client));
             services.AddScoped<IActivityService>(s => new ActivityService(_client));
             services.AddScoped<Redmine.library.Services.IProjectService>(s => new Redmine.library.Services.Implementations.ProjectService(_client));
@@ -58,6 +58,7 @@ namespace Minenetred.web
             #region Project services
             services.AddScoped<IUsersManagementService, UsersManagementService>();
             services.AddScoped<Services.IProjectService, Services.Implementations.ProjectService>();
+            services.AddScoped<Services.ITimeEntryService, Services.Implementations.TimeEntryService>();
             #endregion
             var mappingConfig = new MapperConfiguration( mc =>
             {
