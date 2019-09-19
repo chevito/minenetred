@@ -41,7 +41,6 @@ namespace Minenetred.web.Controllers
             if (!_userManagementService.CheckReisteredUser(userName))
                 _userManagementService.RegisterUser(userName);
 
-
             if (!_userManagementService.CheckRedmineKey(userName))
                 return RedirectToAction("AddKey");
 

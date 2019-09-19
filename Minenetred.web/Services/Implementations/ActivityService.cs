@@ -39,7 +39,5 @@ namespace Minenetred.web.Services.Implementations
             var toRetun = _mapper.Map<ActivityListResponse, ActivityViewModel>(retrievedData);
             return toRetun;
         }
-
-
     }
 }

@@ -46,7 +46,6 @@ namespace Redmine.library.Services.Implementations
                     var errorMsg = await response.Content.ReadAsStringAsync();
                     throw new Exception(errorMsg);
                 }
-
             }
             catch (Exception ex)
             {
