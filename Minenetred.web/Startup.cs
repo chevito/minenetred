@@ -19,6 +19,8 @@ using Minenetred.web.Infrastructure;
 using Redmine.library.Services;
 using Redmine.library.Services.Implementations;
 using System.DirectoryServices.AccountManagement;
+using Minenetred.web.Services;
+using Minenetred.web.Services.Implementations;
 
 namespace Minenetred.web
 {
@@ -45,12 +47,18 @@ namespace Minenetred.web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            #region Library Services
             services.AddScoped<IIssueService>(s=> new IssueService(_client));
             services.AddScoped<ITimeEntryService>(s => new TimeEntryService(_client));
             services.AddScoped<IUserService>(s => new UserService(_client));
             services.AddScoped<IActivityService>(s => new ActivityService(_client));
-            services.AddScoped<IProjectService>(s => new ProjectService(_client));
+            services.AddScoped<Redmine.library.Services.IProjectService>(s => new Redmine.library.Services.Implementations.ProjectService(_client));
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
+            #endregion
+            #region Project services
+            services.AddScoped<IUsersManagementService, UsersManagementService>();
+            services.AddScoped<Services.IProjectService, Services.Implementations.ProjectService>();
+            #endregion
             var mappingConfig = new MapperConfiguration( mc =>
             {
                 mc.AddProfile(new MappingProfile());
