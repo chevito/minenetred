@@ -48,7 +48,7 @@ namespace Minenetred.web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             #region Library Services
-            services.AddScoped<IIssueService>(s=> new IssueService(_client));
+            services.AddScoped<Redmine.library.Services.IIssueService>(s=> new Redmine.library.Services.Implementations.IssueService(_client));
             services.AddScoped<Redmine.library.Services.ITimeEntryService>(s => new Redmine.library.Services.Implementations.TimeEntryService(_client));
             services.AddScoped<IUserService>(s => new UserService(_client));
             services.AddScoped<IActivityService>(s => new ActivityService(_client));
@@ -59,6 +59,7 @@ namespace Minenetred.web
             services.AddScoped<IUsersManagementService, UsersManagementService>();
             services.AddScoped<Services.IProjectService, Services.Implementations.ProjectService>();
             services.AddScoped<Services.ITimeEntryService, Services.Implementations.TimeEntryService>();
+            services.AddScoped<Services.IIssueService, Services.Implementations.IssueService>();
             #endregion
             var mappingConfig = new MapperConfiguration( mc =>
             {
