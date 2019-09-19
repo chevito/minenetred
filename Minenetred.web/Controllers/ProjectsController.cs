@@ -47,7 +47,7 @@ namespace Minenetred.web.Controllers
 
             var decryptedKey = _userManagementService.GetUserKey(userName);
             var projectList = await _projectService.GetOpenProjectsAsync(decryptedKey);
-            return projectList;
+            return View(projectList);
         }
         [Route("/AccessKey")]
         public IActionResult AddKey()
@@ -69,13 +69,13 @@ namespace Minenetred.web.Controllers
         } 
 
         [HttpPost]
-        public IActionResult KeyUpdate(string key)
+        public async Task<IActionResult> KeyUpdateAsync(string key)
         {
             if (string.IsNullOrEmpty(key))
                 return RedirectToAction("AddKey");
 
             _userManagementService.UpdateKey(key, UserPrincipal.Current.EmailAddress);
-            _userManagementService.AddRedmineIdAsync(key);
+            await _userManagementService.AddRedmineIdAsync(key);
             return RedirectToAction("GetProjectsAsync");
         }
     }

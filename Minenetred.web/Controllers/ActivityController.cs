@@ -4,6 +4,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
@@ -14,6 +15,7 @@ using Redmine.library.Models;
 
 namespace Minenetred.web.Controllers
 {
+    [Authorize]
     public class ActivityController : Controller
     {
         private readonly IActivityService _activityService;
@@ -24,7 +26,7 @@ namespace Minenetred.web.Controllers
         }
         [Route("/Activities/{projectId}")]
         [HttpGet]
-        public async Task<ActivityViewModel> GetActivitiesAsync(int projectId)
+        public async Task<ActivityViewModel> GetActivitiesAsync([FromRoute] int projectId)
         {
             try
             {

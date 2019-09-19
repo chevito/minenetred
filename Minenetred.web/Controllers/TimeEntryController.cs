@@ -4,6 +4,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
@@ -13,6 +14,7 @@ using Redmine.library.Models;
 
 namespace Minenetred.web.Controllers
 {
+    [Authorize]
     public class TimeEntryController : Controller
     {
         private readonly ITimeEntryService _timeEntryService;
@@ -24,7 +26,7 @@ namespace Minenetred.web.Controllers
 
         [Route("/Entries/{projectId}/{date}")]
         [HttpGet]
-        public async Task<TimeEntryViewModel> GetTimeEntriesAsync(int projectId, string date)
+        public async Task<TimeEntryViewModel> GetTimeEntriesAsync([FromRoute] int projectId, [FromRoute]  string date)
         {
             var toReturn = await _timeEntryService.GetTimeEntriesAsync(projectId, date);
             return toReturn;

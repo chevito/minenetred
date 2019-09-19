@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
@@ -14,6 +15,7 @@ using Redmine.library.Models;
 
 namespace Minenetred.web.Controllers
 {
+    [Authorize]
     public class IssueController : Controller
     {
         private readonly IIssueService _issueService;
@@ -27,10 +29,17 @@ namespace Minenetred.web.Controllers
 
         [HttpGet]
         [Route("/Issues/{projectId}")]
-        public async Task<IssueViewModel> GetIssuesAsync(int projectId)
+        public async Task<IssueViewModel> GetIssuesAsync([FromRoute] int projectId)
         {
-            var toReturn = await _issueService.GetIssuesAsync(projectId);
-            return toReturn;
+            try
+            {
+                var toReturn = await _issueService.GetIssuesAsync(projectId);
+                return toReturn;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

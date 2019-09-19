@@ -4,6 +4,7 @@ using Minenetred.web.Infrastructure;
 using Redmine.library.Services;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Minenetred.web.Services.Implementations
             _encryptionService = encryptionService;
             _userService = userService;
         }
-
+        
         public bool CheckReisteredUser(string userEmail)
         {
             var user = _context.Users.SingleOrDefault(u=>u.UserName==userEmail);
@@ -57,7 +58,8 @@ namespace Minenetred.web.Services.Implementations
         {
             var user = _context.Users.SingleOrDefault(u=> u.UserName == userEmail);
             var encryptedKey = _encryptionService.Encrypt(apiKey);
-            user.RedmineKey= encryptedKey;
+            user.LastKeyUpdatedDate = DateTime.Now;
+            user.RedmineKey = encryptedKey;
             _context.Users.Update(user);
             _context.SaveChanges();
         }
@@ -74,7 +76,7 @@ namespace Minenetred.web.Services.Implementations
         public async Task AddRedmineIdAsync(string key)
         {
             var redmineUser = await _userService.GetCurrentUserAsync(key);
-            var contextUser = _context.Users.SingleOrDefault(u=>u.RedmineKey == _encryptionService.Encrypt(key));
+            var contextUser = _context.Users.SingleOrDefault(u=>u.UserName == UserPrincipal.Current.EmailAddress);
             contextUser.RedmineId = redmineUser.User.Id;
             _context.Users.Update(contextUser);
             _context.SaveChanges();
