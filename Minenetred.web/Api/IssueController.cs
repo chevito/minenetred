@@ -2,36 +2,39 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
-using Minenetred.web.Models;
 using Minenetred.web.Services;
 using Minenetred.web.ViewModels;
 using Redmine.library.Models;
 
-namespace Minenetred.web.Controllers
+namespace Minenetred.web.Api
 {
     [Authorize]
-    public class ActivityController : Controller
+    public class IssueController : Controller
     {
-        private readonly IActivityService _activityService;
+        private readonly IIssueService _issueService;
 
-        public ActivityController(IActivityService activityService)
+        public IssueController(
+            IIssueService issueService
+            )
         {
-            _activityService = activityService;
+            _issueService = issueService;
         }
-        [Route("/Activities/{projectId}")]
+
         [HttpGet]
-        public async Task<ActivityViewModel> GetActivitiesAsync([FromRoute] int projectId)
+        [Route("/Issues/{projectId}")]
+        public async Task<IssueViewModel> GetIssuesAsync([FromRoute] int projectId)
         {
             try
             {
-                var toRetun = await _activityService.GetActivitiesAsync(projectId);
-                return toRetun;
+                var toReturn = await _issueService.GetIssuesAsync(projectId);
+                return toReturn;
             }
             catch (Exception ex)
             {

@@ -12,7 +12,7 @@ using Minenetred.web.Services;
 using Minenetred.web.ViewModels;
 using Redmine.library.Models;
 
-namespace Minenetred.web.Controllers
+namespace Minenetred.web.Api
 {
     [Authorize]
     public class TimeEntryController : Controller
