@@ -29,12 +29,16 @@ namespace Minenetred.web.Api
 
         [HttpGet]
         [Route("/Issues/{projectId}")]
-        public async Task<IssueViewModel> GetIssuesAsync([FromRoute] int projectId)
+        public async Task<ActionResult<IssueViewModel>> GetIssuesAsync([FromRoute] int projectId)
         {
             try
             {
                 var toReturn = await _issueService.GetIssuesAsync(projectId);
-                return toReturn;
+                if (toReturn == null)
+                {
+                    return NotFound();
+                }
+                return Ok(toReturn);
             }
             catch (Exception ex)
             {

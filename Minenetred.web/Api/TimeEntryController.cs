@@ -26,10 +26,14 @@ namespace Minenetred.web.Api
 
         [Route("/Entries/{projectId}/{date}")]
         [HttpGet]
-        public async Task<TimeEntryViewModel> GetTimeEntriesAsync([FromRoute] int projectId, [FromRoute]  string date)
+        public async Task<ActionResult<TimeEntryViewModel>> GetTimeEntriesAsync([FromRoute] int projectId, [FromRoute]  string date)
         {
             var toReturn = await _timeEntryService.GetTimeEntriesAsync(projectId, date);
-            return toReturn;
+            if (toReturn == null)
+            {
+                return NotFound();
+            }
+            return Ok(toReturn);
         }
     }
 }

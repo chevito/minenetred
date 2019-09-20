@@ -26,12 +26,16 @@ namespace Minenetred.web.Api
         }
         [Route("/Activities/{projectId}")]
         [HttpGet]
-        public async Task<ActivityViewModel> GetActivitiesAsync([FromRoute] int projectId)
+        public async Task<ActionResult<ActivityViewModel>> GetActivitiesAsync([FromRoute] int projectId)
         {
             try
             {
                 var toRetun = await _activityService.GetActivitiesAsync(projectId);
-                return toRetun;
+                if (toRetun == null)
+                {
+                    return NotFound();
+                }
+                return Ok(toRetun);
             }
             catch (Exception ex)
             {
