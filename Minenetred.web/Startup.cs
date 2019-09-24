@@ -80,28 +80,6 @@ namespace Minenetred.web
            services.AddSwaggerGen(c=> {
                 c.SwaggerDoc("v1", new Info {Title = "My API", Description="Swagger core API"});
             });
-           /* services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info
-                {
-                    Version = "v1",
-                    Title = "ToDo API",
-                    Description = "A simple example ASP.NET Core Web API",
-                    TermsOfService = new Uri("https://example.com/terms").ToString(),
-                    Contact = new Contact
-                    {
-                        Name = "Shayne Boyer",
-                        Email = string.Empty,
-                        Url = new Uri("https://twitter.com/spboyer").ToString(),
-                    },
-                    License = new License
-                    {
-                        Name = "Use under LICX",
-                        Url = new Uri("https://example.com/license").ToString(),
-                    }
-                });
-            });*/
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
