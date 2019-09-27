@@ -7,86 +7,117 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+    function displayTable() {
+        if ($('.datesTable').css('display') == 'none') {
+            $('.datesTable').toggle("slide");
+        }
+    }
+    function convertDateFormat(value) {
+        value.setDate(value.getDate() + 1);
+        var toReturn = value.getFullYear() + '-' +
+            ('0' + (value.getMonth() + 1)).slice(-2) + '-' +
+            ('0' + value.getDate()).slice(-2);
+        return toReturn;
+    }
+
+    function setDateHeader(date, object, displayDate, weekDays, i) {
+        date.setDate(date.getDate() +1 + i);
+        var weekDay = weekDays[date.getDay()]
+        $(object).html('<h3>' + weekDay + '</h3>' + '<text>' + displayDate + '</text>');
+    }
+    function setTotalHoursPerDay() {
+        $('.hours-a-day').each(function (indexH, object) {
+            $(object).find('h3').html('0');
+            $('.time-entries').each(function (indexT) {
+                if ($(this).index() - 1 == indexH) {
+                    $(object).find('h3').html(parseInt($(object).find('h3').html()) + parseInt($(this).find('text').find('h4').text()));
+                }
+            });
+        });
+
+    }
+    function setTotalHoursLoggedPerProject(sum, projectId, actualIndex) {
+         $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br/> <h4>' + sum + '</h4> ');
+    }
+    function getHoursPerProjectNDay(result) {
+        var sum = 0;
+        $.each(result.timeEntries, function (index, value) {
+            sum = sum + value.hours;
+        });
+        return sum;
+    }
+
+    function setValuesToForm(button) {
+        var projectName = $(button).parent("td").parent("tr").find("td:first").text();
+        $('#modalProjectTitle').text(projectName);
+        var hiddenDate = $(button).parent("td").closest('table').find('th').eq($(button).parent("td").index()).find('text').html();
+        $('#dateEntry').val(hiddenDate);
+        $('#dateText').text('Date: ' + hiddenDate);
+        var projectId = $(button).parent("td").parent("tr").find("td:first").find('input').val();
+        $('#projectIdInput').val(projectId);
+    }
+
+    function setSelector(className, description, type) {
+        $(className).html('');
+        $.each(type, function (index, object) {
+            $(className).html($(className).html() + '<option value="' + object.id + '">' + description + '</option>')
+        });
+    }
+
+
     $(document).ready(function () {
         var baseAdress = document.location.origin;
-        $('#date').change(function () {
-            if ($('.datesTable').css('display') == 'none') {
-                $('.datesTable').toggle("slide");
-            }
-            var valueDate = new Date($('#date').val());
-            valueDate.setDate(valueDate.getDate() + 1);
-            valueDate.getFullYear() + '-' +
-                ('0' + (valueDate.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + valueDate.getDate()).slice(-2);
-            var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            $('.tableHeader').each(function (i, obj) {
+        var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-                var displayDate = valueDate.getFullYear() + '-' +
-                    ('0' + (valueDate.getMonth() + 1)).slice(-2) + '-' +
-                    ('0' + valueDate.getDate()).slice(-2);
-                var weekDay = weekDays[valueDate.getDay()]
-                $(this).html('<h3>' + weekDay + '</h3>' + '<text>' + displayDate + '</text>');
-                valueDate.setDate(valueDate.getDate() + 1);
+
+        $('#date').change(function () {
+            displayTable();
+            var displayDate = convertDateFormat(new Date($('#date').val()));
+
+            $('.tableHeader').each(function (i, obj) {
+                setDateHeader(new Date($('#date').val()), obj, displayDate, weekDays, i)
             });
             $('.table-row').each(function () {
                 $(this).children('.time-entries').each(function (indexColumn) {
                     var date = $(this).closest('table').find('th').eq($(this).index()).find('text').text();
                     var projectId = $(this).parent("tr").find("td:first").find('input').val();
+
                     $.ajax({
                         url: baseAdress + '/Entries/' + projectId + '/' + date,
                         dataType: 'json',
                         success: function (result) {
-                            var sum = 0;
-                            $.each(result.timeEntries, function (index, value) {
-                                sum = sum + value.hours;
-                            });
+                            var sum = getHoursPerProjectNDay(result);
                             var actualIndex = indexColumn + 1;
-                            $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br/> <h4>' + sum + '</h4> ');
-
-                            $('.hours-a-day').each(function (indexH, object) {
-                                $(object).find('h3').html('0');
-                                $('.time-entries').each(function (indexT) {
-                                    if ($(this).index() - 1 == indexH) {
-                                        $(object).find('h3').html(parseInt($(object).find('h3').html()) + parseInt($(this).find('text').find('h4').text()));
-                                    }
-                                });
-                            });
+                            setTotalHoursLoggedPerProject(sum, projectId, actualIndex);
+                            setTotalHoursPerDay();
                         }
                     })
-
                 });
-
             });
         });
 
         $('.btn-add-entry').click(function () {
-            var projectName = $(this).parent("td").parent("tr").find("td:first").text();
-            $('#modalProjectTitle').text(projectName);
-            var hiddenDate = $(this).parent("td").closest('table').find('th').eq($(this).parent("td").index()).find('text').html();
-            $('#dateEntry').val(hiddenDate);
-            $('#dateText').text('Date: ' + hiddenDate);
-            var projectId = $(this).parent("td").parent("tr").find("td:first").find('input').val();
-            $('#projectIdInput').val(projectId);
-
+            setValuesToForm(this);
             $.ajax({
                 url: baseAdress + '/Issues/' + projectId,
                 dataType: 'json',
                 success: function (result) {
-                    $('.issue-selector').html('');
+                    setSelector('.issue-selector', result.issues.subject, result.issues);
+                    /*$('.issue-selector').html('');
                     $.each(result.issues, function (index, object) {
                         $('.issue-selector').html($('.issue-selector').html() + '<option value="' + object.id + '">' + object.subject + '</option>')
-                    });
-
+                    });*/
                 }
             })
             $.ajax({
                 url: baseAdress + '/Activities/' + projectId,
                 dataType: 'json',
                 success: function (result) {
-                    $('.activity-selector').html('');
+                    setSelector('.activity-selector', result.activities.name, result.activities);
+                    /*$('.activity-selector').html('');
                     $.each(result.activities, function (index, object) {
                         $('.activity-selector').html($('.activity-selector').html() + '<option value="' + object.id + '">' + object.name + '</option>')
-                    });
+                    });*/
 
                 }
             });
