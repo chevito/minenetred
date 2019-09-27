@@ -1,5 +1,6 @@
 ﻿
 
+
 @model Minenetred.web.ViewModels.ProjectsViewModel
 
 @{
@@ -21,7 +22,7 @@
     }
 
     function setDateHeader(date, object, displayDate, weekDays, i) {
-        date.setDate(date.getDate() +1 + i);
+        date.setDate(date.getDate() + 1 + i);
         var weekDay = weekDays[date.getDay()]
         $(object).html('<h3>' + weekDay + '</h3>' + '<text>' + displayDate + '</text>');
     }
@@ -37,7 +38,7 @@
 
     }
     function setTotalHoursLoggedPerProject(sum, projectId, actualIndex) {
-         $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br/> <h4>' + sum + '</h4> ');
+        $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br/> <h4>' + sum + '</h4> ');
     }
     function getHoursPerProjectNDay(result) {
         var sum = 0;
@@ -57,14 +58,14 @@
         $('#projectIdInput').val(projectId);
     }
 
-    function setSelector(className, description, type) {
+    function setSelector(className, type) {
         $(className).html('');
         $.each(type, function (index, object) {
-            $(className).html($(className).html() + '<option value="' + object.id + '">' + description + '</option>')
+            $(className).html($(className).html() + '<option value="' + object.id + '">' + Object.values(object)[1] + '</option>')
         });
     }
-
-
+</script>
+<script>
     $(document).ready(function () {
         var baseAdress = document.location.origin;
         var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -98,35 +99,25 @@
 
         $('.btn-add-entry').click(function () {
             setValuesToForm(this);
+            var projectId = $('#projectIdInput').val();
             $.ajax({
                 url: baseAdress + '/Issues/' + projectId,
                 dataType: 'json',
                 success: function (result) {
-                    setSelector('.issue-selector', result.issues.subject, result.issues);
-                    /*$('.issue-selector').html('');
-                    $.each(result.issues, function (index, object) {
-                        $('.issue-selector').html($('.issue-selector').html() + '<option value="' + object.id + '">' + object.subject + '</option>')
-                    });*/
+                    setSelector('.issue-selector', result.issues);
                 }
             })
             $.ajax({
                 url: baseAdress + '/Activities/' + projectId,
                 dataType: 'json',
                 success: function (result) {
-                    setSelector('.activity-selector', result.activities.name, result.activities);
-                    /*$('.activity-selector').html('');
-                    $.each(result.activities, function (index, object) {
-                        $('.activity-selector').html($('.activity-selector').html() + '<option value="' + object.id + '">' + object.name + '</option>')
-                    });*/
-
+                    setSelector('.activity-selector', result.activities);
                 }
             });
         });
     })
 
 </script>
-
-
 <h2>My open projects</h2>
 
 <hr />
@@ -242,6 +233,3 @@
         </div>
     </div>
 </div>
-
-
-
