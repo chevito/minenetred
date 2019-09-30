@@ -24,9 +24,13 @@ namespace Minenetred.web.Infrastructure
             CreateMap<Issue, IssueDto>();
             CreateMap<IssueListResponse, IssueViewModel>();
 
-            CreateMap<TimeEntry, TimeEntryDto>();
+            CreateMap<TimeEntry, Minenetred.web.Models.TimeEntryDto >();
             CreateMap<TimeEntryListResponse, TimeEntryViewModel>()
                 .ForMember(dto => dto.TimeEntries, opt => opt.MapFrom(src => src.Time_Entries));
+
+            CreateMap<Redmine.library.Models.TimeEntryDto, TimeEntryFormDto>();
+            CreateMap<TimeEntryDtoContainer, TimeEntryFormContainer>()
+                .ForMember(dto => dto.TimeEntry, opt=> opt.MapFrom(src => src.Time_entry));
         }
     }
 }

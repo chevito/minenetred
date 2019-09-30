@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
+using Minenetred.web.Models;
 using Minenetred.web.Services;
 using Minenetred.web.ViewModels;
 using Redmine.library.Models;
@@ -37,6 +38,19 @@ namespace Minenetred.web.Api
                 return NotFound();
             }
             return Ok(toReturn);
+        }
+
+        [Route("/Entries")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(201)]
+        [HttpPost]
+        public async Task<IActionResult> AddTimeEntryAsync([FromBody]TimeEntryFormDto entry)
+        {
+            if (entry == null)
+            {
+                return new StatusCodeResult(400);
+            }
+            return  new StatusCodeResult((int) await _timeEntryService.AddTimeEntryAsync(entry));
         }
     }
 }

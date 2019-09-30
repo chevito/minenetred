@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
+using Minenetred.web.Models;
 using Minenetred.web.ViewModels;
 using Redmine.library.Models;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Minenetred.web.Services.Implementations
@@ -42,6 +44,20 @@ namespace Minenetred.web.Services.Implementations
            var response = await _timeEntryService.GetTimeEntriesAsync(key, redmineId, projectId, date);
            var toReturn = _mapper.Map<TimeEntryListResponse, TimeEntryViewModel>(response);
            return toReturn;
+        }
+
+        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry)
+        {
+            var user = UserPrincipal.Current.EmailAddress;
+            var key = _usersManagementService.GetUserKey(user);
+            var entryToMap = new TimeEntryFormContainer()
+            {
+                TimeEntry = entry,
+            };
+            var timeEntry = _mapper.Map<TimeEntryDtoContainer>(entryToMap);
+            var response = await _timeEntryService.AddTimeEntryAsync(timeEntry, key);
+            return response;
+
         }
     }
 }
