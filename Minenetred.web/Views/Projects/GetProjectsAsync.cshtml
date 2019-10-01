@@ -21,10 +21,12 @@
         return toReturn;
     }
 
-    function setDateHeader(date, object, displayDate, weekDays, i) {
-        date.setDate(date.getDate() + 1 + i);
+    function setDateHeader(date, object, weekDays, i) {
+        date.setDate(date.getDate() + i);
+        var displayDate = convertDateFormat(date);
         var weekDay = weekDays[date.getDay()]
         $(object).html('<h3>' + weekDay + '</h3>' + '<text>' + displayDate + '</text>');
+
     }
     function setTotalHoursPerDay() {
         $('.hours-a-day').each(function (indexH, object) {
@@ -53,7 +55,7 @@
         $('#modalProjectTitle').text(projectName);
         var hiddenDate = $(button).parent("td").closest('table').find('th').eq($(button).parent("td").index()).find('text').html();
         $('#dateEntry').val(hiddenDate);
-        $('#dateText').text('Date: ' + hiddenDate);
+        $('#dateText').html('Date: <text>' + hiddenDate+'</text>');
         var projectId = $(button).parent("td").parent("tr").find("td:first").find('input').val();
         $('#projectIdInput').val(projectId);
     }
@@ -73,10 +75,8 @@
 
         $('#date').change(function () {
             displayTable();
-            var displayDate = convertDateFormat(new Date($('#date').val()));
-
             $('.tableHeader').each(function (i, obj) {
-                setDateHeader(new Date($('#date').val()), obj, displayDate, weekDays, i)
+                setDateHeader(new Date($('#date').val()), obj, weekDays, i)
             });
             $('.table-row').each(function () {
                 $(this).children('.time-entries').each(function (indexColumn) {
@@ -114,6 +114,28 @@
                     setSelector('.activity-selector', result.activities);
                 }
             });
+        });
+
+
+        $('.post-time-entry').click(function () {
+            var entry = JSON.stringify({
+                issueId: parseInt($('.issue-selector').val()),
+                spentOn: $('#dateText').find('text').text(),
+                hours: parseFloat($('#hours-input').val()),
+                activityId: parseInt($('.activity-selector').val()),
+                comments: $('#comment-input').val()
+            })
+            console.log(entry);
+            $.ajax({
+                url: baseAdress + '/Entries',
+                type: 'POST',
+                data: entry,
+                contentType: 'application/json',
+                success: function () {
+                    $('.btn-close').click();
+                    $("#date").change();
+                }
+            })
         });
     })
 
@@ -213,8 +235,8 @@
                 <div class="form-group input-group">
                     <form action="/" method="post">
                         <input id="projectIdInput" type="hidden" name="projectId" value="" />
-                        <input class="input-group" type="number" min="0" name="hours" placeholder="Enter hours" /><br />
-                        <input class="input-group" type="text" name="description" placeholder="Enter description" /><br />
+                        <input id="hours-input" class="input-group" type="number" min="0" name="hours" placeholder="Enter hours" /><br />
+                        <input id="comment-input" class="input-group" type="text" name="description" placeholder="Enter description" /><br />
                         <h5>Select Issue</h5>
                         <select class="input-group issue-selector" name="issue">
                         </select><br />
@@ -227,8 +249,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary post-time-entry">Save changes</button>
             </div>
         </div>
     </div>

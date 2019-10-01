@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -44,13 +45,14 @@ namespace Minenetred.web.Api
         [ProducesResponseType(400)]
         [ProducesResponseType(201)]
         [HttpPost]
-        public async Task<IActionResult> AddTimeEntryAsync([FromBody]TimeEntryFormDto entry)
+        public async Task<HttpStatusCode> AddTimeEntryAsync([FromBody]TimeEntryFormDto entry)
         {
             if (entry == null)
             {
-                return new StatusCodeResult(400);
+                return HttpStatusCode.BadRequest;
             }
-            return  new StatusCodeResult((int) await _timeEntryService.AddTimeEntryAsync(entry));
+            return await _timeEntryService.AddTimeEntryAsync(entry);
+
         }
     }
 }

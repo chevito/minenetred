@@ -6,10 +6,10 @@ namespace Redmine.library.Models
 {
     public class TimeEntryDto
     {
-        public int Issue_id { get; set; }
-        public string Spent_on { get; set; }
-        public int Hours { get; set; }
-        public int Activity_id { get; set; }
-        public string Comments { get; set; }
+        public int issue_id { get; set; }
+        public string spent_on { get; set; }
+        public float hours { get; set; }
+        public int activity_id { get; set; }
+        public string comments { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace Minenetred.web.Models
     {
         public int IssueId { get; set; }
         public string SpentOn { get; set; }
-        public int Hours { get; set; }
+        public float Hours { get; set; }
         public int ActivityId { get; set; }
         public string Comments { get; set; }
 
