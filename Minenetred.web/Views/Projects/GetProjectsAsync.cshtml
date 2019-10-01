@@ -33,7 +33,7 @@
             $(object).find('h3').html('0');
             $('.time-entries').each(function (indexT) {
                 if ($(this).index() - 1 == indexH) {
-                    $(object).find('h3').html(parseInt($(object).find('h3').html()) + parseInt($(this).find('text').find('h4').text()));
+                    $(object).find('h3').html(parseFloat($(object).find('h3').html()) + parseFloat($(this).find('text').find('h4').text()));
                 }
             });
         });
@@ -55,7 +55,7 @@
         $('#modalProjectTitle').text(projectName);
         var hiddenDate = $(button).parent("td").closest('table').find('th').eq($(button).parent("td").index()).find('text').html();
         $('#dateEntry').val(hiddenDate);
-        $('#dateText').html('Date: <text>' + hiddenDate+'</text>');
+        $('#dateText').html('Date: <text>' + hiddenDate + '</text>');
         var projectId = $(button).parent("td").parent("tr").find("td:first").find('input').val();
         $('#projectIdInput').val(projectId);
     }
@@ -68,7 +68,7 @@
     }
 </script>
 <script>
-    $(document).ready(function () {
+$(document).ready(function () {
         var baseAdress = document.location.origin;
         var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -82,7 +82,8 @@
                 $(this).children('.time-entries').each(function (indexColumn) {
                     var date = $(this).closest('table').find('th').eq($(this).index()).find('text').text();
                     var projectId = $(this).parent("tr").find("td:first").find('input').val();
-
+                    $(this).find('text').text('Loading...');
+                    $('.hours-a-day').find('h3').text('Loading...');
                     $.ajax({
                         url: baseAdress + '/Entries/' + projectId + '/' + date,
                         dataType: 'json',
@@ -125,7 +126,6 @@
                 activityId: parseInt($('.activity-selector').val()),
                 comments: $('#comment-input').val()
             })
-            console.log(entry);
             $.ajax({
                 url: baseAdress + '/Entries',
                 type: 'POST',
@@ -140,6 +140,7 @@
     })
 
 </script>
+
 <h2>My open projects</h2>
 
 <hr />
@@ -178,31 +179,31 @@
 
                     </td>
                     <td scope="row" class="time-entries">
-                        <text></text>
+                        <text>Loading...</text>
                         <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
                             Add time entry
                         </button>
                     </td>
                     <td scope="row" class="time-entries">
-                        <text></text>
+                        <text>Loading...</text>
                         <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
                             Add time entry
                         </button>
                     </td>
                     <td scope="row" class="time-entries">
-                        <text></text>
+                        <text>Loading...</text>
                         <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
                             Add time entry
                         </button>
                     </td>
                     <td scope="row" class="time-entries">
-                        <text></text>
+                        <text>Loading...</text>
                         <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
                             Add time entry
                         </button>
                     </td>
                     <td scope="row" class="time-entries">
-                        <text></text>
+                        <text>Loading...</text>
                         <button type="button" class="btn btn-success btn-add-entry" data-toggle="modal" data-target="#timeEntryForm">
                             Add time entry
                         </button>
