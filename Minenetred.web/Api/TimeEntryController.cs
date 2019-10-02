@@ -52,7 +52,6 @@ namespace Minenetred.web.Api
                 return HttpStatusCode.BadRequest;
             }
             return await _timeEntryService.AddTimeEntryAsync(entry);
-
         }
     }
 }

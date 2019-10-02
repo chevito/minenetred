@@ -12,6 +12,5 @@ namespace Minenetred.web.Models
         public float Hours { get; set; }
         public int ActivityId { get; set; }
         public string Comments { get; set; }
-
     }
 }

@@ -88,7 +88,6 @@ namespace Minenetred.web.Controllers
             {
                 return RedirectToAction("AddKey", new {msj="Add a valid key"});
             }
-
         }
     }
 }

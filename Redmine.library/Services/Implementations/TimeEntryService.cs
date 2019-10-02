@@ -77,7 +77,6 @@ namespace Redmine.library.Services.Implementations
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage  response = await _client.PostAsync(requestUri, httpContent);
                 return response.StatusCode;
-
             }
             catch (Exception ex)
             {
