@@ -66,6 +66,29 @@
             $(className).html($(className).html() + '<option value="' + object.id + '">' + Object.values(object)[1] + '</option>')
         });
     }
+
+    function createDataObject() {
+        return JSON.stringify({
+                issueId: parseInt($('.issue-selector').val()),
+                spentOn: $('#dateText').find('text').text(),
+                hours: parseFloat($('#hours-input').val()),
+                activityId: parseInt($('.activity-selector').val()),
+                comments: $('#comment-input').val()
+        })
+
+    }
+    function validateInputs() {
+        if (!$('#hours-input').val() || !$('#comment-input').val()) {
+            $('.validation').text('Please fill all fields');
+            return false;
+        }
+        return true;
+    }
+    function clearInputs() {
+        $('.validation').text('');
+        $('#comment-input').val('');
+        $('#hours-input').val('');
+    }
 </script>
 <script>
 $(document).ready(function () {
@@ -118,14 +141,9 @@ $(document).ready(function () {
         });
 
 
-        $('.post-time-entry').click(function () {
-            var entry = JSON.stringify({
-                issueId: parseInt($('.issue-selector').val()),
-                spentOn: $('#dateText').find('text').text(),
-                hours: parseFloat($('#hours-input').val()),
-                activityId: parseInt($('.activity-selector').val()),
-                comments: $('#comment-input').val()
-            })
+    $('.post-time-entry').click(function () {
+        var entry = createDataObject();
+        if (validateInputs()) {
             $.ajax({
                 url: baseAdress + '/Entries',
                 type: 'POST',
@@ -134,10 +152,14 @@ $(document).ready(function () {
                 success: function () {
                     $('.btn-close').click();
                     $("#date").change();
+                    clearInputs();
                 }
             })
-        });
-    })
+
+        }
+
+    });
+})
 
 </script>
 
@@ -228,6 +250,7 @@ $(document).ready(function () {
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="modalProjectTitle"></h2>
+                <h4 style="color:red" class="validation"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
