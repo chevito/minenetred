@@ -53,10 +53,8 @@ namespace Minenetred.web.Controllers
             }
             catch (Exception)
             {
-
                 return RedirectToAction("AddKey", new {msj = "Add a valid key"});
             }
-
         }
         [Route("/AccessKey")]
         
