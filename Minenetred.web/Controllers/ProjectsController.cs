@@ -51,11 +51,14 @@ namespace Minenetred.web.Controllers
         }
         [Route("/AccessKey")]
         
-        public IActionResult AddKey()
+        public IActionResult AddKey(string msj = null)
         {
             var userName = UserPrincipal.Current.EmailAddress;
             ViewBag.user = userName;
-
+            if (!string.IsNullOrWhiteSpace(msj))
+            {
+                ViewBag.msj = msj;
+            }
             var userKey = _userManagementService.GetUserKey(userName);
             if (userKey == null)
             {
@@ -72,12 +75,20 @@ namespace Minenetred.web.Controllers
         [HttpPost]
         public async Task<IActionResult> KeyUpdateAsync(string key)
         {
-            if (string.IsNullOrEmpty(key))
-                return RedirectToAction("AddKey");
+            try
+            {
+                if (string.IsNullOrEmpty(key))
+                    return RedirectToAction("AddKey");
 
-            _userManagementService.UpdateKey(key, UserPrincipal.Current.EmailAddress);
-            await _userManagementService.AddRedmineIdAsync(key);
-            return RedirectToAction("GetProjectsAsync");
+                _userManagementService.UpdateKey(key, UserPrincipal.Current.EmailAddress);
+                await _userManagementService.AddRedmineIdAsync(key);
+                return RedirectToAction("GetProjectsAsync");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("AddKey", new {msj="Add a valid key"});
+            }
+
         }
     }
 }
