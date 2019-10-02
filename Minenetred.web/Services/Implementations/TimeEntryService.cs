@@ -37,14 +37,19 @@ namespace Minenetred.web.Services.Implementations
             _usersManagementService = usersManagementService;
         }
 
-        public async Task<TimeEntryViewModel> GetTimeEntriesAsync(int projectId, string date)
+        public async Task<float> GetTimeEntryHoursPerDay(int projectId, string date)
         {
            var user = UserPrincipal.Current.EmailAddress;
            var key = _usersManagementService.GetUserKey(user);
            var redmineId = _context.Users.SingleOrDefault(u=>u.UserName == user).RedmineId;
            var response = await _timeEntryService.GetTimeEntriesAsync(key, redmineId, projectId, date);
-           var toReturn = _mapper.Map<TimeEntryListResponse, TimeEntryViewModel>(response);
-           return toReturn;
+           var shapedList = _mapper.Map<TimeEntryListResponse, TimeEntryViewModel>(response);
+            float totalHours = 0;
+            foreach (var entry in shapedList.TimeEntries)
+            {
+                totalHours += entry.Hours;
+            }
+           return totalHours;
         }
 
         public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry)

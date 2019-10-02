@@ -10,7 +10,7 @@ namespace Minenetred.web.Services
 {
     public interface ITimeEntryService
     {
-        Task<TimeEntryViewModel> GetTimeEntriesAsync(int projectId, string date);
+        Task<float> GetTimeEntryHoursPerDay(int projectId, string date);
         Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry);
     }
 }

@@ -42,13 +42,6 @@
     function setTotalHoursLoggedPerProject(sum, projectId, actualIndex) {
         $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br/> <h4>' + sum + '</h4> ');
     }
-    function getHoursPerProjectNDay(result) {
-        var sum = 0;
-        $.each(result.timeEntries, function (index, value) {
-            sum = sum + value.hours;
-        });
-        return sum;
-    }
 
     function setValuesToForm(button) {
         var projectName = $(button).parent("td").parent("tr").find("td:first").text();
@@ -111,9 +104,8 @@ $(document).ready(function () {
                         url: baseAdress + '/Entries/' + projectId + '/' + date,
                         dataType: 'json',
                         success: function (result) {
-                            var sum = getHoursPerProjectNDay(result);
                             var actualIndex = indexColumn + 1;
-                            setTotalHoursLoggedPerProject(sum, projectId, actualIndex);
+                            setTotalHoursLoggedPerProject(result, projectId, actualIndex);
                             setTotalHoursPerDay();
                         }
                     })

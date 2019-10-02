@@ -38,16 +38,25 @@ namespace Minenetred.web.Controllers
         [HttpGet]
         public async Task<ActionResult<ProjectsViewModel>> GetProjectsAsync()
         {
-            var userName = UserPrincipal.Current.EmailAddress;
-            if (!_userManagementService.CheckReisteredUser(userName))
-                _userManagementService.RegisterUser(userName);
+            try
+            {
+                var userName = UserPrincipal.Current.EmailAddress;
+                if (!_userManagementService.CheckReisteredUser(userName))
+                    _userManagementService.RegisterUser(userName);
 
-            if (!_userManagementService.CheckRedmineKey(userName))
-                return RedirectToAction("AddKey");
+                if (!_userManagementService.CheckRedmineKey(userName))
+                    return RedirectToAction("AddKey");
 
-            var decryptedKey = _userManagementService.GetUserKey(userName);
-            var projectList = await _projectService.GetOpenProjectsAsync(decryptedKey);
-            return View(projectList);
+                var decryptedKey = _userManagementService.GetUserKey(userName);
+                var projectList = await _projectService.GetOpenProjectsAsync(decryptedKey);
+                return View(projectList);
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("AddKey", new {msj = "Add a valid key"});
+            }
+
         }
         [Route("/AccessKey")]
         
