@@ -73,10 +73,10 @@ namespace Minenetred.web.Services.Implementations
             return _encryptionService.Decrypt(EncryptedKey);
         }
 
-        public async Task AddRedmineIdAsync(string key)
+        public async Task AddRedmineIdAsync(string key, string email)
         {
             var redmineUser = await _userService.GetCurrentUserAsync(key);
-            var contextUser = _context.Users.SingleOrDefault(u=>u.UserName == UserPrincipal.Current.EmailAddress);
+            var contextUser = _context.Users.SingleOrDefault(u=>u.UserName == email);
             contextUser.RedmineId = redmineUser.User.Id;
             _context.Users.Update(contextUser);
             _context.SaveChanges();

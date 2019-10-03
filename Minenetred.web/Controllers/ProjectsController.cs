@@ -76,7 +76,7 @@ namespace Minenetred.web.Controllers
                 return RedirectToAction("AddKey");
 
             _userManagementService.UpdateKey(key, UserPrincipal.Current.EmailAddress);
-            await _userManagementService.AddRedmineIdAsync(key);
+            await _userManagementService.AddRedmineIdAsync(key, UserPrincipal.Current.EmailAddress);
             return RedirectToAction("GetProjectsAsync");
         }
     }

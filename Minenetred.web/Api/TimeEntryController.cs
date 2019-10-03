@@ -18,12 +18,10 @@ namespace Minenetred.web.Api
     public class TimeEntryController : Controller
     {
         private readonly ITimeEntryService _timeEntryService;
-
         public TimeEntryController(ITimeEntryService timeEntryService)
         {
             _timeEntryService = timeEntryService;
         }
-
         [Route("/Entries/{projectId}/{date}")]
         [Produces("application/json")]
         [ProducesResponseType(404)]
