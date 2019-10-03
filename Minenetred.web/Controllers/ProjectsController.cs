@@ -41,10 +41,10 @@ namespace Minenetred.web.Controllers
             try
             {
                 var userName = UserPrincipal.Current.EmailAddress;
-                if (!_userManagementService.CheckReisteredUser(userName))
+                if (!_userManagementService.IsUserRegistered(userName))
                     _userManagementService.RegisterUser(userName);
 
-                if (!_userManagementService.CheckRedmineKey(userName))
+                if (!_userManagementService.HasRedmineKey(userName))
                     return RedirectToAction("AddKey");
 
                 var decryptedKey = _userManagementService.GetUserKey(userName);
@@ -80,15 +80,15 @@ namespace Minenetred.web.Controllers
         } 
 
         [HttpPost]
-        public async Task<IActionResult> KeyUpdateAsync(string key)
+        public async Task<IActionResult> UpdateRedmineKeyAsync(string Redminekey)
         {
             try
             {
-                if (string.IsNullOrEmpty(key))
+                if (string.IsNullOrEmpty(Redminekey))
                     return RedirectToAction("AddKey");
 
-                _userManagementService.UpdateKey(key, UserPrincipal.Current.EmailAddress);
-                await _userManagementService.AddRedmineIdAsync(key);
+                _userManagementService.UpdateKey(Redminekey, UserPrincipal.Current.EmailAddress);
+                await _userManagementService.AddRedmineIdAsync(Redminekey);
                 return RedirectToAction("GetProjectsAsync");
             }
             catch (Exception)

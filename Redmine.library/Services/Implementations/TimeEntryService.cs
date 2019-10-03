@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Redmine.library.Core;
 using Redmine.library.Models;
 using System;
@@ -73,7 +74,15 @@ namespace Redmine.library.Services.Implementations
                 var requestUri = Constants.timeEntries +
                     Constants.json +
                     "?key=" + authKey;
-                var json = JsonConvert.SerializeObject(entry);
+
+                var json = JsonConvert.SerializeObject(entry, new JsonSerializerSettings
+                {
+                    ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new SnakeCaseNamingStrategy()
+                    },
+                    Formatting = Formatting.Indented
+                });
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage  response = await _client.PostAsync(requestUri, httpContent);
                 return response.StatusCode;

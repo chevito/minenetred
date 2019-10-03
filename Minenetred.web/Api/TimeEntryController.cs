@@ -31,7 +31,7 @@ namespace Minenetred.web.Api
         [ProducesResponseType(404)]
         [ProducesResponseType(201)]
         [HttpGet]
-        public async Task<ActionResult<float>> GetTimeEntriesAsync([FromRoute] int projectId, [FromRoute]  string date)
+        public async Task<ActionResult<float>> GetTimeSpentPerDate([FromRoute] int projectId, [FromRoute]  string date)
         {
             var toReturn = await _timeEntryService.GetTimeEntryHoursPerDay(projectId, date);
             return Ok(toReturn);

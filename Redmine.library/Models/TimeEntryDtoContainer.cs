@@ -6,6 +6,6 @@ namespace Redmine.library.Models
 {
     public class TimeEntryDtoContainer
     {
-        public TimeEntryDto time_entry { get; set; }
+        public TimeEntryDto TimeEntry { get; set; }
     }
 }

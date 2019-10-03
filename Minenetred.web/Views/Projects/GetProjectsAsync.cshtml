@@ -107,7 +107,12 @@ $(document).ready(function () {
                             var actualIndex = indexColumn + 1;
                             setTotalHoursLoggedPerProject(result, projectId, actualIndex);
                             setTotalHoursPerDay();
+                        },
+                        error: function(response){
+                             var errorMessage = reponse.status + ': ' + response.statusText
+                             alert('Error - ' + errorMessage);
                         }
+
                     })
                 });
             });
@@ -121,6 +126,10 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (result) {
                     setSelector('.issue-selector', result.issues);
+                },
+                error: function(response){
+                    var errorMessage = reponse.status + ': ' + response.statusText
+                    alert('Error - ' + errorMessage);
                 }
             })
             $.ajax({
@@ -128,6 +137,10 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (result) {
                     setSelector('.activity-selector', result.activities);
+                },
+                error: function(response){
+                    var errorMessage = reponse.status + ': ' + response.statusText
+                    alert('Error - ' + errorMessage);
                 }
             });
         });
@@ -149,6 +162,10 @@ $(document).ready(function () {
                     $('.btn-close').click();
                     $("#date").change();
                     clearInputs();
+                },
+                error: function(response){
+                    var errorMessage = reponse.status + ': ' + response.statusText
+                    alert('Error - ' + errorMessage);
                 }
             })
 
