@@ -31,7 +31,7 @@ namespace Minenetred.web.Api
         [HttpGet]
         public async Task<ActionResult<float>> GetTimeSpentPerDate([FromRoute] int projectId, [FromRoute]  string date)
         {
-            var toReturn = await _timeEntryService.GetTimeEntryHoursPerDay(projectId, date);
+            var toReturn = await _timeEntryService.GetTimeEntryHoursPerDay(projectId, date, UserPrincipal.Current.EmailAddress);
             return Ok(toReturn);
         }
 

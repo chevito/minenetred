@@ -23,7 +23,7 @@ namespace Minenetred.web.Test
         public UserManagementServiceTest()
         {
             var options = new DbContextOptionsBuilder<MinenetredContext>()
-                .UseInMemoryDatabase(databaseName: "TestDataBase").Options;
+                .UseInMemoryDatabase(databaseName: "TestDataBaseUserManagementService").Options;
             _context = new MinenetredContext(options);
             _encryptionService = new EncryptionService("DefaultTest");
             _userService = new Mock<IUserService>();
