@@ -23,14 +23,12 @@ namespace Minenetred.web.Services.Implementations
         private readonly IUsersManagementService _usersManagementService;
 
         public TimeEntryService(
-            MinenetredContext context,
             Redmine.library.Services.ITimeEntryService timeEntryService,
             IEncryptionService encryptionService,
             IMapper mapper,
             IUsersManagementService usersManagementService
             )
         {
-            _context = context;
             _timeEntryService = timeEntryService;
             _encryptionService = encryptionService;
             _mapper = mapper;
