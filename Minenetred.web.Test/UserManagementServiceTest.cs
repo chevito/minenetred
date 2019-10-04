@@ -39,7 +39,7 @@ namespace Minenetred.web.Test
         {
             var userName = "TestUser1";
             _usersManagementService.RegisterUser(userName);
-            var check = _usersManagementService.CheckReisteredUser(userName);
+            var check = _usersManagementService.IsUserRegistered(userName);
             Assert.True(check);
         }
 
@@ -51,7 +51,7 @@ namespace Minenetred.web.Test
             
             _usersManagementService.RegisterUser(userName);
             _usersManagementService.UpdateKey(redMineKey, userName);
-            Assert.True(_usersManagementService.CheckRedmineKey(userName));
+            Assert.True(_usersManagementService.HasRedmineKey(userName));
         }
         [Fact]
         public async Task ShouldRegisterRedmineIdFromLibraryServiceAsync()
