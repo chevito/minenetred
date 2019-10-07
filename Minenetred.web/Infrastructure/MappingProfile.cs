@@ -19,7 +19,7 @@ namespace Minenetred.web.Infrastructure
 
             CreateMap<Activity, ActivityDto>();
             CreateMap<ActivityListResponse, ActivityViewModel>()
-                .ForMember(dto => dto.Activities, opt => opt.MapFrom(src => src.Time_Entry_Activities));
+                .ForMember(dto => dto.Activities, opt => opt.MapFrom(src => src.TimeEntryActivities));
 
             CreateMap<Issue, IssueDto>();
             CreateMap<IssueListResponse, IssueViewModel>();
