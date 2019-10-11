@@ -142,9 +142,8 @@ namespace Minenetred.web.Services.Implementations
                 var entries = await _timeEntryService.GetTimeEntriesAsync(
                     authKey,
                     UserId,
-                    0,
-                    ConvertDateToStringFormat(dateToValidate),
-                    ConvertDateToStringFormat(dateToValidate));
+                    fromDate: ConvertDateToStringFormat(dateToValidate),
+                    toDate: ConvertDateToStringFormat(dateToValidate));
                 foreach (var entry in entries.TimeEntries)
                 {
                     if (entry.Activity.Name.Equals("Vacation/PTO/Holiday"))
