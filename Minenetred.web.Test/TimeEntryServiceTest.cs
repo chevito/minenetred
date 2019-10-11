@@ -22,6 +22,7 @@ namespace Minenetred.web.Test
         private IMapper _mapper;
         private MinenetredContext _context;
         private Mock<IUsersManagementService> _userManagementService;
+        private Mock<IProjectService> _projectService;
         public TimeEntryServiceTest()
         {
             var mappingConfig = new MapperConfiguration(mc =>
@@ -35,12 +36,14 @@ namespace Minenetred.web.Test
             _userManagementService = new Mock<IUsersManagementService>();
             _context = new MinenetredContext(options);
             _mapper = mappingConfig.CreateMapper();
+            _projectService = new Mock<IProjectService>();
 
             _timeEntryService = new TimeEntryService(
                 _context,
                 _timeEntryLibraryService.Object,
                 _mapper,
-                _userManagementService.Object
+                _userManagementService.Object,
+                _projectService.Object
                 );
         }
 
@@ -95,7 +98,7 @@ namespace Minenetred.web.Test
             //_context.Users.Add();
             _userManagementService.Setup(s=> s.GetUserKey(testUserName)).Returns(testKey);
             _timeEntryLibraryService
-                .Setup(s=>s.GetTimeEntriesAsync(testKey, redmineIdForTest, projectIdTest, testDate))
+                .Setup(s=>s.GetTimeEntriesAsync(testKey, redmineIdForTest, projectIdTest, testDate, testDate))
                 .Returns(AssignResponse());
 
             Assert.Equal(total, await _timeEntryService.GetTimeEntryHoursPerDay(projectIdTest, testDate, testUserName));
