@@ -9,7 +9,12 @@ namespace Redmine.library.Services
 {
     public interface ITimeEntryService
     {
-        Task<TimeEntryListResponse> GetTimeEntriesAsync(string authKey, int userId, int projectId, string date);
+        Task<TimeEntryListResponse> GetTimeEntriesAsync(
+            string authKey,
+            int userId,
+            int projectId = 0,
+            string fromDate = null,
+            string toDate = null);
         Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryDtoContainer entry, string authKey);
     }
 }

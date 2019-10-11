@@ -13,5 +13,6 @@ namespace Minenetred.web.Services
         void UpdateKey(string apiKey, string userEmail);
         string GetUserKey(string userEmail);
         Task AddRedmineIdAsync(string key, string email);
+        int getRedmineId(string redmineKey = null, string userName = null);
     }
 }

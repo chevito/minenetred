@@ -19,7 +19,7 @@ namespace Redmine.library.Services.Implementations
             _client = client;
         }
 
-        public async Task<TimeEntryListResponse> GetTimeEntriesAsync(string authKey, int userId, int projectId, string date)
+        public async Task<TimeEntryListResponse> GetTimeEntriesAsync(string authKey, int userId, int projectId=0, string fromDate = null, string toDate = null)
         {
             try
             {
@@ -31,15 +31,21 @@ namespace Redmine.library.Services.Implementations
                     Constants.timeEntries +
                     Constants.json +
                     "?key=" + authKey +
-                    "&" +
-                    Constants.projectId +
-                    projectId +
                     "&user_id=" +
-                    userId +
-                    "&from=" +
-                    date +
-                    "&to=" +
-                    date;
+                    userId;
+                if(projectId != 0)
+                {
+                  requestUri += "&"+Constants.projectId +
+                    projectId;
+                }
+                if (fromDate != null)
+                {
+                    requestUri += "&from=" + fromDate;
+                }
+                if (toDate != null)
+                {
+                    requestUri += "&to=" + toDate;
+                }
                 HttpResponseMessage response = await _client.GetAsync(requestUri);
                 if (response.IsSuccessStatusCode)
                 {

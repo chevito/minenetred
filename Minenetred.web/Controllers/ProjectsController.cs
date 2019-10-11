@@ -24,14 +24,17 @@ namespace Minenetred.web.Controllers
     {
         private readonly IProjectService _projectService;
         private readonly IUsersManagementService _userManagementService;
+        private readonly ITimeEntryService _timeEntryService;
 
         public ProjectsController(
             IProjectService service,
-            IUsersManagementService userManagementService
+            IUsersManagementService userManagementService,
+            ITimeEntryService timeEntryService
             )
         {
             _projectService = service;
             _userManagementService = userManagementService;
+            _timeEntryService = timeEntryService;
         }
 
         [Route("/")]
@@ -49,10 +52,12 @@ namespace Minenetred.web.Controllers
 
                 var decryptedKey = _userManagementService.GetUserKey(userName);
                 var projectList = await _projectService.GetOpenProjectsAsync(decryptedKey);
+                ViewBag.Warnings = await _timeEntryService.GetUnloggedDaysAsync(_userManagementService.getRedmineId(null, userName), decryptedKey);
                 return View(projectList);
             }
             catch (Exception)
             {
+                
                 return RedirectToAction("AddKey", new {msj = "Add a valid key"});
             }
         }
