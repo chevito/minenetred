@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Minenetred.web.Context;
 using Minenetred.web.Context.ContextModels;
 using Minenetred.web.Infrastructure;
+using Minenetred.web.Models;
 using Minenetred.web.Services;
 using Minenetred.web.Services.Implementations;
+using Minenetred.web.ViewModels;
 using Moq;
 using Redmine.library.Models;
 using System;
@@ -95,7 +97,7 @@ namespace Minenetred.web.Test
                 return timeEntryResponse;
             }
 
-            //_context.Users.Add();
+            
             _userManagementService.Setup(s=> s.GetUserKey(testUserName)).Returns(testKey);
             _timeEntryLibraryService
                 .Setup(s=>s.GetTimeEntriesAsync(testKey, redmineIdForTest, projectIdTest, testDate, testDate))
@@ -103,6 +105,114 @@ namespace Minenetred.web.Test
 
             Assert.Equal(total, await _timeEntryService.GetTimeEntryHoursPerDay(projectIdTest, testDate, testUserName));
 
+        }
+        [Theory]
+        [InlineData("Vacation/PTO/Holiday", 0)]
+        [InlineData("Random activity", 8)]
+        [InlineData("Random activity", 0)]
+        public async Task ShouldReturnDictionaryOfFutureAsync(string activityName, int hours)
+        {
+
+            DateTime DateToTest = new DateTime(2019, 10, 11);
+            int userTestId = 0;
+            string authKeyTest = "testKey";
+            int redmineIdTest = 0;
+
+            Mock<ProjectDto> mockedProject = new Mock<ProjectDto>();
+            var projectList = new ProjectsViewModel() {
+                Projects = new List<ProjectDto>(),
+            };
+            projectList.Projects.Add(mockedProject.Object);
+
+            async Task<ProjectsViewModel> AssignResponse()
+            {
+                await Task.Delay(0);
+                return projectList;
+            }
+            Mock<TimeEntryListResponse> timeEntryListResponse = new Mock<TimeEntryListResponse>();
+            timeEntryListResponse.Object.TimeEntries = new List<TimeEntry>();
+
+            async Task<TimeEntryListResponse> timeEntryResponse()
+            {
+                await Task.Delay(0);
+                return timeEntryListResponse.Object;
+            }
+
+            Mock<TimeEntry> timeEntry1 = new Mock<TimeEntry>();
+            timeEntry1.Object.SpentOn = new DateTime(2019, 10, 13);
+            timeEntry1.Object.Hours = hours;
+            timeEntry1.Object.Activity = new Activity()
+            {
+                Id = 1,
+                Name = activityName,
+            };
+
+            var timeEntryListToShape = new TimeEntryListResponse()
+            {
+                TimeEntries = new List<TimeEntry>()
+                {
+                    timeEntry1.Object,
+                },
+            };
+
+            async Task<TimeEntryListResponse> timeEntryResponseToShape()
+            {
+                await Task.Delay(0);
+                return timeEntryListToShape;
+            }
+
+
+            _projectService.Setup(s => s.GetOpenProjectsAsync(authKeyTest)).Returns(AssignResponse());
+            _userManagementService.Setup(s => s.getRedmineId(authKeyTest, null)).Returns(redmineIdTest);
+
+            _timeEntryLibraryService.Setup(s=>
+            s.GetTimeEntriesAsync(
+                authKeyTest,
+                redmineIdTest,
+                0,
+                It.IsAny<String>(),
+                null))
+                .Returns(timeEntryResponse());
+
+            _timeEntryLibraryService.Setup(s =>
+            s.GetTimeEntriesAsync(
+                authKeyTest,
+                redmineIdTest,
+                0,
+                It.IsAny<string>(),
+                It.IsNotNull<String>()))
+                .Returns(timeEntryResponseToShape());
+
+            var dictionaryToValidate = await _timeEntryService.GetUnloggedDaysAsync(userTestId, authKeyTest, DateToTest);
+
+            if (activityName.Equals("Vacation/PTO/Holiday"))
+            {
+                //should validate all time entries where ignored except for the weekends
+                Assert.True(dictionaryToValidate.Count == 2);
+            }
+            else
+            {
+                if (hours == 8)
+                {
+                    //should have 2 weekend logs warnings
+                    Assert.True(dictionaryToValidate.Count == 2);
+                    foreach (var entry in dictionaryToValidate)
+                    {
+                        Assert.Equal(1, entry.Value);
+                    }
+                }
+                else
+                {
+                    //should check unlogged hours during the period
+                    Assert.True(dictionaryToValidate.Count == 8);
+                    foreach (var entry in dictionaryToValidate)
+                    {
+                        Assert.Equal(0, entry.Value);
+                    }
+
+                }
+            }
+            
         }
     }
 }

@@ -111,10 +111,10 @@ namespace Minenetred.web.Services.Implementations
             var toReturn = periodDay;
             return toReturn;
         }
-        public async Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey)
+        public async Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey, DateTime today)
         {
             var toReturn = new Dictionary<String, int>();
-            var today = DateTime.Today;
+            //var today = DateTime.Today;
             var firstPeriodDay = GetFirstAndLastPeriod(today, true);
             var lastPeriodDay = GetFirstAndLastPeriod(today, false);
             var futureTimeEntries = await GetFutureTimeEntriesDates(today, authKey);

@@ -12,6 +12,6 @@ namespace Minenetred.web.Services
     {
         Task<float> GetTimeEntryHoursPerDay(int projectId, string date, string user);
         Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry);
-        Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey);
+        Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey, DateTime today);
     }
 }
