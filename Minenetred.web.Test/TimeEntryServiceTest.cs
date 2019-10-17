@@ -170,19 +170,24 @@ namespace Minenetred.web.Test
                 authKeyTest,
                 redmineIdTest,
                 0,
-                It.IsAny<String>(),
-                null))
+                "2019-10-12",
+                "2019-10-15"))
                 .Returns(timeEntryResponse());
 
-            _timeEntryLibraryService.Setup(s =>
-            s.GetTimeEntriesAsync(
-                authKeyTest,
-                redmineIdTest,
-                0,
-                It.IsAny<string>(),
-                It.IsNotNull<String>()))
-                .Returns(timeEntryResponseToShape());
+            var dateTest = new DateTime(2019, 10, 01);
+            for (int i = 0; i < 15; i++)
+            {
+                var dateForSetup = dateTest.AddDays(i).ToString("yyyy-MM-dd");
+                _timeEntryLibraryService.Setup(s =>
+                    s.GetTimeEntriesAsync(
+                        authKeyTest,
+                        redmineIdTest,
+                        0,
+                        dateForSetup,
+                        dateForSetup))
+                        .Returns(timeEntryResponseToShape());
 
+            }
             var dictionaryToValidate = await _timeEntryService.GetUnloggedDaysAsync(userTestId, authKeyTest, DateToTest);
 
             if (activityName.Equals("Vacation/PTO/Holiday"))
