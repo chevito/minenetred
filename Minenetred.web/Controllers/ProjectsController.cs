@@ -25,16 +25,19 @@ namespace Minenetred.web.Controllers
         private readonly IProjectService _projectService;
         private readonly IUsersManagementService _userManagementService;
         private readonly ITimeEntryService _timeEntryService;
+        private readonly IPopulateSelectorService _populateSelectorService;
 
         public ProjectsController(
             IProjectService service,
             IUsersManagementService userManagementService,
-            ITimeEntryService timeEntryService
+            ITimeEntryService timeEntryService,
+            IPopulateSelectorService populateSelectorService
             )
         {
             _projectService = service;
             _userManagementService = userManagementService;
             _timeEntryService = timeEntryService;
+            _populateSelectorService = populateSelectorService;
         }
 
         [Route("/")]
@@ -52,7 +55,26 @@ namespace Minenetred.web.Controllers
 
                 var decryptedKey = _userManagementService.GetUserKey(userName);
                 var projectList = await _projectService.GetOpenProjectsAsync(decryptedKey);
-                ViewBag.Warnings = await _timeEntryService.GetUnloggedDaysAsync(_userManagementService.getRedmineId(userName: userName), decryptedKey, DateTime.Today);
+                var activityDictionary = new Dictionary<int, List<ActivityDto>>();
+                var issueDictionary = new Dictionary<int, List<IssueDto>>();
+
+                foreach (var project in projectList.Projects)
+                {
+                    var activitiesToAdd = await _populateSelectorService.GetActivitiesInListAsync(project.Id, userName);
+                    var issuesToAdd = await _populateSelectorService.GetIssuesInListAsync(project.Id, userName);
+
+                    activityDictionary.Add(project.Id, activitiesToAdd);
+                    issueDictionary.Add(project.Id, issuesToAdd);
+                }
+                ViewBag.lastAct = activityDictionary.Last();
+                ViewBag.lastIss = issueDictionary.Last();
+                ViewBag.activities = activityDictionary;
+                ViewBag.issues = issueDictionary;
+                ViewBag.Warnings =
+                    await _timeEntryService
+                    .GetUnloggedDaysAsync(
+                        _userManagementService.getRedmineId(userName: userName),
+                        decryptedKey, DateTime.Today);
                 return View(projectList);
             }
             catch (Exception)

@@ -63,6 +63,7 @@ namespace Minenetred.web
             services.AddScoped<Services.ITimeEntryService, Services.Implementations.TimeEntryService>();
             services.AddScoped<Services.IIssueService, Services.Implementations.IssueService>();
             services.AddScoped<Services.IActivityService, Services.Implementations.ActivityService>();
+            services.AddScoped<Services.IPopulateSelectorService, Services.Implementations.PopulateSelectorService>();
             #endregion
             var mappingConfig = new MapperConfiguration(mc =>
            {
