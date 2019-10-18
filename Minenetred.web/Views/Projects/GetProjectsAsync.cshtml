@@ -100,7 +100,7 @@
                 var listedActivities = "";
                 foreach (var listedAct in activity.Value)
                 {
-                    var array = "{Name:'" + listedAct.Name + "', Id:" + listedAct.Id + "}";
+                    var array = "{Name:\"" + listedAct.Name + "\", Id:" + listedAct.Id + "}";
                     listedActivities += array + ",";
                 }
                 listedActivities = listedActivities.Substring(0, listedActivities.Length - 1);
@@ -122,7 +122,7 @@
                 var listedIssues = "";
                 foreach (var listedI in issue.Value)
                 {
-                    var array = "{Name:'" + listedI.Subject + "', Id:" + listedI.Id + "}";
+                    var array = "{Name:\"" + listedI.Subject + "\", Id:" + listedI.Id + "}";
                     listedIssues += array + ",";
                 }
                 listedIssues = listedIssues.Length>1? listedIssues.Substring(0, listedIssues.Length - 1) : "";
