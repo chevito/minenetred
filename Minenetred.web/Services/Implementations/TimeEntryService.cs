@@ -67,13 +67,13 @@ namespace Minenetred.web.Services.Implementations
             var toReturn = new List<DateTime>();
             today = today.AddDays(1);
             var projects = await _projectService.GetOpenProjectsAsync(apiKey);
-            var redimeId = _usersManagementService.getRedmineId(apiKey);
+            var redimeId = _usersManagementService.GetRedmineId(apiKey);
             var fromDate = today.ToString("yyyy-MM-dd");
             var toDate = lastPeriodDate.ToString("yyyy-MM-dd");
             foreach (var project in projects.Projects)
             {
                 var time = await _timeEntryService.GetTimeEntriesAsync(apiKey, redimeId, project.Id, fromDate, toDate);
-                if (time.TimeEntries.Count > 0)
+                if (time.TimeEntries.Any())
                 {
                     foreach (var entry in time.TimeEntries)
                     {
@@ -85,31 +85,25 @@ namespace Minenetred.web.Services.Implementations
         }
         private DateTime GetFirstPeriodDay(DateTime today)
         {
-            var periodDay = new DateTime();
             if (today.Day <= 15)
             {
-                periodDay = new DateTime(today.Year, today.Month, 1);
+                return new DateTime(today.Year, today.Month, 1);
             }
             else
             {
-                periodDay = new DateTime(today.Year, today.Month, 16);
+                return  new DateTime(today.Year, today.Month, 16);
             }
-            var toReturn = periodDay;
-            return toReturn;
         }
         public DateTime GetLastPeriodDay(DateTime today)
         {
-            var periodDay = new DateTime();
             if (today.Day <= 15)
             {
-                periodDay = new DateTime(today.Year, today.Month, 15);
+                return new DateTime(today.Year, today.Month, 15);
             }
             else
             {
-                periodDay =  new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+                return new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
             }
-            var toReturn = periodDay;
-            return toReturn;
         }
         public async Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey, DateTime today)
         {
@@ -118,7 +112,7 @@ namespace Minenetred.web.Services.Implementations
             var lastPeriodDay = GetLastPeriodDay(today);
             var futureTimeEntries = await GetFutureTimeEntriesDates(today, authKey, lastPeriodDay);
             var referenceDate = new DateTime();
-            if (futureTimeEntries.Count > 0)
+            if (futureTimeEntries.Any())
             {
                 referenceDate = futureTimeEntries.Max<DateTime>();
             }

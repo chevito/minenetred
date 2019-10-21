@@ -82,7 +82,7 @@ namespace Minenetred.web.Services.Implementations
             _context.SaveChanges();
         }
 
-        public int getRedmineId(string redmineKey = null, string userName = null)
+        public int GetRedmineId(string redmineKey = null, string userName = null)
         {
             if (userName != null)
             {

@@ -163,7 +163,7 @@ namespace Minenetred.web.Test
 
 
             _projectService.Setup(s => s.GetOpenProjectsAsync(authKeyTest)).Returns(AssignResponse());
-            _userManagementService.Setup(s => s.getRedmineId(authKeyTest, null)).Returns(redmineIdTest);
+            _userManagementService.Setup(s => s.GetRedmineId(authKeyTest, null)).Returns(redmineIdTest);
 
             _timeEntryLibraryService.Setup(s=>
             s.GetTimeEntriesAsync(
