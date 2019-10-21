@@ -52,7 +52,7 @@ namespace Minenetred.web.Controllers
 
                 var decryptedKey = _userManagementService.GetUserKey(userName);
                 var projectList = await _projectService.GetOpenProjectsAsync(decryptedKey);
-                ViewBag.Warnings = await _timeEntryService.GetUnloggedDaysAsync(_userManagementService.getRedmineId(userName: userName), decryptedKey, DateTime.Today);
+                ViewBag.Warnings = await _timeEntryService.GetUnloggedDaysAsync(_userManagementService.GetRedmineId(userName: userName), decryptedKey, DateTime.Today);
                 return View(projectList);
             }
             catch (Exception)
