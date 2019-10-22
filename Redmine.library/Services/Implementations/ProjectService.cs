@@ -23,39 +23,22 @@ namespace Redmine.library.Services.Implementations
 
         public async Task<ProjectListResponse> GetProjectsAsync(string authKey)
         {
-            try
-            {
-                if (authKey == null || authKey.Equals(""))
-                    throw new ArgumentNullException(Constants.nullKeyException);
+            if (authKey == null || authKey.Equals(""))
+                throw new ArgumentNullException(nameof(authKey));
 
-                var toReturn = "";
-                var requestUri = Constants.projects + Constants.json+ "?key=" + authKey;
-                HttpResponseMessage response = await _client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    toReturn = await response.Content.ReadAsStringAsync();
-                    var contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
-                    var projectListResponse = JsonConvert.DeserializeObject<ProjectListResponse>(
-                        toReturn,
-                        new JsonSerializerSettings
-                        {
-                            ContractResolver = contractResolver,
-                            Formatting = Formatting.Indented,
-                        });
-                    return projectListResponse;
-                }
-                else
-                {
-                    var errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errorMessage);
-                }
-            }
-            catch (Exception ex)
+            var toReturn = "";
+            var requestUri = UriHelper.Projects(authKey);
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
             {
-                throw new Exception(ex.Message); 
+                toReturn = await response.Content.ReadAsStringAsync();
+                var projectListResponse = JsonConvert.DeserializeObject<ProjectListResponse>(toReturn, SerializerHelper.Settings);
+                return projectListResponse;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
             }
         }
     }

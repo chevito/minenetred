@@ -20,47 +20,23 @@ namespace Redmine.library.Services.Implementations
         }
         public async Task<ActivityListResponse> GetActivityListResponseAsync(string authKey, int projectId)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(authKey))
-                    throw new ArgumentNullException(Constants.nullKeyException);
 
-                var toReturn = "";
-                var requestUri = 
-                    Constants.Activites +
-                    Constants.json +
-                    "?key=" +
-                    authKey +
-                    "&" +
-                    Constants.projectId +
-                    projectId;
-                HttpResponseMessage response = await _client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    toReturn = await response.Content.ReadAsStringAsync();
-                   var contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
-                    var activityListResponse = JsonConvert.DeserializeObject<ActivityListResponse>(
-                        toReturn,
-                        new JsonSerializerSettings
-                        {
-                            ContractResolver = contractResolver,
-                            Formatting = Formatting.Indented
-                        }
-                        );
-                    return activityListResponse;
-                }
-                else
-                {
-                    var errorMsg = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errorMsg);
-                }   
-            }
-            catch (Exception ex)
+            if (string.IsNullOrEmpty(authKey))
+                throw new ArgumentNullException(nameof(authKey));
+
+            var toReturn = "";
+            var requestUri = UriHelper.Activities(projectId, authKey);
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
             {
-                throw new Exception(ex.Message);
+                toReturn = await response.Content.ReadAsStringAsync();
+                var activityListResponse = JsonConvert.DeserializeObject<ActivityListResponse>(toReturn, SerializerHelper.Settings);
+                return activityListResponse;
+            }
+            else
+            {
+                var errorMsg = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMsg);
             }
         }
     }

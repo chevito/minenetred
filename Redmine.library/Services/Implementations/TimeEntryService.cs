@@ -21,92 +21,43 @@ namespace Redmine.library.Services.Implementations
 
         public async Task<TimeEntryListResponse> GetTimeEntriesAsync(string authKey, int userId, int projectId=0, string fromDate = null, string toDate = null)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(authKey))
-                    throw new ArgumentNullException(Constants.nullKeyException);
+            if (string.IsNullOrEmpty(authKey))
+                throw new ArgumentNullException(nameof(authKey));
 
-                var toReturn = "";
-                var requestUri =
-                    Constants.timeEntries +
-                    Constants.json +
-                    "?key=" + authKey +
-                    "&user_id=" +
-                    userId;
-                if(projectId != 0)
-                {
-                  requestUri += "&"+Constants.projectId +
-                    projectId;
-                }
-                if (fromDate != null)
-                {
-                    requestUri += "&from=" + fromDate;
-                }
-                if (toDate != null)
-                {
-                    requestUri += "&to=" + toDate;
-                }
-                HttpResponseMessage response = await _client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    toReturn = await response.Content.ReadAsStringAsync();
-                    var contractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    };
-                    var timeEntryListResponse = JsonConvert.DeserializeObject<TimeEntryListResponse>(
-                        toReturn,
-                        new JsonSerializerSettings
-                        {
-                            ContractResolver = contractResolver,
-                            Formatting = Formatting.Indented
-                        });
-                    return timeEntryListResponse;
-                }
-                else
-                {
-                    var errormsg = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errormsg);
-                }
-            }
-            catch (Exception ex)
+            var toReturn = "";
+            var requestUri = UriHelper.HandleTimeEntriesUri(authKey, userId, projectId, fromDate, toDate);
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
             {
-                throw new Exception(ex.Message);
+                toReturn = await response.Content.ReadAsStringAsync();
+                var timeEntryListResponse = JsonConvert.DeserializeObject<TimeEntryListResponse>(toReturn, SerializerHelper.Settings);
+                return timeEntryListResponse;
+            }
+            else
+            {
+                var errormsg = await response.Content.ReadAsStringAsync();
+                throw new Exception(errormsg);
             }
         }
 
         public async Task<HttpStatusCode> AddTimeEntryAsync (TimeEntryDtoContainer entry, string authKey)
         {
-            try
+            if (entry == null)
             {
-                if (entry == null)
-                {
-                    throw new Exception("Time entry is null");
-                }
-                if (string.IsNullOrEmpty(authKey))
-                {
-                    throw new ArgumentNullException(Constants.nullKeyException);
-                }
-                var requestUri = Constants.timeEntries +
-                    Constants.json +
-                    "?key=" + authKey;
+                throw new ArgumentNullException(nameof(entry));
+            }
+            if (string.IsNullOrEmpty(authKey))
+            {
+                throw new ArgumentNullException(nameof(authKey));
+            }
+            var requestUri = Constants.TimeEntries +
+                Constants.Json +
+                "?key=" + authKey;
 
-                var json = JsonConvert.SerializeObject(entry, new JsonSerializerSettings
-                {
-                    ContractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new SnakeCaseNamingStrategy()
-                    },
-                    Formatting = Formatting.Indented
-                });
-                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage  response = await _client.PostAsync(requestUri, httpContent);
-                return response.StatusCode;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var json = JsonConvert.SerializeObject(entry, SerializerHelper.Settings);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage  response = await _client.PostAsync(requestUri, httpContent);
+            return response.StatusCode;
         }
     }
 }

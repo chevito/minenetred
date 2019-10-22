@@ -1,0 +1,164 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Redmine.library.Core
+{
+    internal static class UriHelper
+    {
+        public static string Activities(int projectId, string authKey)
+        {
+            return Constants.Activites +
+                Constants.Json +
+                "&" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.ProjectId +
+                projectId;
+        }
+
+        public static string Issues(string authKey, int assignedToId, int projectId)
+        {
+            return Constants.Issues +
+                Constants.Json +
+                "?"+
+                Constants.Key +
+                authKey +
+                "&"+
+                Constants.AssignedTo +
+                assignedToId +
+                "&" +
+                Constants.ProjectId +
+                projectId;
+        }
+
+        public static string Projects(string authKey)
+        {
+            return Constants.Projects +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey;
+        }
+
+        private static string TimeEntry(string authKey, int userId)
+        {
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?"+
+                Constants.Key + 
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId;
+            return "";
+        }
+        private static string TimeEntry(string authKey, int userId, int projectId)
+        {
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId +
+                "&" +
+                Constants.ProjectId +
+                projectId;
+            return "";
+        }
+        private static string TimeEntry(string authKey, int userId, int projectId, string fromDate)
+        {
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId +
+                "&" +
+                Constants.ProjectId +
+                projectId+
+                "&from=" +
+                fromDate;
+            return "";
+        }
+        private static string TimeEntry(string authKey, int userId, int projectId, string fromDate, string toDate)
+        {
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId +
+                "&" +
+                Constants.ProjectId +
+                projectId +
+                "&from=" +
+                fromDate +
+                "&to=" +
+                toDate;
+            return toReturn;
+        }
+        private static string TimeEntry(string authKey, int userId, string fromDate, string toDate)
+        {
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId +
+                "&" +
+                "from=" +
+                fromDate +
+                "&to=" +
+                toDate;
+            return toReturn;
+        }
+        public static string HandleTimeEntriesUri(string authKey, int userId, int projectId, string fromDate, string toDate)
+        {
+            if (projectId == 0 && string.IsNullOrEmpty(fromDate) && string.IsNullOrEmpty(toDate))
+            {
+                return TimeEntry(authKey, userId);
+            }
+            else if (projectId != 0 && string.IsNullOrEmpty(fromDate) && string.IsNullOrEmpty(toDate))
+            {
+                return TimeEntry(authKey, userId, projectId);
+            }
+            else if (projectId != 0 && string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+            {
+                return TimeEntry(authKey, userId, projectId, fromDate);
+            }
+            else if (projectId == 0 && !string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+
+            {
+                return TimeEntry(authKey, userId, fromDate, toDate);
+            }
+            else
+            {
+                return TimeEntry(authKey, userId, projectId,fromDate, toDate);
+            }
+        }
+
+        public static string User(string authKey)
+        {
+            return Constants.CurrentUser +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey;
+        }
+    }
+}

@@ -19,29 +19,22 @@ namespace Redmine.library.Services.Implementations
 
         public async Task<UserResponse> GetCurrentUserAsync(string authKey)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(authKey))
-                    throw new ArgumentNullException(Constants.nullKeyException);
+            if (string.IsNullOrEmpty(authKey))
+                throw new ArgumentNullException(nameof(authKey));
 
-                var toReturn = "";
-                var requestUri = Constants.currentUser + Constants.json + "?key=" + authKey;
-                HttpResponseMessage response = await _client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    toReturn = await response.Content.ReadAsStringAsync();
-                    var user = JsonConvert.DeserializeObject<UserResponse>(toReturn);
-                    return user;
-                }
-                else
-                {
-                    var errorMsj = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errorMsj);
-                }
-            }
-            catch (Exception ex)
+            var toReturn = "";
+            var requestUri = Constants.CurrentUser + Constants.Json + "?key=" + authKey;
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
             {
-                throw new Exception(ex.Message);
+                toReturn = await response.Content.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<UserResponse>(toReturn);
+                return user;
+            }
+            else
+            {
+                var errorMsj = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMsj);
             }
         }
     }

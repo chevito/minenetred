@@ -19,37 +19,22 @@ namespace Redmine.library.Services.Implementations
 
         public async Task<IssueListResponse> GetIssuesAsync(string authKey, int assignedToId, int projectId)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(authKey))
-                    throw new ArgumentNullException(Constants.nullKeyException);
+            if (string.IsNullOrEmpty(authKey))
+                throw new ArgumentNullException(nameof(authKey));
 
-                var toReturn = "";
-                var requestUri = Constants.issues+
-                    Constants.json+
-                    "?key=" +
-                    authKey +
-                    "&assigned_to_id=" +
-                    assignedToId +
-                    "&" +
-                    Constants.projectId+
-                    projectId;
-                HttpResponseMessage response = await _client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    toReturn = await response.Content.ReadAsStringAsync();
-                    var issueResponse = JsonConvert.DeserializeObject<IssueListResponse>(toReturn);
-                    return issueResponse;
-                }
-                else
-                {
-                    var errorMsg = await response.Content.ReadAsStringAsync();
-                    throw new Exception(errorMsg);
-                }
-            }
-            catch (Exception ex)
+            var toReturn = "";
+            var requestUri = UriHelper.Issues(authKey, assignedToId, projectId);
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
             {
-                throw new Exception(ex.Message);
+                toReturn = await response.Content.ReadAsStringAsync();
+                var issueResponse = JsonConvert.DeserializeObject<IssueListResponse>(toReturn);
+                return issueResponse;
+            }
+            else
+            {
+                var errorMsg = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMsg);
             }
         }
     }
