@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Redmine.library.Core
+﻿namespace Redmine.library.Core
 {
     public static class Constants
     {
@@ -12,7 +8,7 @@ namespace Redmine.library.Core
         public const string Issues = "issues";
         public const string ProjectId = "project_id=";
         public const string Key = "key=";
-        public const string AssignedTo= "assigned_to_id=";
+        public const string AssignedTo = "assigned_to_id=";
         public const string Activites = "enumerations/time_entry_activities";
         public const string TimeEntries = "time_entries";
         public const string UserId = "user_id=";

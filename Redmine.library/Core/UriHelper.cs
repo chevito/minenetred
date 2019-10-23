@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Redmine.library.Core
+﻿namespace Redmine.library.Core
 {
     internal static class UriHelper
     {
@@ -10,7 +6,7 @@ namespace Redmine.library.Core
         {
             return Constants.Activites +
                 Constants.Json +
-                "&" +
+                "?" +
                 Constants.Key +
                 authKey +
                 "&" +
@@ -22,10 +18,10 @@ namespace Redmine.library.Core
         {
             return Constants.Issues +
                 Constants.Json +
-                "?"+
+                "?" +
                 Constants.Key +
                 authKey +
-                "&"+
+                "&" +
                 Constants.AssignedTo +
                 assignedToId +
                 "&" +
@@ -47,14 +43,15 @@ namespace Redmine.library.Core
             string toReturn =
                 Constants.TimeEntries +
                 Constants.Json +
-                "?"+
-                Constants.Key + 
+                "?" +
+                Constants.Key +
                 authKey +
                 "&" +
                 Constants.UserId +
                 userId;
             return "";
         }
+
         private static string TimeEntry(string authKey, int userId, int projectId)
         {
             string toReturn =
@@ -71,6 +68,7 @@ namespace Redmine.library.Core
                 projectId;
             return "";
         }
+
         private static string TimeEntry(string authKey, int userId, int projectId, string fromDate)
         {
             string toReturn =
@@ -84,11 +82,12 @@ namespace Redmine.library.Core
                 userId +
                 "&" +
                 Constants.ProjectId +
-                projectId+
+                projectId +
                 "&from=" +
                 fromDate;
             return "";
         }
+
         private static string TimeEntry(string authKey, int userId, int projectId, string fromDate, string toDate)
         {
             string toReturn =
@@ -109,6 +108,7 @@ namespace Redmine.library.Core
                 toDate;
             return toReturn;
         }
+
         private static string TimeEntry(string authKey, int userId, string fromDate, string toDate)
         {
             string toReturn =
@@ -127,6 +127,7 @@ namespace Redmine.library.Core
                 toDate;
             return toReturn;
         }
+
         public static string HandleTimeEntriesUri(string authKey, int userId, int projectId, string fromDate, string toDate)
         {
             if (projectId == 0 && string.IsNullOrEmpty(fromDate) && string.IsNullOrEmpty(toDate))
@@ -142,13 +143,12 @@ namespace Redmine.library.Core
                 return TimeEntry(authKey, userId, projectId, fromDate);
             }
             else if (projectId == 0 && !string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
-
             {
                 return TimeEntry(authKey, userId, fromDate, toDate);
             }
             else
             {
-                return TimeEntry(authKey, userId, projectId,fromDate, toDate);
+                return TimeEntry(authKey, userId, projectId, fromDate, toDate);
             }
         }
 
