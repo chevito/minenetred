@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using Redmine.library.Core;
 using Redmine.library.Models;
-using Redmine.library.Services;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Redmine.library.Services.Implementations
@@ -21,7 +18,7 @@ namespace Redmine.library.Services.Implementations
             _client = client;
         }
 
-        public async Task<ProjectListResponse> GetProjectsAsync(string authKey)
+        public async Task<List<Project>> GetProjectsAsync(string authKey)
         {
             if (authKey == null || authKey.Equals(""))
                 throw new ArgumentNullException(nameof(authKey));
@@ -32,7 +29,9 @@ namespace Redmine.library.Services.Implementations
             if (response.IsSuccessStatusCode)
             {
                 toReturn = await response.Content.ReadAsStringAsync();
-                var projectListResponse = JsonConvert.DeserializeObject<ProjectListResponse>(toReturn, SerializerHelper.Settings);
+                var jsonObject = JObject.Parse(toReturn);
+                var projects = jsonObject["projects"].ToString();
+                var projectListResponse = JsonConvert.DeserializeObject<List<Project>>(projects, SerializerHelper.Settings);
                 return projectListResponse;
             }
             else

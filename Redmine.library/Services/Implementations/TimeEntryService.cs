@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 using Redmine.library.Core;
 using Redmine.library.Models;
 using System;
@@ -14,12 +14,13 @@ namespace Redmine.library.Services.Implementations
     public class TimeEntryService : ITimeEntryService
     {
         private readonly HttpClient _client;
+
         public TimeEntryService(HttpClient client)
         {
             _client = client;
         }
 
-        public async Task<TimeEntryListResponse> GetTimeEntriesAsync(string authKey, int userId, int projectId=0, string fromDate = null, string toDate = null)
+        public async Task<List<TimeEntry>> GetTimeEntriesAsync(string authKey, int userId, int projectId = 0, string fromDate = null, string toDate = null)
         {
             if (string.IsNullOrEmpty(authKey))
                 throw new ArgumentNullException(nameof(authKey));
@@ -30,7 +31,9 @@ namespace Redmine.library.Services.Implementations
             if (response.IsSuccessStatusCode)
             {
                 toReturn = await response.Content.ReadAsStringAsync();
-                var timeEntryListResponse = JsonConvert.DeserializeObject<TimeEntryListResponse>(toReturn, SerializerHelper.Settings);
+                var jsonObject = JObject.Parse(toReturn);
+                var timeEntries = jsonObject["time_entries"].ToString();
+                var timeEntryListResponse = JsonConvert.DeserializeObject<List<TimeEntry>>(timeEntries, SerializerHelper.Settings);
                 return timeEntryListResponse;
             }
             else
@@ -40,7 +43,7 @@ namespace Redmine.library.Services.Implementations
             }
         }
 
-        public async Task<HttpStatusCode> AddTimeEntryAsync (TimeEntryDtoContainer entry, string authKey)
+        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryDtoContainer entry, string authKey)
         {
             if (entry == null)
             {
@@ -56,7 +59,7 @@ namespace Redmine.library.Services.Implementations
 
             var json = JsonConvert.SerializeObject(entry, SerializerHelper.Settings);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage  response = await _client.PostAsync(requestUri, httpContent);
+            HttpResponseMessage response = await _client.PostAsync(requestUri, httpContent);
             return response.StatusCode;
         }
     }
