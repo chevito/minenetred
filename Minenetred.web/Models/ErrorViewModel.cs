@@ -1,5 +1,3 @@
-using System;
-
 namespace Minenetred.web.Models
 {
     public class ErrorViewModel
