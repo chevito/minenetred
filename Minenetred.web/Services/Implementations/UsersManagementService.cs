@@ -3,8 +3,6 @@ using Minenetred.web.Context.ContextModels;
 using Minenetred.web.Infrastructure;
 using Redmine.library.Services;
 using System;
-using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +13,7 @@ namespace Minenetred.web.Services.Implementations
         private readonly MinenetredContext _context;
         private readonly IEncryptionService _encryptionService;
         private readonly IUserService _userService;
+
         public UsersManagementService(
             MinenetredContext context,
             IEncryptionService encryptionService,
@@ -25,10 +24,10 @@ namespace Minenetred.web.Services.Implementations
             _encryptionService = encryptionService;
             _userService = userService;
         }
-        
+
         public bool IsUserRegistered(string userEmail)
         {
-            var user = _context.Users.SingleOrDefault(u=>u.UserName==userEmail);
+            var user = _context.Users.SingleOrDefault(u => u.UserName == userEmail);
             if (user == null)
                 return false;
 
@@ -56,7 +55,7 @@ namespace Minenetred.web.Services.Implementations
 
         public void UpdateKey(string apiKey, string userEmail)
         {
-            var user = _context.Users.SingleOrDefault(u=> u.UserName == userEmail);
+            var user = _context.Users.SingleOrDefault(u => u.UserName == userEmail);
             var encryptedKey = _encryptionService.Encrypt(apiKey);
             user.LastKeyUpdatedDate = DateTime.Now;
             user.RedmineKey = encryptedKey;
@@ -66,7 +65,7 @@ namespace Minenetred.web.Services.Implementations
 
         public string GetUserKey(string userEmail)
         {
-            var EncryptedKey = _context.Users.SingleOrDefault(u=>u.UserName == userEmail).RedmineKey;
+            var EncryptedKey = _context.Users.SingleOrDefault(u => u.UserName == userEmail).RedmineKey;
             if (EncryptedKey == null)
                 return null;
 
@@ -76,7 +75,7 @@ namespace Minenetred.web.Services.Implementations
         public async Task AddRedmineIdAsync(string key, string email)
         {
             var redmineUser = await _userService.GetCurrentUserAsync(key);
-            var contextUser = _context.Users.SingleOrDefault(u=>u.UserName == email);
+            var contextUser = _context.Users.SingleOrDefault(u => u.UserName == email);
             contextUser.RedmineId = redmineUser.User.Id;
             _context.Users.Update(contextUser);
             _context.SaveChanges();
@@ -91,7 +90,7 @@ namespace Minenetred.web.Services.Implementations
             if (redmineKey != null)
             {
                 var encryptedKey = _encryptionService.Encrypt(redmineKey);
-                return _context.Users.SingleOrDefault(u => u.RedmineKey== encryptedKey).RedmineId;
+                return _context.Users.SingleOrDefault(u => u.RedmineKey == encryptedKey).RedmineId;
             }
             return 0;
         }

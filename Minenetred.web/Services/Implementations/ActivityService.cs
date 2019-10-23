@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using Minenetred.web.Context;
-using Minenetred.web.ViewModels;
+using Minenetred.web.Models;
 using Redmine.library.Models;
-using Redmine.library.Services;
-using System;
 using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Minenetred.web.Services.Implementations
@@ -28,12 +23,12 @@ namespace Minenetred.web.Services.Implementations
             _activityService = activityService;
         }
 
-        public async Task<ActivityViewModel> GetActivitiesAsync(int projectId, string email)
+        public async Task<List<ActivityDto>> GetActivitiesAsync(int projectId, string email)
         {
             var userName = email;
             var decryptedKey = _usersManagementService.GetUserKey(userName);
             var retrievedData = await _activityService.GetActivityListResponseAsync(decryptedKey, projectId);
-            var toRetun = _mapper.Map<ActivityListResponse, ActivityViewModel>(retrievedData);
+            var toRetun = _mapper.Map<List<Activity>, List<ActivityDto>>(retrievedData);
             return toRetun;
         }
     }

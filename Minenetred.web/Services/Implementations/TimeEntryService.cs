@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Minenetred.web.Context;
-using Minenetred.web.Infrastructure;
 using Minenetred.web.Models;
-using Minenetred.web.ViewModels;
-using Newtonsoft.Json;
 using Redmine.library.Models;
 using System;
 using System.Collections.Generic;
@@ -40,11 +37,11 @@ namespace Minenetred.web.Services.Implementations
         public async Task<float> GetTimeEntryHoursPerDay(int projectId, string date, string user)
         {
             var key = _usersManagementService.GetUserKey(user);
-            var redmineId = _context.Users.SingleOrDefault(u=>u.UserName == user).RedmineId;
+            var redmineId = _context.Users.SingleOrDefault(u => u.UserName == user).RedmineId;
             var response = await _timeEntryService.GetTimeEntriesAsync(key, redmineId, projectId, date, date);
-            var shapedList = _mapper.Map<TimeEntryListResponse, TimeEntryViewModel>(response);
+            var shapedList = _mapper.Map<List<TimeEntry>, List<Models.TimeEntryDto>>(response);
             float totalHours = 0;
-            foreach (var entry in shapedList.TimeEntries)
+            foreach (var entry in shapedList)
             {
                 totalHours += entry.Hours;
             }
@@ -59,7 +56,7 @@ namespace Minenetred.web.Services.Implementations
             };
             var timeEntry = _mapper.Map<TimeEntryFormContainer, TimeEntryDtoContainer>(entryToMap);
             var key = _usersManagementService.GetUserKey(UserPrincipal.Current.EmailAddress);
-            return  await _timeEntryService.AddTimeEntryAsync(timeEntry, key);
+            return await _timeEntryService.AddTimeEntryAsync(timeEntry, key);
         }
 
         private async Task<List<DateTime>> GetFutureTimeEntriesDates(DateTime today, string apiKey, DateTime lastPeriodDate)
@@ -70,12 +67,12 @@ namespace Minenetred.web.Services.Implementations
             var redimeId = _usersManagementService.GetRedmineId(apiKey);
             var fromDate = today.ToString("yyyy-MM-dd");
             var toDate = lastPeriodDate.ToString("yyyy-MM-dd");
-            foreach (var project in projects.Projects)
+            foreach (var project in projects)
             {
                 var time = await _timeEntryService.GetTimeEntriesAsync(apiKey, redimeId, project.Id, fromDate, toDate);
-                if (time.TimeEntries.Any())
+                if (time.Any())
                 {
-                    foreach (var entry in time.TimeEntries)
+                    foreach (var entry in time)
                     {
                         toReturn.Add(entry.SpentOn);
                     }
@@ -83,6 +80,7 @@ namespace Minenetred.web.Services.Implementations
             }
             return toReturn;
         }
+
         private DateTime GetFirstPeriodDay(DateTime today)
         {
             if (today.Day <= 15)
@@ -91,9 +89,10 @@ namespace Minenetred.web.Services.Implementations
             }
             else
             {
-                return  new DateTime(today.Year, today.Month, 16);
+                return new DateTime(today.Year, today.Month, 16);
             }
         }
+
         public DateTime GetLastPeriodDay(DateTime today)
         {
             if (today.Day <= 15)
@@ -105,6 +104,7 @@ namespace Minenetred.web.Services.Implementations
                 return new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
             }
         }
+
         public async Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey, DateTime today)
         {
             var toReturn = new Dictionary<String, int>();
@@ -130,7 +130,7 @@ namespace Minenetred.web.Services.Implementations
                     UserId,
                     fromDate: dateToValidate.ToString("yyyy-MM-dd"),
                     toDate: dateToValidate.ToString("yyyy-MM-dd"));
-                foreach (var entry in entries.TimeEntries)
+                foreach (var entry in entries)
                 {
                     if (entry.Activity.Name.Equals("Vacation/PTO/Holiday"))
                     {

@@ -1,13 +1,13 @@
-﻿using System;
-using System.DirectoryServices.AccountManagement;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Services;
+using System.DirectoryServices.AccountManagement;
 
 namespace Minenetred.web.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IUsersManagementService _usersManagementService;
+
         public AccountController(IUsersManagementService usersManagementService)
         {
             _usersManagementService = usersManagementService;

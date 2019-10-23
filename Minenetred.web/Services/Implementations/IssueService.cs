@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
 using Minenetred.web.Context;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.ViewModels;
+using Minenetred.web.Models;
 using Redmine.library.Models;
-using Redmine.library.Services;
-using System;
 using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +13,7 @@ namespace Minenetred.web.Services.Implementations
         private readonly MinenetredContext _context;
         private readonly Redmine.library.Services.IIssueService _issueService;
         private readonly IMapper _mapper;
-        IUsersManagementService _usersManagementService;
+        private IUsersManagementService _usersManagementService;
 
         public IssueService(
             MinenetredContext context,
@@ -31,13 +27,14 @@ namespace Minenetred.web.Services.Implementations
             _mapper = mapper;
             _usersManagementService = usersManagementService;
         }
-        public async Task<IssueViewModel> GetIssuesAsync(int projectId, string email)
+
+        public async Task<List<IssueDto>> GetIssuesAsync(int projectId, string email)
         {
             var userEmail = email;
             var user = _context.Users.SingleOrDefault(u => u.UserName == userEmail);
             var decryptedKey = _usersManagementService.GetUserKey(userEmail);
             var response = await _issueService.GetIssuesAsync(decryptedKey, user.RedmineId, projectId);
-            var toReturn = _mapper.Map<IssueListResponse, IssueViewModel>(response);
+            var toReturn = _mapper.Map<List<Issue>, List<IssueDto>>(response);
             return toReturn;
         }
     }
