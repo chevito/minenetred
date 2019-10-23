@@ -33,14 +33,13 @@
                     @{
                         if (User.Identity.Name != null)
                         {
-                            <li><a asp-area="" asp-controller="Projects" asp-action="GetProjectsAsync">Projects</a></li>
-                            <li><a asp-area="" asp-controller="Projects" asp-action="AddKey">Api Access Key</a></li>
+                        <li><a asp-area="" asp-controller="Projects" asp-action="GetProjectsAsync">Projects</a></li>
+                        <li><a asp-area="" asp-controller="Projects" asp-action="AddKey">Api Access Key</a></li>
                         }
 
                     }
-
                 </ul>
-                </div>
+            </div>
         </div>
     </nav>
 
@@ -74,7 +73,6 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
     </environment>
 
     @RenderSection("Scripts", required: false)
