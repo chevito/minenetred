@@ -9,7 +9,6 @@ using Moq;
 using Redmine.library.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -67,33 +66,27 @@ namespace Minenetred.web.Test
                 Id = 1,
                 Subject = "subject test 1",
                 Description = "description test 1",
-                
             };
             var issueForTest2 = new Issue()
             {
                 Id = 2,
                 Subject = "subject test 2",
                 Description = "description test 2",
-
             };
 
             var listToAdd = new List<Issue>();
             listToAdd.Add(issueForTest1);
             listToAdd.Add(issueForTest2);
 
-            var listResponse = new IssueListResponse()
-            {
-                Issues = listToAdd,
-            };
-            async Task<IssueListResponse> AssignResponse()
+            async Task<List<Issue>> AssignResponse()
             {
                 await Task.Delay(0);
-                return listResponse;
+                return listToAdd;
             }
             _issueLibraryService.Setup(s => s.GetIssuesAsync(keyForTest, redmineIdForTest, projectIdForTest)).Returns(AssignResponse());
             var issueViewModel = await _issueService.GetIssuesAsync(projectIdForTest, userNameForTest);
             var counter = 1;
-            foreach (var issue in issueViewModel.Issues)
+            foreach (var issue in issueViewModel)
             {
                 if (counter == 1)
                 {

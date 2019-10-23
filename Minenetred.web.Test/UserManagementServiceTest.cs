@@ -1,13 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
-using Minenetred.web.Services;
 using Minenetred.web.Services.Implementations;
 using Moq;
 using Redmine.library.Models;
 using Redmine.library.Services;
-using Redmine.library.Services.Implementations;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,7 +16,7 @@ namespace Minenetred.web.Test
         private EncryptionService _encryptionService;
         private UsersManagementService _usersManagementService;
         private Mock<IUserService> _userService;
-        
+
         public UserManagementServiceTest()
         {
             var options = new DbContextOptionsBuilder<MinenetredContext>()
@@ -33,7 +30,7 @@ namespace Minenetred.web.Test
                 _userService.Object
                 );
         }
-        
+
         [Fact]
         public void ShouldCheckIfUserExistAfterCreation()
         {
@@ -48,11 +45,12 @@ namespace Minenetred.web.Test
         {
             var userName = "TestUser2";
             var redMineKey = "TestKey";
-            
+
             _usersManagementService.RegisterUser(userName);
             _usersManagementService.UpdateKey(redMineKey, userName);
             Assert.True(_usersManagementService.HasRedmineKey(userName));
         }
+
         [Fact]
         public async Task ShouldRegisterRedmineIdFromLibraryServiceAsync()
         {
@@ -76,6 +74,5 @@ namespace Minenetred.web.Test
             var userToCheck = await _context.Users.SingleOrDefaultAsync(c => c.RedmineId != 0);
             Assert.Equal(5, userToCheck.RedmineId);
         }
-
     }
 }

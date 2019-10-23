@@ -6,12 +6,10 @@ using Minenetred.web.Infrastructure;
 using Minenetred.web.Models;
 using Minenetred.web.Services;
 using Minenetred.web.Services.Implementations;
-using Minenetred.web.ViewModels;
 using Moq;
 using Redmine.library.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -25,6 +23,7 @@ namespace Minenetred.web.Test
         private MinenetredContext _context;
         private Mock<IUsersManagementService> _userManagementService;
         private Mock<IProjectService> _projectService;
+
         public TimeEntryServiceTest()
         {
             var mappingConfig = new MapperConfiguration(mc =>
@@ -64,7 +63,7 @@ namespace Minenetred.web.Test
             var testDate = "TestDate";
             var testKey = "Test Key";
             var redmineIdForTest = 1;
-            
+
             var userForTest = new User()
             {
                 UserName = testUserName,
@@ -87,55 +86,44 @@ namespace Minenetred.web.Test
             timeEntryListResponse.Add(timeEntry2.Object);
             timeEntryListResponse.Add(timeEntry3.Object);
 
-            var timeEntryResponse = new TimeEntryListResponse()
-            {
-                TimeEntries = timeEntryListResponse,
-            };
-            async Task<TimeEntryListResponse> AssignResponse()
+            async Task<List<TimeEntry>> AssignResponse()
             {
                 await Task.Delay(0);
-                return timeEntryResponse;
+                return timeEntryListResponse;
             }
 
-            
-            _userManagementService.Setup(s=> s.GetUserKey(testUserName)).Returns(testKey);
+            _userManagementService.Setup(s => s.GetUserKey(testUserName)).Returns(testKey);
             _timeEntryLibraryService
-                .Setup(s=>s.GetTimeEntriesAsync(testKey, redmineIdForTest, projectIdTest, testDate, testDate))
+                .Setup(s => s.GetTimeEntriesAsync(testKey, redmineIdForTest, projectIdTest, testDate, testDate))
                 .Returns(AssignResponse());
 
             Assert.Equal(total, await _timeEntryService.GetTimeEntryHoursPerDay(projectIdTest, testDate, testUserName));
-
         }
+
         [Theory]
         [InlineData("Vacation/PTO/Holiday", 0)]
         [InlineData("Random activity", 8)]
         [InlineData("Random activity", 0)]
         public async Task ShouldReturnDictionaryOfFutureAsync(string activityName, int hours)
         {
-
             DateTime DateToTest = new DateTime(2019, 10, 11);
             int userTestId = 0;
             string authKeyTest = "testKey";
             int redmineIdTest = 0;
 
             Mock<ProjectDto> mockedProject = new Mock<ProjectDto>();
-            var projectList = new ProjectsViewModel() {
-                Projects = new List<ProjectDto>(),
-            };
-            projectList.Projects.Add(mockedProject.Object);
+            var projectList = new List<ProjectDto>();
+            projectList.Add(mockedProject.Object);
 
-            async Task<ProjectsViewModel> AssignResponse()
+            async Task<List<ProjectDto>> AssignResponse()
             {
                 await Task.Delay(0);
                 return projectList;
             }
-            Mock<TimeEntryListResponse> timeEntryListResponse = new Mock<TimeEntryListResponse>();
-            timeEntryListResponse.Object.TimeEntries = new List<TimeEntry>();
-
-            async Task<TimeEntryListResponse> timeEntryResponse()
+            async Task<List<TimeEntry>> timeEntryResponse()
             {
                 await Task.Delay(0);
-                return timeEntryListResponse.Object;
+                return new List<TimeEntry>(); ;
             }
 
             Mock<TimeEntry> timeEntry1 = new Mock<TimeEntry>();
@@ -147,25 +135,21 @@ namespace Minenetred.web.Test
                 Name = activityName,
             };
 
-            var timeEntryListToShape = new TimeEntryListResponse()
+            var timeEntryListToShape = new List<TimeEntry>()
             {
-                TimeEntries = new List<TimeEntry>()
-                {
-                    timeEntry1.Object,
-                },
+                timeEntry1.Object,
             };
 
-            async Task<TimeEntryListResponse> timeEntryResponseToShape()
+            async Task<List<TimeEntry>> timeEntryResponseToShape()
             {
                 await Task.Delay(0);
                 return timeEntryListToShape;
             }
 
-
             _projectService.Setup(s => s.GetOpenProjectsAsync(authKeyTest)).Returns(AssignResponse());
             _userManagementService.Setup(s => s.GetRedmineId(authKeyTest, null)).Returns(redmineIdTest);
 
-            _timeEntryLibraryService.Setup(s=>
+            _timeEntryLibraryService.Setup(s =>
             s.GetTimeEntriesAsync(
                 authKeyTest,
                 redmineIdTest,
@@ -186,7 +170,6 @@ namespace Minenetred.web.Test
                         dateForSetup,
                         dateForSetup))
                         .Returns(timeEntryResponseToShape());
-
             }
             var dictionaryToValidate = await _timeEntryService.GetUnloggedDaysAsync(userTestId, authKeyTest, DateToTest);
 
@@ -214,10 +197,8 @@ namespace Minenetred.web.Test
                     {
                         Assert.Equal(0, entry.Value);
                     }
-
                 }
             }
-            
         }
     }
 }

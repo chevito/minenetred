@@ -4,9 +4,7 @@ using Minenetred.web.Services;
 using Minenetred.web.Services.Implementations;
 using Moq;
 using Redmine.library.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -34,7 +32,6 @@ namespace Minenetred.web.Test
                 _usersManagementService.Object,
                 _activityLibraryService.Object
                 );
-
         }
 
         [Fact]
@@ -46,7 +43,7 @@ namespace Minenetred.web.Test
             var activityForTest1 = new Activity()
             {
                 Id = 1,
-                Name="Meeting"
+                Name = "Meeting"
             };
             var activityForTest2 = new Activity()
             {
@@ -57,23 +54,19 @@ namespace Minenetred.web.Test
             activitiesList.Add(activityForTest1);
             activitiesList.Add(activityForTest2);
 
-            var responseList = new ActivityListResponse()
-            {
-                TimeEntryActivities = activitiesList,
-            };
-            async Task<ActivityListResponse> AssignResponse()
+            async Task<List<Activity>> AssignResponse()
             {
                 await Task.Delay(0);
-                return responseList;
+                return activitiesList;
             }
-            _usersManagementService.Setup(c=>c.GetUserKey(userNameTest)).Returns(decryptedKey);
+            _usersManagementService.Setup(c => c.GetUserKey(userNameTest)).Returns(decryptedKey);
             _activityLibraryService.Setup(s => s.GetActivityListResponseAsync(decryptedKey, projectIdTest)).Returns(AssignResponse());
 
             var activitiesViewModel = await _activityService.GetActivitiesAsync(projectIdTest, userNameTest);
             int counter = 1;
-            foreach (var activity in activitiesViewModel.Activities)
+            foreach (var activity in activitiesViewModel)
             {
-                if (counter==1)
+                if (counter == 1)
                 {
                     Assert.Equal(activity.Id, activityForTest1.Id);
                     Assert.Equal(activity.Name, activityForTest1.Name);
@@ -85,7 +78,6 @@ namespace Minenetred.web.Test
                 }
                 counter += 1;
             }
-
         }
     }
 }
