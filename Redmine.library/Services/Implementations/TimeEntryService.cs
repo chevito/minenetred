@@ -56,16 +56,8 @@ namespace Redmine.library.Services.Implementations
             var requestUri = Constants.TimeEntries +
                 Constants.Json +
                 "?key=" + authKey;
-            var formatedEntryString = new JObject();
-            formatedEntryString.Add("issue_id", issueId);
-            formatedEntryString.Add("spent_on", spentOn);
-            formatedEntryString.Add("hours", hours);
-            formatedEntryString.Add("activity_id", activityId);
-            formatedEntryString.Add("comments", comments);
-            var jsonObject = new JObject();
-            jsonObject.Add("time_entry", formatedEntryString);
-            var toContent = JsonConvert.SerializeObject(jsonObject, SerializerHelper.Settings);
-            var httpContent = new StringContent(toContent, Encoding.UTF8, "application/json");
+            var FormatedJson = TimeEntryPostHelper.GetTimeEntryJsonFormat(authKey, issueId, spentOn, hours, activityId, comments);
+            var httpContent = new StringContent(FormatedJson, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(requestUri, httpContent);
             return response.StatusCode;
         }
