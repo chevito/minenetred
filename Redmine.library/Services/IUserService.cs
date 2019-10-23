@@ -5,6 +5,6 @@ namespace Redmine.library.Services
 {
     public interface IUserService
     {
-        Task<UserResponse> GetCurrentUserAsync(string authKey);
+        Task<UserServiceModel> GetCurrentUserAsync(string authKey);
     }
 }

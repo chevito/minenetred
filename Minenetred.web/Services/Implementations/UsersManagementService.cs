@@ -76,7 +76,7 @@ namespace Minenetred.web.Services.Implementations
         {
             var redmineUser = await _userService.GetCurrentUserAsync(key);
             var contextUser = _context.Users.SingleOrDefault(u => u.UserName == email);
-            contextUser.RedmineId = redmineUser.User.Id;
+            contextUser.RedmineId = redmineUser.Id;
             _context.Users.Update(contextUser);
             _context.SaveChanges();
         }

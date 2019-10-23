@@ -56,14 +56,11 @@ namespace Minenetred.web.Test
         {
             var testKey = "TestKey";
             var testUser = "TestUser3";
-            var returnedUser = new UserResponse()
+            var returnedUser = new UserServiceModel()
             {
-                User = new UserServiceModel()
-                {
-                    Id = 5
-                },
+                Id = 5
             };
-            async Task<UserResponse> AssignResponse()
+            async Task<UserServiceModel> AssignResponse()
             {
                 await Task.Delay(0);
                 return returnedUser;

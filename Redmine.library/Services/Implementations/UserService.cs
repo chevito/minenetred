@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Redmine.library.Core;
 using Redmine.library.Models;
 using System;
@@ -16,7 +17,7 @@ namespace Redmine.library.Services.Implementations
             _client = client;
         }
 
-        public async Task<UserResponse> GetCurrentUserAsync(string authKey)
+        public async Task<UserServiceModel> GetCurrentUserAsync(string authKey)
         {
             if (string.IsNullOrEmpty(authKey))
                 throw new ArgumentNullException(nameof(authKey));
@@ -27,7 +28,9 @@ namespace Redmine.library.Services.Implementations
             if (response.IsSuccessStatusCode)
             {
                 toReturn = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<UserResponse>(toReturn);
+                var jsonObject = JObject.Parse(toReturn);
+                var userData = jsonObject["user"].ToString();
+                var user = JsonConvert.DeserializeObject<UserServiceModel>(userData);
                 return user;
             }
             else

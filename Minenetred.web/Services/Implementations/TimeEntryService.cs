@@ -50,11 +50,8 @@ namespace Minenetred.web.Services.Implementations
 
         public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry)
         {
-            var entryToMap = new TimeEntryFormContainer()
-            {
-                TimeEntry = entry,
-            };
-            var timeEntry = _mapper.Map<TimeEntryFormContainer, TimeEntryDtoContainer>(entryToMap);
+
+            var timeEntry = _mapper.Map<TimeEntryFormDto, Redmine.library.Models.TimeEntryDto>(entry);
             var key = _usersManagementService.GetUserKey(UserPrincipal.Current.EmailAddress);
             return await _timeEntryService.AddTimeEntryAsync(timeEntry, key);
         }

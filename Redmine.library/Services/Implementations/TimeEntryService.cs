@@ -43,7 +43,7 @@ namespace Redmine.library.Services.Implementations
             }
         }
 
-        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryDtoContainer entry, string authKey)
+        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryDto entry, string authKey)
         {
             if (entry == null)
             {
@@ -56,9 +56,12 @@ namespace Redmine.library.Services.Implementations
             var requestUri = Constants.TimeEntries +
                 Constants.Json +
                 "?key=" + authKey;
-
-            var json = JsonConvert.SerializeObject(entry, SerializerHelper.Settings);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var formatedEntryString = JsonConvert.SerializeObject(entry, SerializerHelper.Settings);
+            var formatedEntry= JObject.Parse(formatedEntryString);
+            var jsonObject = new JObject();
+            jsonObject.Add("time_entry", formatedEntry);
+            var toContent = JsonConvert.SerializeObject(jsonObject, SerializerHelper.Settings);
+            var httpContent = new StringContent(toContent, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(requestUri, httpContent);
             return response.StatusCode;
         }
