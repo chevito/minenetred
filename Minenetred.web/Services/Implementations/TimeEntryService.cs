@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Minenetred.web.Context;
 using Minenetred.web.Models;
+using Newtonsoft.Json.Linq;
 using Redmine.library.Models;
 using System;
 using System.Collections.Generic;
@@ -48,12 +49,16 @@ namespace Minenetred.web.Services.Implementations
             return totalHours;
         }
 
-        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry)
+        public async Task<HttpStatusCode> AddTimeEntryAsync(JObject entry)
         {
-
-            var timeEntry = _mapper.Map<TimeEntryFormDto, Redmine.library.Models.TimeEntryDto>(entry);
+            var jsonObject = entry;
+            int issueId = Convert.ToInt32(jsonObject["issueId"]);
+            string spentOn = jsonObject["spentOn"].ToString();
+            double hours = Convert.ToDouble(jsonObject["hours"]);
+            int activityId = Convert.ToInt32(jsonObject["activityId"]);
+            string comments = jsonObject["comments"].ToString();
             var key = _usersManagementService.GetUserKey(UserPrincipal.Current.EmailAddress);
-            return await _timeEntryService.AddTimeEntryAsync(timeEntry, key);
+            return await _timeEntryService.AddTimeEntryAsync(key, issueId, spentOn, hours, activityId, comments);
         }
 
         private async Task<List<DateTime>> GetFutureTimeEntriesDates(DateTime today, string apiKey, DateTime lastPeriodDate)

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.DirectoryServices.AccountManagement;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.web.Models;
 using Minenetred.web.Services;
-using System.DirectoryServices.AccountManagement;
-using System.Net;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Minenetred.web.Api
 {
@@ -12,12 +13,10 @@ namespace Minenetred.web.Api
     public class TimeEntryController : Controller
     {
         private readonly ITimeEntryService _timeEntryService;
-
         public TimeEntryController(ITimeEntryService timeEntryService)
         {
             _timeEntryService = timeEntryService;
         }
-
         [Route("/Entries/{projectId}/{date}")]
         [Produces("application/json")]
         [ProducesResponseType(404)]
@@ -33,7 +32,7 @@ namespace Minenetred.web.Api
         [ProducesResponseType(400)]
         [ProducesResponseType(201)]
         [HttpPost]
-        public async Task<HttpStatusCode> AddTimeEntryAsync([FromBody]TimeEntryFormDto entry)
+        public async Task<HttpStatusCode> AddTimeEntryAsync([FromBody]JObject entry)
         {
             if (entry == null)
             {

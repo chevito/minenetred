@@ -15,8 +15,6 @@ namespace Minenetred.web.Infrastructure
             CreateMap<Issue, IssueDto>();
 
             CreateMap<TimeEntry, Minenetred.web.Models.TimeEntryDto>();
-
-            CreateMap<TimeEntryFormDto, Redmine.library.Models.TimeEntryDto>();
         }
     }
 }

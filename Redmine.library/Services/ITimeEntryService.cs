@@ -14,6 +14,6 @@ namespace Redmine.library.Services
             string fromDate = null,
             string toDate = null);
 
-        Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryDto entry, string authKey);
+        Task<HttpStatusCode> AddTimeEntryAsync(string authKey, int issueId, string spentOn, double hours, int activityId, string comments);
     }
 }

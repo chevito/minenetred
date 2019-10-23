@@ -43,11 +43,11 @@ namespace Redmine.library.Services.Implementations
             }
         }
 
-        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryDto entry, string authKey)
+        public async Task<HttpStatusCode> AddTimeEntryAsync(string authKey, int issueId, string spentOn, double hours, int activityId, string comments)
         {
-            if (entry == null)
+            if (string.IsNullOrEmpty(comments))
             {
-                throw new ArgumentNullException(nameof(entry));
+                throw new ArgumentNullException(nameof(comments));
             }
             if (string.IsNullOrEmpty(authKey))
             {
@@ -56,10 +56,14 @@ namespace Redmine.library.Services.Implementations
             var requestUri = Constants.TimeEntries +
                 Constants.Json +
                 "?key=" + authKey;
-            var formatedEntryString = JsonConvert.SerializeObject(entry, SerializerHelper.Settings);
-            var formatedEntry= JObject.Parse(formatedEntryString);
+            var formatedEntryString = new JObject();
+            formatedEntryString.Add("issue_id", issueId);
+            formatedEntryString.Add("spent_on", spentOn);
+            formatedEntryString.Add("hours", hours);
+            formatedEntryString.Add("activity_id", activityId);
+            formatedEntryString.Add("comments", comments);
             var jsonObject = new JObject();
-            jsonObject.Add("time_entry", formatedEntry);
+            jsonObject.Add("time_entry", formatedEntryString);
             var toContent = JsonConvert.SerializeObject(jsonObject, SerializerHelper.Settings);
             var httpContent = new StringContent(toContent, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(requestUri, httpContent);
