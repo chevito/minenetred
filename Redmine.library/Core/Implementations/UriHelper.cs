@@ -1,8 +1,8 @@
 ﻿namespace Redmine.library.Core
 {
-    internal static class UriHelper
+    public class UriHelper : IUriHelper
     {
-        public static string Activities(int projectId, string authKey)
+        public string Activities(int projectId, string authKey)
         {
             return Constants.Activites +
                 Constants.Json +
@@ -14,7 +14,7 @@
                 projectId;
         }
 
-        public static string Issues(string authKey, int assignedToId, int projectId)
+        public string Issues(string authKey, int assignedToId, int projectId)
         {
             return Constants.Issues +
                 Constants.Json +
@@ -29,7 +29,7 @@
                 projectId;
         }
 
-        public static string Projects(string authKey)
+        public string Projects(string authKey)
         {
             return Constants.Projects +
                 Constants.Json +
@@ -38,7 +38,7 @@
                 authKey;
         }
 
-        private static string TimeEntry(string authKey, int userId)
+        private string TimeEntry(string authKey, int userId)
         {
             string toReturn =
                 Constants.TimeEntries +
@@ -49,10 +49,10 @@
                 "&" +
                 Constants.UserId +
                 userId;
-            return "";
+            return toReturn;
         }
 
-        private static string TimeEntry(string authKey, int userId, int projectId)
+        private string TimeEntry(string authKey, int userId, int projectId)
         {
             string toReturn =
                 TimeEntry(authKey, userId);
@@ -63,25 +63,47 @@
             return toReturn;
         }
 
-        private static string TimeEntry(string authKey, int userId, int projectId, string fromDate)
+        private string TimeEntry(string authKey, int userId, int projectId, string fromDate)
         {
-            string toReturn = TimeEntry(authKey, userId, projectId);
-            toReturn +=
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId +
+                "&" +
+                Constants.ProjectId +
+                projectId +
                 "&from=" +
                 fromDate;
             return toReturn;
         }
 
-        private static string TimeEntry(string authKey, int userId, int projectId, string fromDate, string toDate)
+        private string TimeEntry(string authKey, int userId, int projectId, string fromDate, string toDate)
         {
-            string toReturn = TimeEntry(authKey, userId, projectId, fromDate, toDate);
-            toReturn +=
+            string toReturn =
+                Constants.TimeEntries +
+                Constants.Json +
+                "?" +
+                Constants.Key +
+                authKey +
+                "&" +
+                Constants.UserId +
+                userId +
+                "&" +
+                Constants.ProjectId +
+                projectId +
+                "&from=" +
+                fromDate +
                 "&to=" +
                 toDate;
             return toReturn;
         }
 
-        private static string TimeEntry(string authKey, int userId, string fromDate, string toDate)
+        private string TimeEntry(string authKey, int userId, string fromDate, string toDate)
         {
             string toReturn = TimeEntry(authKey, userId);
             toReturn +=
@@ -93,7 +115,7 @@
             return toReturn;
         }
 
-        public static string HandleTimeEntriesUri(string authKey, int userId, int projectId, string fromDate, string toDate)
+        public string HandleTimeEntriesUri(string authKey, int userId, int projectId, string fromDate, string toDate)
         {
             if (projectId == 0 && string.IsNullOrEmpty(fromDate) && string.IsNullOrEmpty(toDate))
             {
@@ -117,7 +139,7 @@
             }
         }
 
-        public static string User(string authKey)
+        public string User(string authKey)
         {
             return Constants.CurrentUser +
                 Constants.Json +

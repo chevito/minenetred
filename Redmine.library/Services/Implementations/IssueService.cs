@@ -12,10 +12,12 @@ namespace Redmine.library.Services.Implementations
     public class IssueService : IIssueService
     {
         private readonly HttpClient _client;
+        private readonly IUriHelper _uriHelper;
 
-        public IssueService(HttpClient client)
+        public IssueService(HttpClient client, IUriHelper uriHelper)
         {
             _client = client;
+            _uriHelper = uriHelper;
         }
 
         public async Task<List<Issue>> GetIssuesAsync(string authKey, int assignedToId, int projectId)
@@ -24,7 +26,7 @@ namespace Redmine.library.Services.Implementations
                 throw new ArgumentNullException(nameof(authKey));
 
             var toReturn = "";
-            var requestUri = UriHelper.Issues(authKey, assignedToId, projectId);
+            var requestUri = _uriHelper.Issues(authKey, assignedToId, projectId);
             HttpResponseMessage response = await _client.GetAsync(requestUri);
             if (response.IsSuccessStatusCode)
             {

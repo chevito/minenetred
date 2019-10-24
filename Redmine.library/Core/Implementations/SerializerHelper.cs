@@ -3,9 +3,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace Redmine.library.Core
 {
-    internal static class SerializerHelper
+    public class SerializerHelper : ISerializerHelper
     {
-        private static JsonSerializerSettings DeserializeObject()
+        private JsonSerializerSettings _serializerSettings;
+        public SerializerHelper()
         {
             var contractResolver = new DefaultContractResolver
             {
@@ -16,9 +17,11 @@ namespace Redmine.library.Core
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented
             };
-            return settings;
+            _serializerSettings = settings;
         }
-
-        public static JsonSerializerSettings Settings = DeserializeObject();
+        public JsonSerializerSettings SerializerSettings()
+        {
+            return _serializerSettings;
+        }
     }
 }

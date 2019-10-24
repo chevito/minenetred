@@ -8,7 +8,7 @@ namespace Redmine.library.Core
 {
     internal static class TimeEntryPostHelper
     {
-        public static string GetTimeEntryJsonFormat(string authKey, int issueId, string spentOn, double hours, int activityId, string comments)
+        public static string GetTimeEntryJsonFormat(string authKey, int issueId, string spentOn, double hours, int activityId, string comments, JsonSerializerSettings settings)
         {
             var formatedEntryString = new JObject();
             formatedEntryString.Add("issue_id", issueId);
@@ -18,7 +18,7 @@ namespace Redmine.library.Core
             formatedEntryString.Add("comments", comments);
             var jsonObject = new JObject();
             jsonObject.Add("time_entry", formatedEntryString);
-            var toContent = JsonConvert.SerializeObject(jsonObject, SerializerHelper.Settings);
+            var toContent = JsonConvert.SerializeObject(jsonObject, settings);
             return toContent;
         }
     }

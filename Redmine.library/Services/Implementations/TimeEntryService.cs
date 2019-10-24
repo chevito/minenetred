@@ -14,10 +14,14 @@ namespace Redmine.library.Services.Implementations
     public class TimeEntryService : ITimeEntryService
     {
         private readonly HttpClient _client;
+        private readonly IUriHelper _uriHelper;
+        private readonly ISerializerHelper _serializerHelper;
 
-        public TimeEntryService(HttpClient client)
+        public TimeEntryService(HttpClient client, IUriHelper uriHelper, ISerializerHelper serializerHelper)
         {
             _client = client;
+            _uriHelper = uriHelper;
+            _serializerHelper = serializerHelper;
         }
 
         public async Task<List<TimeEntry>> GetTimeEntriesAsync(string authKey, int userId, int projectId = 0, string fromDate = null, string toDate = null)
@@ -26,14 +30,14 @@ namespace Redmine.library.Services.Implementations
                 throw new ArgumentNullException(nameof(authKey));
 
             var toReturn = "";
-            var requestUri = UriHelper.HandleTimeEntriesUri(authKey, userId, projectId, fromDate, toDate);
+            var requestUri = _uriHelper.HandleTimeEntriesUri(authKey, userId, projectId, fromDate, toDate);
             HttpResponseMessage response = await _client.GetAsync(requestUri);
             if (response.IsSuccessStatusCode)
             {
                 toReturn = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(toReturn);
                 var timeEntries = jsonObject["time_entries"].ToString();
-                var timeEntryListResponse = JsonConvert.DeserializeObject<List<TimeEntry>>(timeEntries, SerializerHelper.Settings);
+                var timeEntryListResponse = JsonConvert.DeserializeObject<List<TimeEntry>>(timeEntries, _serializerHelper.SerializerSettings());
                 return timeEntryListResponse;
             }
             else
@@ -56,7 +60,7 @@ namespace Redmine.library.Services.Implementations
             var requestUri = Constants.TimeEntries +
                 Constants.Json +
                 "?key=" + authKey;
-            var FormatedJson = TimeEntryPostHelper.GetTimeEntryJsonFormat(authKey, issueId, spentOn, hours, activityId, comments);
+            var FormatedJson = TimeEntryPostHelper.GetTimeEntryJsonFormat(authKey, issueId, spentOn, hours, activityId, comments, _serializerHelper.SerializerSettings());
             var httpContent = new StringContent(FormatedJson, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(requestUri, httpContent);
             return response.StatusCode;

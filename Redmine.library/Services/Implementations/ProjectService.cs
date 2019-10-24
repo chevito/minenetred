@@ -12,10 +12,14 @@ namespace Redmine.library.Services.Implementations
     public class ProjectService : IProjectService
     {
         private readonly HttpClient _client;
+        private readonly IUriHelper _uriHelper;
+        private readonly ISerializerHelper _serializerHelper;
 
-        public ProjectService(HttpClient client)
+        public ProjectService(HttpClient client, IUriHelper uriHelper, ISerializerHelper serializerHelper)
         {
             _client = client;
+            _uriHelper = uriHelper;
+            _serializerHelper = serializerHelper;
         }
 
         public async Task<List<Project>> GetProjectsAsync(string authKey)
@@ -24,14 +28,14 @@ namespace Redmine.library.Services.Implementations
                 throw new ArgumentNullException(nameof(authKey));
 
             var toReturn = "";
-            var requestUri = UriHelper.Projects(authKey);
+            var requestUri = _uriHelper.Projects(authKey);
             HttpResponseMessage response = await _client.GetAsync(requestUri);
             if (response.IsSuccessStatusCode)
             {
                 toReturn = await response.Content.ReadAsStringAsync();
                 var jsonObject = JObject.Parse(toReturn);
                 var projects = jsonObject["projects"].ToString();
-                var projectListResponse = JsonConvert.DeserializeObject<List<Project>>(projects, SerializerHelper.Settings);
+                var projectListResponse = JsonConvert.DeserializeObject<List<Project>>(projects, _serializerHelper.SerializerSettings());
                 return projectListResponse;
             }
             else

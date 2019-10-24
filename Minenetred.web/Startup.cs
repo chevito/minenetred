@@ -11,6 +11,7 @@ using Minenetred.web.Context;
 using Minenetred.web.Infrastructure;
 using Minenetred.web.Services;
 using Minenetred.web.Services.Implementations;
+using Redmine.library.Core;
 using Redmine.library.Services;
 using Redmine.library.Services.Implementations;
 using Swashbuckle.AspNetCore.Swagger;
@@ -28,15 +29,12 @@ namespace Minenetred.web
 
         public IConfiguration Configuration { get; }
         private string _secretEncrytionKey;
-        private HttpClient _client;
-
+        private Uri _uri;
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             _secretEncrytionKey = Configuration["EncryptionKey"];
-            _client = new HttpClient();
-            _client.BaseAddress = new Uri("https://dev.unosquare.com/redmine/");
-
+            _uri = new Uri("https://dev.unosquare.com/redmine/");
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -45,12 +43,25 @@ namespace Minenetred.web
             });
 
             #region Library Services
+            services.AddSingleton<IUriHelper, UriHelper>();
+            services.AddSingleton<ISerializerHelper, SerializerHelper>();
 
-            services.AddScoped<Redmine.library.Services.IIssueService>(s => new Redmine.library.Services.Implementations.IssueService(_client));
-            services.AddScoped<Redmine.library.Services.ITimeEntryService>(s => new Redmine.library.Services.Implementations.TimeEntryService(_client));
-            services.AddScoped<IUserService>(s => new UserService(_client));
-            services.AddScoped<Redmine.library.Services.IActivityService>(s => new Redmine.library.Services.Implementations.ActivityService(_client));
-            services.AddScoped<Redmine.library.Services.IProjectService>(s => new Redmine.library.Services.Implementations.ProjectService(_client));
+            services.AddScoped<Redmine.library.Services.IIssueService, Redmine.library.Services.Implementations.IssueService>();
+            services.AddHttpClient<Redmine.library.Services.IIssueService, Redmine.library.Services.Implementations.IssueService>("issueClient", c=> c.BaseAddress = _uri);
+
+            services.AddScoped<Redmine.library.Services.ITimeEntryService, Redmine.library.Services.Implementations.TimeEntryService>();
+            services.AddHttpClient<Redmine.library.Services.ITimeEntryService, Redmine.library.Services.Implementations.TimeEntryService>("timeEntryClient", c => c.BaseAddress = _uri);
+
+            //services.AddScoped<IUserService>(s => new UserService(_client));
+            services.AddScoped<IUserService, UserService>();
+            services.AddHttpClient<IUserService, UserService>("userClient", c => c.BaseAddress = _uri);
+
+            services.AddScoped<Redmine.library.Services.IActivityService, Redmine.library.Services.Implementations.ActivityService>();
+            services.AddHttpClient<Redmine.library.Services.IActivityService, Redmine.library.Services.Implementations.ActivityService>("activityClient", c => c.BaseAddress = _uri);
+
+            services.AddScoped<Redmine.library.Services.IProjectService, Redmine.library.Services.Implementations.ProjectService>();
+            services.AddHttpClient<Redmine.library.Services.IProjectService, Redmine.library.Services.Implementations.ProjectService>("projectClient", c => c.BaseAddress = _uri);
+
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
 
             #endregion Library Services
