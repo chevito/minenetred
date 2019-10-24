@@ -66,17 +66,8 @@
         private string TimeEntry(string authKey, int userId, int projectId, string fromDate)
         {
             string toReturn =
-                Constants.TimeEntries +
-                Constants.Json +
-                "?" +
-                Constants.Key +
-                authKey +
-                "&" +
-                Constants.UserId +
-                userId +
-                "&" +
-                Constants.ProjectId +
-                projectId +
+                TimeEntry(authKey, userId, projectId);
+            toReturn += 
                 "&from=" +
                 fromDate;
             return toReturn;
@@ -85,19 +76,8 @@
         private string TimeEntry(string authKey, int userId, int projectId, string fromDate, string toDate)
         {
             string toReturn =
-                Constants.TimeEntries +
-                Constants.Json +
-                "?" +
-                Constants.Key +
-                authKey +
-                "&" +
-                Constants.UserId +
-                userId +
-                "&" +
-                Constants.ProjectId +
-                projectId +
-                "&from=" +
-                fromDate +
+                TimeEntry(authKey, userId, projectId, fromDate);
+            toReturn +=
                 "&to=" +
                 toDate;
             return toReturn;
