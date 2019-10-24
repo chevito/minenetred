@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minenetred.web.Context;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Services;
-using Minenetred.web.Services.Implementations;
-using Redmine.library.Core;
-using Redmine.library.Services;
-using Redmine.library.Services.Implementations;
+using Minenetred.Web.Context;
+using Minenetred.Web.Infrastructure;
+using Minenetred.Web.Services;
+using Minenetred.Web.Services.Implementations;
+using Redmine.Library.Core;
+using Redmine.Library.Services;
+using Redmine.Library.Services.Implementations;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Net.Http;
 
-namespace Minenetred.web
+namespace Minenetred.Web
 {
     public class Startup
     {
@@ -46,21 +46,21 @@ namespace Minenetred.web
             services.AddSingleton<IUriHelper, UriHelper>();
             services.AddSingleton<ISerializerHelper, SerializerHelper>();
 
-            services.AddScoped<Redmine.library.Services.IIssueService, Redmine.library.Services.Implementations.IssueService>();
-            services.AddHttpClient<Redmine.library.Services.IIssueService, Redmine.library.Services.Implementations.IssueService>("issueClient", c=> c.BaseAddress = _uri);
+            services.AddScoped<Redmine.Library.Services.IIssueService, Redmine.Library.Services.Implementations.IssueService>();
+            services.AddHttpClient<Redmine.Library.Services.IIssueService, Redmine.Library.Services.Implementations.IssueService>("issueClient", c=> c.BaseAddress = _uri);
 
-            services.AddScoped<Redmine.library.Services.ITimeEntryService, Redmine.library.Services.Implementations.TimeEntryService>();
-            services.AddHttpClient<Redmine.library.Services.ITimeEntryService, Redmine.library.Services.Implementations.TimeEntryService>("timeEntryClient", c => c.BaseAddress = _uri);
+            services.AddScoped<Redmine.Library.Services.ITimeEntryService, Redmine.Library.Services.Implementations.TimeEntryService>();
+            services.AddHttpClient<Redmine.Library.Services.ITimeEntryService, Redmine.Library.Services.Implementations.TimeEntryService>("timeEntryClient", c => c.BaseAddress = _uri);
 
             //services.AddScoped<IUserService>(s => new UserService(_client));
             services.AddScoped<IUserService, UserService>();
             services.AddHttpClient<IUserService, UserService>("userClient", c => c.BaseAddress = _uri);
 
-            services.AddScoped<Redmine.library.Services.IActivityService, Redmine.library.Services.Implementations.ActivityService>();
-            services.AddHttpClient<Redmine.library.Services.IActivityService, Redmine.library.Services.Implementations.ActivityService>("activityClient", c => c.BaseAddress = _uri);
+            services.AddScoped<Redmine.Library.Services.IActivityService, Redmine.Library.Services.Implementations.ActivityService>();
+            services.AddHttpClient<Redmine.Library.Services.IActivityService, Redmine.Library.Services.Implementations.ActivityService>("activityClient", c => c.BaseAddress = _uri);
 
-            services.AddScoped<Redmine.library.Services.IProjectService, Redmine.library.Services.Implementations.ProjectService>();
-            services.AddHttpClient<Redmine.library.Services.IProjectService, Redmine.library.Services.Implementations.ProjectService>("projectClient", c => c.BaseAddress = _uri);
+            services.AddScoped<Redmine.Library.Services.IProjectService, Redmine.Library.Services.Implementations.ProjectService>();
+            services.AddHttpClient<Redmine.Library.Services.IProjectService, Redmine.Library.Services.Implementations.ProjectService>("projectClient", c => c.BaseAddress = _uri);
 
             services.AddScoped<IEncryptionService>(s => new EncryptionService(_secretEncrytionKey));
 

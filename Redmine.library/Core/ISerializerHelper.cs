@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Redmine.library.Core
+namespace Redmine.Library.Core
 {
     public interface  ISerializerHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace Redmine.library.Core
+﻿namespace Redmine.Library.Core
 {
     public class UriHelper : IUriHelper
     {

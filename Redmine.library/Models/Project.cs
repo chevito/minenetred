@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Redmine.library.Models
+namespace Redmine.Library.Models
 {
     public class Project
     {

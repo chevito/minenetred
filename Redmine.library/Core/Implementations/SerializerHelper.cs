@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Redmine.library.Core
+namespace Redmine.Library.Core
 {
     public class SerializerHelper : ISerializerHelper
     {

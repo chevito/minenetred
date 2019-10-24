@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Minenetred.web.Context;
-using Minenetred.web.Context.ContextModels;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Services;
-using Minenetred.web.Services.Implementations;
+using Minenetred.Web.Context;
+using Minenetred.Web.Context.ContextModels;
+using Minenetred.Web.Infrastructure;
+using Minenetred.Web.Services;
+using Minenetred.Web.Services.Implementations;
 using Moq;
-using Redmine.library.Models;
+using Redmine.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Minenetred.web.Test
+namespace Minenetred.Web.Test
 {
     public class IssueServiceTest
     {
         private IssueService _issueService;
         private MinenetredContext _context;
-        private Mock<Redmine.library.Services.IIssueService> _issueLibraryService;
+        private Mock<Redmine.Library.Services.IIssueService> _issueLibraryService;
         private IMapper _mapper;
         private Mock<IUsersManagementService> _usersManagementService;
 
@@ -33,7 +33,7 @@ namespace Minenetred.web.Test
 
             _context = new MinenetredContext(options);
             _mapper = mappingConfig.CreateMapper();
-            _issueLibraryService = new Mock<Redmine.library.Services.IIssueService>();
+            _issueLibraryService = new Mock<Redmine.Library.Services.IIssueService>();
             _usersManagementService = new Mock<IUsersManagementService>();
             _issueService = new IssueService(
                 _context,

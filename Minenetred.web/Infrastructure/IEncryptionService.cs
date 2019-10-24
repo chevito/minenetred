@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Minenetred.web.Infrastructure
+namespace Minenetred.Web.Infrastructure
 {
     public interface IEncryptionService
     {

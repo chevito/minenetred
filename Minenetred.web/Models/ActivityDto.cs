@@ -1,4 +1,4 @@
-﻿namespace Minenetred.web.Models
+﻿namespace Minenetred.Web.Models
 {
     public class ActivityDto
     {

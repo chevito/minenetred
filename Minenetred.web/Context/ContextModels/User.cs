@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Minenetred.web.Context.ContextModels
+namespace Minenetred.Web.Context.ContextModels
 {
     public class User
     {

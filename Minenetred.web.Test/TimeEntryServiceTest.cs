@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Minenetred.web.Context;
-using Minenetred.web.Context.ContextModels;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Models;
-using Minenetred.web.Services;
-using Minenetred.web.Services.Implementations;
+using Minenetred.Web.Context;
+using Minenetred.Web.Context.ContextModels;
+using Minenetred.Web.Infrastructure;
+using Minenetred.Web.Models;
+using Minenetred.Web.Services;
+using Minenetred.Web.Services.Implementations;
 using Moq;
-using Redmine.library.Models;
+using Redmine.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Minenetred.web.Test
+namespace Minenetred.Web.Test
 {
     public class TimeEntryServiceTest
     {
         private TimeEntryService _timeEntryService;
-        private Mock<Redmine.library.Services.ITimeEntryService> _timeEntryLibraryService;
+        private Mock<Redmine.Library.Services.ITimeEntryService> _timeEntryLibraryService;
         private IMapper _mapper;
         private MinenetredContext _context;
         private Mock<IUsersManagementService> _userManagementService;
@@ -33,7 +33,7 @@ namespace Minenetred.web.Test
             var options = new DbContextOptionsBuilder<MinenetredContext>()
                 .UseInMemoryDatabase(databaseName: "TestDataBaseTimeEntryService").Options;
 
-            _timeEntryLibraryService = new Mock<Redmine.library.Services.ITimeEntryService>();
+            _timeEntryLibraryService = new Mock<Redmine.Library.Services.ITimeEntryService>();
             _userManagementService = new Mock<IUsersManagementService>();
             _context = new MinenetredContext(options);
             _mapper = mappingConfig.CreateMapper();

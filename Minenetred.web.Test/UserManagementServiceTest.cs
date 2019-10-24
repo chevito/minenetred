@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Minenetred.web.Context;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Services.Implementations;
+using Minenetred.Web.Context;
+using Minenetred.Web.Infrastructure;
+using Minenetred.Web.Services.Implementations;
 using Moq;
-using Redmine.library.Models;
-using Redmine.library.Services;
+using Redmine.Library.Models;
+using Redmine.Library.Services;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Minenetred.web.Test
+namespace Minenetred.Web.Test
 {
     public class UserManagementServiceTest
     {

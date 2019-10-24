@@ -1,7 +1,7 @@
-﻿using Redmine.library.Models;
+﻿using Redmine.Library.Models;
 using System.Threading.Tasks;
 
-namespace Redmine.library.Services
+namespace Redmine.Library.Services
 {
     public interface IUserService
     {

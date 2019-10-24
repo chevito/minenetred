@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Minenetred.web.Infrastructure
+namespace Minenetred.Web.Infrastructure
 {
     public class EncryptionService : IEncryptionService
     {

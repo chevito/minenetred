@@ -1,12 +1,12 @@
-﻿using Minenetred.web.Context;
-using Minenetred.web.Context.ContextModels;
-using Minenetred.web.Infrastructure;
-using Redmine.library.Services;
+﻿using Minenetred.Web.Context;
+using Minenetred.Web.Context.ContextModels;
+using Minenetred.Web.Infrastructure;
+using Redmine.Library.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class UsersManagementService : IUsersManagementService
     {

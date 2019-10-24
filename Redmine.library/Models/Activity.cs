@@ -1,4 +1,4 @@
-﻿namespace Redmine.library.Models
+﻿namespace Redmine.Library.Models
 {
     public class Activity
     {

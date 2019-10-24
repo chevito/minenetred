@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Minenetred.web.Models;
-using Redmine.library.Models;
+using Minenetred.Web.Models;
+using Redmine.Library.Models;
 
-namespace Minenetred.web.Infrastructure
+namespace Minenetred.Web.Infrastructure
 {
     public class MappingProfile : Profile
     {
@@ -14,7 +14,7 @@ namespace Minenetred.web.Infrastructure
 
             CreateMap<Issue, IssueDto>();
 
-            CreateMap<TimeEntry, Minenetred.web.Models.TimeEntryDto>();
+            CreateMap<TimeEntry, Minenetred.Web.Models.TimeEntryDto>();
         }
     }
 }

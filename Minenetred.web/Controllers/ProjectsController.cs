@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Minenetred.web.Models;
-using Minenetred.web.Services;
+using Minenetred.Web.Models;
+using Minenetred.Web.Services;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Controllers
+namespace Minenetred.Web.Controllers
 {
     [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]

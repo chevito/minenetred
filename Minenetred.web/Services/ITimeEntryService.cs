@@ -1,11 +1,11 @@
-﻿using Minenetred.web.Models;
+﻿using Minenetred.Web.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services
+namespace Minenetred.Web.Services
 {
     public interface ITimeEntryService
     {

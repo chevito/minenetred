@@ -3,11 +3,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Minenetred.web.Models;
-using Minenetred.web.Services;
+using Minenetred.Web.Models;
+using Minenetred.Web.Services;
 using Newtonsoft.Json.Linq;
 
-namespace Minenetred.web.Api
+namespace Minenetred.Web.Api
 {
     [Authorize]
     public class TimeEntryController : Controller

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Minenetred.web.Services;
+using Minenetred.Web.Services;
 using System.DirectoryServices.AccountManagement;
 
-namespace Minenetred.web.Controllers
+namespace Minenetred.Web.Controllers
 {
     public class AccountController : Controller
     {

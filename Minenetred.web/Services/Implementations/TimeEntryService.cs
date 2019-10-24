@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Minenetred.web.Context;
-using Minenetred.web.Models;
+using Minenetred.Web.Context;
+using Minenetred.Web.Models;
 using Newtonsoft.Json.Linq;
-using Redmine.library.Models;
+using Redmine.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
@@ -10,19 +10,19 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class TimeEntryService : ITimeEntryService
     {
         private readonly MinenetredContext _context;
-        private readonly Redmine.library.Services.ITimeEntryService _timeEntryService;
+        private readonly Redmine.Library.Services.ITimeEntryService _timeEntryService;
         private readonly IMapper _mapper;
         private readonly IUsersManagementService _usersManagementService;
         private readonly IProjectService _projectService;
 
         public TimeEntryService(
             MinenetredContext context,
-            Redmine.library.Services.ITimeEntryService timeEntryService,
+            Redmine.Library.Services.ITimeEntryService timeEntryService,
             IMapper mapper,
             IUsersManagementService usersManagementService,
             IProjectService projectService

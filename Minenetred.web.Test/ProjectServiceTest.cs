@@ -1,23 +1,23 @@
 ﻿using AutoMapper;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Services.Implementations;
+using Minenetred.Web.Infrastructure;
+using Minenetred.Web.Services.Implementations;
 using Moq;
-using Redmine.library.Models;
+using Redmine.Library.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Minenetred.web.Test
+namespace Minenetred.Web.Test
 {
     public class ProjectServiceTest
     {
         private ProjectService _projectSerivce;
-        private Mock<Redmine.library.Services.IProjectService> _libraryProjectService;
+        private Mock<Redmine.Library.Services.IProjectService> _libraryProjectService;
         private IMapper _mapper;
 
         public ProjectServiceTest()
         {
-            _libraryProjectService = new Mock<Redmine.library.Services.IProjectService>();
+            _libraryProjectService = new Mock<Redmine.Library.Services.IProjectService>();
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());

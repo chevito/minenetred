@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Redmine.library.Core;
-using Redmine.library.Models;
+using Redmine.Library.Core;
+using Redmine.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Redmine.library.Services.Implementations
+namespace Redmine.Library.Services.Implementations
 {
     public class ProjectService : IProjectService
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Minenetred.web.Services
+namespace Minenetred.Web.Services
 {
     public interface IUsersManagementService
     {

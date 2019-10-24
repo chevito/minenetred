@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
-using Minenetred.web.Models;
-using Redmine.library.Models;
+using Minenetred.Web.Models;
+using Redmine.Library.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class ActivityService : IActivityService
     {
         private readonly IMapper _mapper;
         private readonly IUsersManagementService _usersManagementService;
-        private readonly Redmine.library.Services.IActivityService _activityService;
+        private readonly Redmine.Library.Services.IActivityService _activityService;
 
         public ActivityService(
             IMapper mapper,
             IUsersManagementService usersManagementService,
-            Redmine.library.Services.IActivityService activityService
+            Redmine.Library.Services.IActivityService activityService
             )
         {
             _mapper = mapper;

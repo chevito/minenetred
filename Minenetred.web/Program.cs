@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Minenetred.web
+namespace Minenetred.Web
 {
     public static class Program
     {

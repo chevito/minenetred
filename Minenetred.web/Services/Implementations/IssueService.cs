@@ -1,23 +1,23 @@
 ﻿using AutoMapper;
-using Minenetred.web.Context;
-using Minenetred.web.Models;
-using Redmine.library.Models;
+using Minenetred.Web.Context;
+using Minenetred.Web.Models;
+using Redmine.Library.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class IssueService : IIssueService
     {
         private readonly MinenetredContext _context;
-        private readonly Redmine.library.Services.IIssueService _issueService;
+        private readonly Redmine.Library.Services.IIssueService _issueService;
         private readonly IMapper _mapper;
         private IUsersManagementService _usersManagementService;
 
         public IssueService(
             MinenetredContext context,
-            Redmine.library.Services.IIssueService issueService,
+            Redmine.Library.Services.IIssueService issueService,
             IMapper mapper,
             IUsersManagementService usersManagementService
             )

@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
-using Minenetred.web.Models;
-using Redmine.library.Models;
+using Minenetred.Web.Models;
+using Redmine.Library.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class ProjectService : IProjectService
     {
-        private readonly Redmine.library.Services.IProjectService _projectService;
+        private readonly Redmine.Library.Services.IProjectService _projectService;
         private readonly IMapper _mapper;
 
         public ProjectService(
-            Redmine.library.Services.IProjectService projectService,
+            Redmine.Library.Services.IProjectService projectService,
             IMapper mapper
             )
         {

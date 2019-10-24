@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Services;
-using Minenetred.web.Services.Implementations;
+using Minenetred.Web.Infrastructure;
+using Minenetred.Web.Services;
+using Minenetred.Web.Services.Implementations;
 using Moq;
-using Redmine.library.Models;
+using Redmine.Library.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Minenetred.web.Test
+namespace Minenetred.Web.Test
 {
     public class ActivityServiceTest
     {
         private ActivityService _activityService;
         private IMapper _mapper;
-        private Mock<Redmine.library.Services.IActivityService> _activityLibraryService;
+        private Mock<Redmine.Library.Services.IActivityService> _activityLibraryService;
         private Mock<IUsersManagementService> _usersManagementService;
 
         public ActivityServiceTest()
@@ -25,7 +25,7 @@ namespace Minenetred.web.Test
             });
 
             _mapper = mappingConfig.CreateMapper();
-            _activityLibraryService = new Mock<Redmine.library.Services.IActivityService>();
+            _activityLibraryService = new Mock<Redmine.Library.Services.IActivityService>();
             _usersManagementService = new Mock<IUsersManagementService>();
             _activityService = new ActivityService(
                 _mapper,
