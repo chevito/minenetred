@@ -1,6 +1,6 @@
 # Minenetred
 
-App for logging time entries in multiple projects in redmine.
+App which allows logging time entries in multiple projects and dates into redmine.
 
 ## Before running
 
