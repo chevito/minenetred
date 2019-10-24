@@ -9,7 +9,7 @@ Run the database migrations in package manager console.
 update-database
 ```
 Add user secret key in your secrets.json file which can be opened by right clicking "Minenetred.web" project and then selecting the "Manage user secrets" option.
-Feel free to set write whatever string in "EncriptionKey" value.
+Feel free to write whatever string you want in "EncriptionKey" value.
 ```bash
 {
   "EncryptionKey": "Any string you want"
