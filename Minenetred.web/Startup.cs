@@ -15,6 +15,7 @@ using Redmine.Library.Core;
 using Redmine.Library.Services;
 using Redmine.Library.Services.Implementations;
 using Serilog;
+using Serilog.Sinks.MSSqlServer;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Net.Http;
@@ -35,14 +36,17 @@ namespace Minenetred.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           /* _secretEncrytionKey = Configuration["EncryptionKey"];
+           _secretEncrytionKey = Configuration["EncryptionKey"];
             _uri = new Uri("https://dev.unosquare.com/redmine/");
             Log.Logger = new LoggerConfiguration()
-                //.MinimumLevel.Warning()
-                ///.WriteTo.Console()
-                .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error);
+                .WriteTo.MSSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    "LogEvents",
+                    autoCreateSqlTable: true
+                    )
+                .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
                 .CreateLogger();
-            Log.Information("Ah, there you are!");*/
+            Log.Information("Ah, there you are!");
 
 
             services.Configure<CookiePolicyOptions>(options =>
