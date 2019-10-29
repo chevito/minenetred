@@ -1,0 +1,10 @@
+2019-10-29 15:55:10.062 -06:00 [ERR] Unhandled exception
+System.UnauthorizedAccessException: Invalid access key
+   at Redmine.Library.Services.Implementations.UserService.GetCurrentUserAsync(String authKey) in C:\Users\jorge.dominguez\source\repos\Minenetred.web\Redmine.library\Services\Implementations\UserService.cs:line 43
+   at Minenetred.Web.Services.Implementations.UsersManagementService.AddRedmineIdAsync(String key, String email) in C:\Users\jorge.dominguez\source\repos\Minenetred.web\Minenetred.web\Services\Implementations\UsersManagementService.cs:line 80
+   at Minenetred.Web.Controllers.ProjectsController.UpdateRedmineKeyAsync(String Redminekey) in C:\Users\jorge.dominguez\source\repos\Minenetred.web\Minenetred.web\Controllers\ProjectsController.cs:line 101
+2019-10-29 16:03:48.254 -06:00 [ERR] Invalid key
+System.UnauthorizedAccessException: Invalid access key
+   at Redmine.Library.Services.Implementations.UserService.GetCurrentUserAsync(String authKey) in C:\Users\jorge.dominguez\source\repos\Minenetred.web\Redmine.library\Services\Implementations\UserService.cs:line 43
+   at Minenetred.Web.Services.Implementations.UsersManagementService.AddRedmineIdAsync(String key, String email) in C:\Users\jorge.dominguez\source\repos\Minenetred.web\Minenetred.web\Services\Implementations\UsersManagementService.cs:line 80
+   at Minenetred.Web.Controllers.ProjectsController.UpdateRedmineKeyAsync(String Redminekey) in C:\Users\jorge.dominguez\source\repos\Minenetred.web\Minenetred.web\Controllers\ProjectsController.cs:line 101

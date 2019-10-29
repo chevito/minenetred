@@ -2,6 +2,7 @@
 using Minenetred.Web.Context.ContextModels;
 using Minenetred.Web.Infrastructure;
 using Redmine.Library.Services;
+using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,7 @@ namespace Minenetred.Web.Services.Implementations
             };
             _context.Users.Add(newUser);
             _context.SaveChanges();
+            Log.Information("Registered user:" + userEmail);
         }
 
         public bool HasRedmineKey(string userEmail)
@@ -61,6 +63,7 @@ namespace Minenetred.Web.Services.Implementations
             user.RedmineKey = encryptedKey;
             _context.Users.Update(user);
             _context.SaveChanges();
+            Log.Information("Updated redmine Key");
         }
 
         public string GetUserKey(string userEmail)

@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.Web.Models;
 using Minenetred.Web.Services;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Minenetred.Web.Api
@@ -21,6 +23,7 @@ namespace Minenetred.Web.Api
 
         [Produces("application/json")]
         [ProducesResponseType(404)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(201)]
         [Route("/Activities/{projectId}")]
         [HttpGet]
@@ -35,10 +38,15 @@ namespace Minenetred.Web.Api
                 }
                 return Ok(toRetun);
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException ex)
             {
-                throw new Exception(ex.Message);
+                Log.Error(ex, "Invalid access key");
             }
+            catch (HttpRequestException ex)
+            {
+                Log.Error(ex, "Bad Request");
+            }
+            return BadRequest();
         }
     }
 }

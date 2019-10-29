@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.Web.Models;
 using Minenetred.Web.Services;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Minenetred.Web.Controllers
@@ -46,10 +48,21 @@ namespace Minenetred.Web.Controllers
                 ViewBag.Warnings = await _timeEntryService.GetUnloggedDaysAsync(_userManagementService.GetRedmineId(userName: userName), decryptedKey, DateTime.Today);
                 return View(projectList);
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException ex)
             {
+                Log.Error(ex , "Invalid key");
                 return RedirectToAction("AddKey", new { msj = "Add a valid key" });
             }
+            catch(HttpRequestException ex)
+            {
+                Log.Error(ex, "Bad request");
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex ,"Unhandled exception");
+            }
+            return BadRequest();
         }
 
         [Route("/AccessKey")]
@@ -80,16 +93,29 @@ namespace Minenetred.Web.Controllers
             try
             {
                 if (string.IsNullOrEmpty(Redminekey))
+                {
+                    Log.Error(new ArgumentNullException("Key is null or empty"), "Invalid key");
                     return RedirectToAction("AddKey");
-
+                }
                 _userManagementService.UpdateKey(Redminekey, UserPrincipal.Current.EmailAddress);
                 await _userManagementService.AddRedmineIdAsync(Redminekey, UserPrincipal.Current.EmailAddress);
                 return RedirectToAction("GetProjectsAsync");
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException ex)
             {
+                Log.Error(ex, "Invalid key");
                 return RedirectToAction("AddKey", new { msj = "Add a valid key" });
             }
+            catch (HttpRequestException ex)
+            {
+                Log.Error(ex, "Bad request");
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Unhandled exception");
+            }
+            return BadRequest();
         }
     }
 }

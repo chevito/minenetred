@@ -46,7 +46,6 @@ namespace Minenetred.Web
                     )
                 .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
                 .CreateLogger();
-            Log.Information("Ah, there you are!");
 
 
             services.Configure<CookiePolicyOptions>(options =>
