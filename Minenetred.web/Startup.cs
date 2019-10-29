@@ -14,6 +14,7 @@ using Minenetred.Web.Services.Implementations;
 using Redmine.Library.Core;
 using Redmine.Library.Services;
 using Redmine.Library.Services.Implementations;
+using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Net.Http;
@@ -30,11 +31,20 @@ namespace Minenetred.Web
         public IConfiguration Configuration { get; }
         private string _secretEncrytionKey;
         private Uri _uri;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _secretEncrytionKey = Configuration["EncryptionKey"];
+           /* _secretEncrytionKey = Configuration["EncryptionKey"];
             _uri = new Uri("https://dev.unosquare.com/redmine/");
+            Log.Logger = new LoggerConfiguration()
+                //.MinimumLevel.Warning()
+                ///.WriteTo.Console()
+                .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error);
+                .CreateLogger();
+            Log.Information("Ah, there you are!");*/
+
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -45,6 +55,7 @@ namespace Minenetred.Web
             #region Library Services
             services.AddSingleton<IUriHelper, UriHelper>();
             services.AddSingleton<ISerializerHelper, SerializerHelper>();
+            //services.AddSingleton<Redmine.Library.Services.IIssueService>(c => new IssueService(_loggerFile));
 
             services.AddScoped<Redmine.Library.Services.IIssueService, Redmine.Library.Services.Implementations.IssueService>();
             services.AddHttpClient<Redmine.Library.Services.IIssueService, Redmine.Library.Services.Implementations.IssueService>("issueClient", c=> c.BaseAddress = _uri);
