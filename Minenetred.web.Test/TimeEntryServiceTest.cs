@@ -33,7 +33,7 @@ namespace Minenetred.Web.Test
             var options = new DbContextOptionsBuilder<MinenetredContext>()
                 .UseInMemoryDatabase(databaseName: "TestDataBaseTimeEntryService").Options;
 
-            //_timeEntryLibraryService = new Mock<Redmine.Library.Services.ITimeEntryService>();
+            _timeEntryLibraryService = new Mock<Redmine.Library.Services.ITimeEntryService>();
             _userManagementService = new Mock<IUsersManagementService>();
             _context = new MinenetredContext(options);
             _mapper = mappingConfig.CreateMapper();
