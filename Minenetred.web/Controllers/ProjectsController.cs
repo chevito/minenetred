@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Minenetred.Web.Controllers
 {
