@@ -19,8 +19,6 @@ namespace Minenetred.Web.Controllers
         private readonly ITimeEntryService _timeEntryService;
         private readonly IPopulateSelectorService _populateSelectorService;
 
-
-
         public ProjectsController(
             IProjectService service,
             IUsersManagementService userManagementService,

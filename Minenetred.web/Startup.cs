@@ -76,9 +76,6 @@ namespace Minenetred.Web
             services.AddScoped<IPopulateSelectorService, PopulateSelectorService>();
             #endregion
 
-
-
-
             var mappingConfig = new MapperConfiguration(mc =>
            {
                mc.AddProfile(new MappingProfile());
