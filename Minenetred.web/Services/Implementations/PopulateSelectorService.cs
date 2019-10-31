@@ -1,10 +1,10 @@
-﻿using Minenetred.web.Models;
+﻿using Minenetred.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class PopulateSelectorService : IPopulateSelectorService
     {
@@ -22,7 +22,7 @@ namespace Minenetred.web.Services.Implementations
         {
             var toReturn = new List<ActivityDto>();
             var activities = await _activityService.GetActivitiesAsync(projectId, userName);
-            foreach (var activity in activities.Activities)
+            foreach (var activity in activities)
             {
                 toReturn.Add(activity);
             }
@@ -33,7 +33,7 @@ namespace Minenetred.web.Services.Implementations
         {
             var toReturn = new List<IssueDto>();
             var issues = await _issueService.GetIssuesAsync(projectId, username);
-            foreach (var issue in issues.Issues)
+            foreach (var issue in issues)
             {
                 toReturn.Add(issue);
             }

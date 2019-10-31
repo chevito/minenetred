@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Minenetred.web.Context;
-using Minenetred.web.Infrastructure;
-using Minenetred.web.Models;
-using Minenetred.web.ViewModels;
-using Newtonsoft.Json;
-using Redmine.library.Models;
+using Minenetred.Web.Context;
+using Minenetred.Web.Models;
+using Newtonsoft.Json.Linq;
+using Redmine.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
@@ -12,19 +10,19 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services.Implementations
+namespace Minenetred.Web.Services.Implementations
 {
     public class TimeEntryService : ITimeEntryService
     {
         private readonly MinenetredContext _context;
-        private readonly Redmine.library.Services.ITimeEntryService _timeEntryService;
+        private readonly Redmine.Library.Services.ITimeEntryService _timeEntryService;
         private readonly IMapper _mapper;
         private readonly IUsersManagementService _usersManagementService;
         private readonly IProjectService _projectService;
 
         public TimeEntryService(
             MinenetredContext context,
-            Redmine.library.Services.ITimeEntryService timeEntryService,
+            Redmine.Library.Services.ITimeEntryService timeEntryService,
             IMapper mapper,
             IUsersManagementService usersManagementService,
             IProjectService projectService
@@ -40,26 +38,28 @@ namespace Minenetred.web.Services.Implementations
         public async Task<float> GetTimeEntryHoursPerDay(int projectId, string date, string user)
         {
             var key = _usersManagementService.GetUserKey(user);
-            var redmineId = _context.Users.SingleOrDefault(u=>u.UserName == user).RedmineId;
+            var redmineId = _context.Users.SingleOrDefault(u => u.UserName == user).RedmineId;
             var response = await _timeEntryService.GetTimeEntriesAsync(key, redmineId, projectId, date, date);
-            var shapedList = _mapper.Map<TimeEntryListResponse, TimeEntryViewModel>(response);
+            var shapedList = _mapper.Map<List<TimeEntry>, List<Models.TimeEntryDto>>(response);
+
             float totalHours = 0;
-            foreach (var entry in shapedList.TimeEntries)
+            foreach (var entry in shapedList)
             {
                 totalHours += entry.Hours;
             }
             return totalHours;
         }
 
-        public async Task<HttpStatusCode> AddTimeEntryAsync(TimeEntryFormDto entry)
+        public async Task<HttpStatusCode> AddTimeEntryAsync(JObject entry)
         {
-            var entryToMap = new TimeEntryFormContainer()
-            {
-                TimeEntry = entry,
-            };
-            var timeEntry = _mapper.Map<TimeEntryFormContainer, TimeEntryDtoContainer>(entryToMap);
+            var jsonObject = entry;
+            int issueId = Convert.ToInt32(jsonObject["issueId"]);
+            string spentOn = jsonObject["spentOn"].ToString();
+            double hours = Convert.ToDouble(jsonObject["hours"]);
+            int activityId = Convert.ToInt32(jsonObject["activityId"]);
+            string comments = jsonObject["comments"].ToString();
             var key = _usersManagementService.GetUserKey(UserPrincipal.Current.EmailAddress);
-            return  await _timeEntryService.AddTimeEntryAsync(timeEntry, key);
+            return await _timeEntryService.AddTimeEntryAsync(key, issueId, spentOn, hours, activityId, comments);
         }
 
         private async Task<List<DateTime>> GetFutureTimeEntriesDates(DateTime today, string apiKey, DateTime lastPeriodDate)
@@ -67,15 +67,15 @@ namespace Minenetred.web.Services.Implementations
             var toReturn = new List<DateTime>();
             today = today.AddDays(1);
             var projects = await _projectService.GetOpenProjectsAsync(apiKey);
-            var redimeId = _usersManagementService.getRedmineId(apiKey);
+            var redimeId = _usersManagementService.GetRedmineId(apiKey);
             var fromDate = today.ToString("yyyy-MM-dd");
             var toDate = lastPeriodDate.ToString("yyyy-MM-dd");
-            foreach (var project in projects.Projects)
+            foreach (var project in projects)
             {
                 var time = await _timeEntryService.GetTimeEntriesAsync(apiKey, redimeId, project.Id, fromDate, toDate);
-                if (time.TimeEntries.Count > 0)
+                if (time.Any())
                 {
-                    foreach (var entry in time.TimeEntries)
+                    foreach (var entry in time)
                     {
                         toReturn.Add(entry.SpentOn);
                     }
@@ -83,34 +83,31 @@ namespace Minenetred.web.Services.Implementations
             }
             return toReturn;
         }
+
         private DateTime GetFirstPeriodDay(DateTime today)
         {
-            var periodDay = new DateTime();
             if (today.Day <= 15)
             {
-                periodDay = new DateTime(today.Year, today.Month, 1);
+                return new DateTime(today.Year, today.Month, 1);
             }
             else
             {
-                periodDay = new DateTime(today.Year, today.Month, 16);
+                return new DateTime(today.Year, today.Month, 16);
             }
-            var toReturn = periodDay;
-            return toReturn;
         }
+
         public DateTime GetLastPeriodDay(DateTime today)
         {
-            var periodDay = new DateTime();
             if (today.Day <= 15)
             {
-                periodDay = new DateTime(today.Year, today.Month, 15);
+                return new DateTime(today.Year, today.Month, 15);
             }
             else
             {
-                periodDay =  new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+                return new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
             }
-            var toReturn = periodDay;
-            return toReturn;
         }
+
         public async Task<Dictionary<String, int>> GetUnloggedDaysAsync(int UserId, string authKey, DateTime today)
         {
             var toReturn = new Dictionary<String, int>();
@@ -118,7 +115,7 @@ namespace Minenetred.web.Services.Implementations
             var lastPeriodDay = GetLastPeriodDay(today);
             var futureTimeEntries = await GetFutureTimeEntriesDates(today, authKey, lastPeriodDay);
             var referenceDate = new DateTime();
-            if (futureTimeEntries.Count > 0)
+            if (futureTimeEntries.Any())
             {
                 referenceDate = futureTimeEntries.Max<DateTime>();
             }
@@ -136,7 +133,7 @@ namespace Minenetred.web.Services.Implementations
                     UserId,
                     fromDate: dateToValidate.ToString("yyyy-MM-dd"),
                     toDate: dateToValidate.ToString("yyyy-MM-dd"));
-                foreach (var entry in entries.TimeEntries)
+                foreach (var entry in entries)
                 {
                     if (entry.Activity.Name.Equals("Vacation/PTO/Holiday"))
                     {

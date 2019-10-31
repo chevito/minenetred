@@ -1,7 +1,4 @@
-﻿
-
-
-@model Minenetred.web.ViewModels.ProjectsViewModel
+﻿@model List<Minenetred.Web.Models.ProjectDto>
 
 @{
     ViewData["Title"] = "ProjectsList";
@@ -41,7 +38,7 @@
 
     }
     function setTotalHoursLoggedPerProject(sum, projectId, actualIndex) {
-        $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br/> <h4>' + sum + '</h4> ');
+        $('#' + projectId).children('td:eq(' + actualIndex + ')').find('text').html('Hours logged:<br /> <h4>' + sum + '</h4> ');
     }
 
     function setValuesToForm(button) {
@@ -138,9 +135,6 @@
             @Html.Raw(scriptI);
         }
 
-        console.log(activities);
-        console.log(issues);
-
         $('#date').change(function () {
             displayTable();
             $('.tableHeader').each(function (i, obj) {
@@ -203,6 +197,7 @@
 
             }
 
+
         });
     })
 </script>
@@ -224,14 +219,6 @@
         </div>
     }
 }
-
-<script>
-
-
-
-</script>
-
-
 
 <h2>My open projects</h2>
 
@@ -257,18 +244,16 @@
                 <th class="tableHeader"></th>
                 <th class="tableHeader"></th>
                 <th class="tableHeader"></th>
-
             </tr>
         </thead>
 
         <tbody>
-            @foreach (var project in Model.Projects)
+            @foreach (var project in Model)
             {
                 <tr class="table-row" id="@project.Id">
                     <td scope="row" style="width:25%">
                         @project.Name
                         <input type="hidden" value="@project.Id">
-
                     </td>
                     <td scope="row" class="time-entries">
                         <text>Loading...</text>

@@ -1,10 +1,10 @@
-﻿using Minenetred.web.Models;
+﻿using Minenetred.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Minenetred.web.Services
+namespace Minenetred.Web.Services
 {
     public interface IPopulateSelectorService
     {
