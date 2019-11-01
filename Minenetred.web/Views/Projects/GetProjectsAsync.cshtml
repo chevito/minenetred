@@ -56,7 +56,7 @@
         $.each(type, function (index, object) {
             if (object.ProjectId == projectId) {
                 $.each(Object.values(object)[1], function (index, _object) {
-                    $(className).html($(className).html() + '<option value="' + _object.id + '">' + Object.values(_object)[0] + '</option>');
+                    $(className).html($(className).html() + '<option value="' + _object.Id + '">' + Object.values(_object)[0] + '</option>');
                 });
             }
 
@@ -177,21 +177,26 @@
         });
 
         $('.post-time-entry').click(function () {
+            var button = $('.post-time-entry');
             var entry = createDataObject();
             if (validateInputs()) {
-                $.ajax({
+                button.attr("disabled", true);
+                $.ajax(
+                    {
                     url: baseAdress + '/Entries',
                     type: 'POST',
                     data: entry,
                     contentType: 'application/json',
-                    success: function () {
+                        success: function () {
                         $('.btn-close').click();
                         $("#date").change();
                         clearInputs();
+                        button.attr("disabled", false);
                     },
                     error: function (response) {
                         var errorMessage = reponse.status + ': ' + response.statusText
                         alert('Error - ' + errorMessage);
+                        button.attr("disabled", false);
                     }
                 })
 
