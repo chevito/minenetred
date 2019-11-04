@@ -34,7 +34,7 @@ namespace Minenetred.Web
                   autoCreateSqlTable: true,
                   restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning
                   )
-              .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
+              //.WriteTo.File("Errors.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
               .CreateLogger();
 
             Configuration = configuration;
