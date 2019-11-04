@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minenetred.Web.Services;
-using Serilog;
 using Minenetred.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Minenetred.Web.Controllers
 {
@@ -20,18 +20,21 @@ namespace Minenetred.Web.Controllers
         private readonly IUsersManagementService _userManagementService;
         private readonly ITimeEntryService _timeEntryService;
         private readonly IPopulateSelectorService _populateSelectorService;
+        private readonly ILogger<ProjectsController> _logger;
 
         public ProjectsController(
             IProjectService service,
             IUsersManagementService userManagementService,
             ITimeEntryService timeEntryService,
-            IPopulateSelectorService populateSelectorService
+            IPopulateSelectorService populateSelectorService,
+            ILogger<ProjectsController>  logger
             )
         {
             _projectService = service;
             _userManagementService = userManagementService;
             _timeEntryService = timeEntryService;
             _populateSelectorService = populateSelectorService;
+            _logger = logger;
         }
 
         [Route("/")]
@@ -69,17 +72,17 @@ namespace Minenetred.Web.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                Log.Error(ex , "Invalid key");
+                _logger.LogError(ex , "Invalid key");
                 return RedirectToAction("AddKey", new { msj = "Add a valid key" });
             }
             catch(HttpRequestException ex)
             {
-                Log.Error(ex, "Bad request");
+                _logger.LogError(ex, "Bad request");
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex ,"Unhandled exception");
+                _logger.LogCritical(ex ,"Unhandled exception");
             }
             return BadRequest();
         }
@@ -113,7 +116,7 @@ namespace Minenetred.Web.Controllers
             {
                 if (string.IsNullOrEmpty(Redminekey))
                 {
-                    Log.Error(new ArgumentNullException("Key is null or empty"), "Invalid key");
+                    _logger.LogError(new ArgumentNullException("Key is null or empty"), "Invalid key");
                     return RedirectToAction("AddKey");
                 }
                 _userManagementService.UpdateKey(Redminekey, UserPrincipal.Current.EmailAddress);
@@ -122,17 +125,17 @@ namespace Minenetred.Web.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                Log.Error(ex, "Invalid key");
+                _logger.LogError(ex, "Invalid key");
                 return RedirectToAction("AddKey", new { msj = "Add a valid key" });
             }
             catch (HttpRequestException ex)
             {
-                Log.Error(ex, "Bad request");
+                _logger.LogError(ex, "Bad request");
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Unhandled exception");
+                _logger.LogCritical(ex, "Unhandled exception");
             }
             return BadRequest();
         }

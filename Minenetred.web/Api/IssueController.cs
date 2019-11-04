@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Minenetred.Web.Models;
 using Minenetred.Web.Services;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
@@ -15,12 +15,15 @@ namespace Minenetred.Web.Api
     public class IssueController : Controller
     {
         private readonly IIssueService _issueService;
+        private readonly ILogger<IssueController> _logger;
 
         public IssueController(
-            IIssueService issueService
+            IIssueService issueService,
+            ILogger<IssueController> logger
             )
         {
             _issueService = issueService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -42,11 +45,11 @@ namespace Minenetred.Web.Api
             }
             catch (UnauthorizedAccessException ex)
             {
-                Log.Error(ex, "Invalid access key");
+                _logger.LogError(ex, "Invalid access key");
             }
             catch (HttpRequestException ex)
             {
-                Log.Error(ex, "Bad Request");
+                _logger.LogError(ex, "Bad Request");
             }
             return BadRequest();
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Minenetred.Web.Context;
 using Minenetred.Web.Infrastructure;
 using Minenetred.Web.Services;
@@ -26,6 +27,16 @@ namespace Minenetred.Web
     {
         public Startup(IConfiguration configuration)
         {
+            Log.Logger = new LoggerConfiguration()
+              .WriteTo.MSSqlServer(
+                  configuration.GetConnectionString("DefaultConnection"),
+                  "LogEvents",
+                  autoCreateSqlTable: true,
+                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning
+                  )
+              .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
+              .CreateLogger();
+
             Configuration = configuration;
         }
 
@@ -38,14 +49,6 @@ namespace Minenetred.Web
         {
            _secretEncrytionKey = Configuration["EncryptionKey"];
             _uri = new Uri("https://dev.unosquare.com/redmine/");
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.MSSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    "LogEvents",
-                    autoCreateSqlTable: true
-                    )
-                .WriteTo.File("log.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
-                .CreateLogger();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -57,7 +60,6 @@ namespace Minenetred.Web
             #region Library Services
             services.AddSingleton<IUriHelper, UriHelper>();
             services.AddSingleton<ISerializerHelper, SerializerHelper>();
-            //services.AddSingleton<Redmine.Library.Services.IIssueService>(c => new IssueService(_loggerFile));
 
             services.AddScoped<Redmine.Library.Services.IIssueService, Redmine.Library.Services.Implementations.IssueService>();
             services.AddHttpClient<Redmine.Library.Services.IIssueService, Redmine.Library.Services.Implementations.IssueService>("issueClient", c=> c.BaseAddress = _uri);
@@ -65,7 +67,6 @@ namespace Minenetred.Web
             services.AddScoped<Redmine.Library.Services.ITimeEntryService, Redmine.Library.Services.Implementations.TimeEntryService>();
             services.AddHttpClient<Redmine.Library.Services.ITimeEntryService, Redmine.Library.Services.Implementations.TimeEntryService>("timeEntryClient", c => c.BaseAddress = _uri);
 
-            //services.AddScoped<IUserService>(s => new UserService(_client));
             services.AddScoped<IUserService, UserService>();
             services.AddHttpClient<IUserService, UserService>("userClient", c => c.BaseAddress = _uri);
 
@@ -106,7 +107,7 @@ namespace Minenetred.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -118,6 +119,7 @@ namespace Minenetred.Web
                 app.UseHsts();
             }
 
+            loggerFactory.AddSerilog();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

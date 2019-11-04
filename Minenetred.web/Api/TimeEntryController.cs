@@ -5,10 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Minenetred.Web.Models;
+using Microsoft.Extensions.Logging;
 using Minenetred.Web.Services;
 using Newtonsoft.Json.Linq;
-using Serilog;
 
 namespace Minenetred.Web.Api
 {
@@ -16,9 +15,12 @@ namespace Minenetred.Web.Api
     public class TimeEntryController : Controller
     {
         private readonly ITimeEntryService _timeEntryService;
-        public TimeEntryController(ITimeEntryService timeEntryService)
+        private readonly ILogger<TimeEntryController> _logger;
+        public TimeEntryController(ITimeEntryService timeEntryService, 
+            ILogger<TimeEntryController> logger)
         {
             _timeEntryService = timeEntryService;
+            _logger = logger; 
         }
         [Route("/Entries/{projectId}/{date}")]
         [Produces("application/json")]
@@ -35,11 +37,11 @@ namespace Minenetred.Web.Api
             }
             catch (UnauthorizedAccessException ex)
             {
-                Log.Error(ex, "Invalid access key");
+                _logger.LogError(ex, "Invalid access key");
             }
             catch (HttpRequestException ex)
             {
-                Log.Error(ex, "Bad Request");
+                _logger.LogError(ex, "Bad Request");
             }
             return BadRequest();
         }
@@ -52,7 +54,7 @@ namespace Minenetred.Web.Api
         {
             if (entry == null)
             {
-                Log.Error(new ArgumentNullException(),"Time entry empty");
+                _logger.LogError(new ArgumentNullException(),"Time entry empty");
                 return HttpStatusCode.BadRequest;
             }
             return await _timeEntryService.AddTimeEntryAsync(entry);

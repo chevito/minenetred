@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
+using Serilog.Core;
 
 namespace Minenetred.Web
 {
@@ -20,11 +21,16 @@ namespace Minenetred.Web
                 Log.Fatal(ex, "Fatal error");
                 throw;
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-            .CaptureStartupErrors(true)
+            WebHost
+                .CreateDefaultBuilder(args)
+                .CaptureStartupErrors(true)
                 .UseStartup<Startup>();
     }
 }
