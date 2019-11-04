@@ -183,22 +183,22 @@
                 button.attr("disabled", true);
                 $.ajax(
                     {
-                    url: baseAdress + '/Entries',
-                    type: 'POST',
-                    data: entry,
-                    contentType: 'application/json',
+                        url: baseAdress + '/Entries',
+                        type: 'POST',
+                        data: entry,
+                        contentType: 'application/json',
                         success: function () {
-                        $('.btn-close').click();
-                        $("#date").change();
-                        clearInputs();
-                        button.attr("disabled", false);
-                    },
-                    error: function (response) {
-                        var errorMessage = reponse.status + ': ' + response.statusText
-                        alert('Error - ' + errorMessage);
-                        button.attr("disabled", false);
-                    }
-                })
+                            $('.btn-close').click();
+                            $("#date").change();
+                            clearInputs();
+                            button.attr("disabled", false);
+                        },
+                        error: function (response) {
+                            var errorMessage = reponse.status + ': ' + response.statusText
+                            alert('Error - ' + errorMessage);
+                            button.attr("disabled", false);
+                        }
+                    })
 
             }
 
