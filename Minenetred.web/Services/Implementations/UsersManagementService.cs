@@ -83,7 +83,6 @@ namespace Minenetred.Web.Services.Implementations
             _context.Users.Update(contextUser);
             _context.SaveChanges();
         }
-
         public int GetRedmineId(string redmineKey = null, string userName = null)
         {
             if (userName != null)
@@ -93,7 +92,7 @@ namespace Minenetred.Web.Services.Implementations
             if (redmineKey != null)
             {
                 var encryptedKey = _encryptionService.Encrypt(redmineKey);
-                return _context.Users.SingleOrDefault(u => u.RedmineKey == encryptedKey).RedmineId;
+                return _context.Users.SingleOrDefault(u => u.RedmineKey== encryptedKey).RedmineId;
             }
             return 0;
         }
