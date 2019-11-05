@@ -47,7 +47,7 @@ namespace Minenetred.Web.Services.Implementations
             };
             _context.Users.Add(newUser);
             _context.SaveChanges();
-            _logger.LogWarning("Registered user:" + userEmail);
+            _logger.LogInformation("Registered user:" + userEmail);
         }
 
         public bool HasRedmineKey(string userEmail)
@@ -66,7 +66,7 @@ namespace Minenetred.Web.Services.Implementations
             user.RedmineKey = encryptedKey;
             _context.Users.Update(user);
             _context.SaveChanges();
-            _logger.LogWarning("Updated redmine Key");
+            _logger.LogInformation("Updated redmine Key");
         }
 
         public string GetUserKey(string userEmail)

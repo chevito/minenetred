@@ -66,7 +66,7 @@ namespace Minenetred.Web.Services.Implementations
             var toReturn = await _timeEntryService.AddTimeEntryAsync(key, issueId, spentOn, hours, activityId, comments);
             if (toReturn == HttpStatusCode.OK)
             {
-                _logger.LogWarning("Added new time entry");
+                _logger.LogInformation("Added new time entry");
             }
             return toReturn;
         }

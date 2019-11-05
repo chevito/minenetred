@@ -10,7 +10,7 @@ namespace Minenetred.Web
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-               .WriteTo.File("Logs.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
+               .WriteTo.File("Logs.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
                .CreateLogger();
             try
             {

@@ -32,7 +32,7 @@ namespace Minenetred.Web
                   configuration.GetConnectionString("DefaultConnection"),
                   "LogEvents",
                   autoCreateSqlTable: true,
-                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning
+                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
                   )
               //.WriteTo.File("Errors.txt", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
               .CreateLogger();
