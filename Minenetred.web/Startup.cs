@@ -128,7 +128,7 @@ namespace Minenetred.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}"
+                    template: "{controller=Projects}/{action=GetProjectsAsync}"
                     );
             });
             app.UseSwagger();

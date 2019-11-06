@@ -37,7 +37,6 @@ namespace Minenetred.Web.Controllers
             _logger = logger;
         }
 
-        [Route("/")]
         [HttpGet]
         public async Task<ActionResult<List<ProjectDto>>> GetProjectsAsync()
         {
