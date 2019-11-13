@@ -149,7 +149,6 @@ namespace Minenetred.Web
                 {
                     ClientSettings.BaseAddress = user.Result.BaseUri;
                 }
-                
             }
         }
     }

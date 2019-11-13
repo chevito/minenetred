@@ -15,7 +15,6 @@ namespace Minenetred.Web.Controllers
         private readonly IUsersManagementService _userManagementService;
         private readonly ILogger<ApiKeyController> _logger;
 
-
         public ApiKeyController(
             IUsersManagementService usersManagementService,
             ILogger<ApiKeyController> logger)
@@ -88,7 +87,6 @@ namespace Minenetred.Web.Controllers
                     return RedirectToAction("KeySettingsAsync", new { msj = "Add a valid address" });
                 }
                 return RedirectToAction("GetProjectsAsync", "Projects");
-
             }
            catch (Exception ex)
             {
