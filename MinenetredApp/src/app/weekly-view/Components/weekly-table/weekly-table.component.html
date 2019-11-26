@@ -9,8 +9,12 @@
         <tr *ngFor="let element of projectList">
             <td>{{element.name}}</td>
             <td *ngFor="let hours of element.hoursPerday" class="td">
-                {{hours}}<button class="button-green" >Add time entry</button>
+                {{hours}} logged hours<br><br><button class="button-green" >Add time entry</button>
             </td>            
+        </tr>
+        <tr>
+            <td>Total hours:</td>
+            <td *ngFor = "let hours of hoursCounter">{{hours}} hours in the day</td>
         </tr>
     </tbody>
 </table>

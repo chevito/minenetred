@@ -224,7 +224,7 @@ table {
     } 
 }
 @mixin centerer {
-    position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -235,6 +235,6 @@ table {
 
   .button-green {
     @include button-var(#35ab4d);
-    @include centerer();
+    //@include centerer();
     color:  white;
   }

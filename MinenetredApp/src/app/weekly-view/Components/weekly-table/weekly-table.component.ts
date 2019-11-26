@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IProject } from './../../../Interfaces/ProjectInterface';
 import {TimeEntrtyService} from '../../../Services/TimeEntryService/time-entrty.service';
-import { formatDate } from '@angular/common';
+import { formatDate, formatPercent } from '@angular/common';
 
 @Component({
   selector: 'app-weekly-table',
@@ -15,6 +15,8 @@ export class WeeklyTableComponent implements OnInit {
   @Input() projectList: IProject[]; 
   @Input() tableHeaders: Array<string>; 
 
+  hoursCounter : Array<number>;
+
   ngOnInit() {
   }
   ngOnChanges(){
@@ -23,7 +25,7 @@ export class WeeklyTableComponent implements OnInit {
     }
   }
   private AddHoursToProjects(){
-    this.projectList.forEach(project => {
+    this.projectList.forEach((project, projectIndex) => {
       project.hoursPerday = new Array<number>();
       this.tableHeaders.forEach((element, index) => {
         let startingIndex = element.length - 10;
@@ -31,15 +33,24 @@ export class WeeklyTableComponent implements OnInit {
         this.timeEntryService.GetHoursPerProjectAndDay(formatedDate, project.id).subscribe(
           h => {
             project.hoursPerday[index]=h;
+          },
+          null,
+          ()=>{
+            if(projectIndex == this.projectList.length-1 && project.hoursPerday.length == this.tableHeaders.length){
+              this.GetHoursPerDay();
+            }
           }
         );
       });
-      console.log(project.hoursPerday);
     });
-
   }
-  GetHours(){
-
+  private GetHoursPerDay(){
+    this.hoursCounter = new Array<number>(0,0,0,0,0);
+    this.projectList.forEach((project) =>{
+      project.hoursPerday.forEach((element, index) =>{
+        this.hoursCounter[index] = this.hoursCounter[index] + element;
+      });
+    });
   }
 
 }
