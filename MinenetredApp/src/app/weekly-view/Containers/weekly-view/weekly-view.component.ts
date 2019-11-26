@@ -16,7 +16,7 @@ export class WeeklyViewComponent implements OnInit {
 
   ngOnInit() {
     this.projectService.GetOpenProjects().subscribe(
-      r => { 
+      r => {
         this.response = r ;
         }
     );
