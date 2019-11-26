@@ -11,7 +11,7 @@ export class TimeEntrtyService {
 
   GetHoursPerProjectAndDay(date : string, projectId : number) : Observable<number>{
     return this.httpClient.get<number>(
-      "https://localhost:44323/Entries/Hours/" + projectId + "?date=" + date,
+      'https://localhost:44323/Entries/Hours/' + projectId + '?date=' + date,
       { withCredentials: true });
   }
 }

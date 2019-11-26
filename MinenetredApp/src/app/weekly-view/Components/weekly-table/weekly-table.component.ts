@@ -12,8 +12,8 @@ export class WeeklyTableComponent implements OnInit {
 
   constructor(private timeEntryService : TimeEntrtyService) { }
 
-  @Input() projectList: IProject[]; 
-  @Input() tableHeaders: Array<string>; 
+  @Input() projectList: IProject[];
+  @Input() tableHeaders: Array<string>;
 
   hoursCounter : Array<number>;
 
@@ -28,15 +28,15 @@ export class WeeklyTableComponent implements OnInit {
     this.projectList.forEach((project, projectIndex) => {
       project.hoursPerday = new Array<number>();
       this.tableHeaders.forEach((element, index) => {
-        let startingIndex = element.length - 10;
-        let formatedDate = element.substring(startingIndex);
+        const startingIndex = element.length - 10;
+        const formatedDate = element.substring(startingIndex);
         this.timeEntryService.GetHoursPerProjectAndDay(formatedDate, project.id).subscribe(
           h => {
             project.hoursPerday[index]=h;
           },
           null,
           ()=>{
-            if(projectIndex == this.projectList.length-1 && project.hoursPerday.length == this.tableHeaders.length){
+            if(projectIndex === this.projectList.length-1 && project.hoursPerday.length === this.tableHeaders.length){
               this.GetHoursPerDay();
             }
           }

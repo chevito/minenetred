@@ -11,7 +11,7 @@ export class WeeklyViewComponent implements OnInit {
 
   constructor(private projectService: ProjectsService) { }
   response : IProject[];
-  formatedDates : Array<String>;
+  formatedDates : Array<string>;
   dates : Array<Date>;
 
   ngOnInit() {
@@ -22,37 +22,36 @@ export class WeeklyViewComponent implements OnInit {
     );
   }
   private GetDayOfTheWeek(date : Date) : string{
-    let days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     return days[date.getDay()];
   }
   private GetStringMonth(date : Date) : string{
-    let months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+    const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
     return months[date.getMonth()];
   }
-  
   BuildDatesArray(date:string){
     this.dates = new Array<Date>();
-    let FormatedDate = new Date(
-      Number.parseInt(date.substring(0,4)),
-      Number.parseInt(date.substring(5,7))-1 ,
-      Number.parseInt(date.substring(8))      
+    const FormatedDate = new Date(
+      Number.parseFloat(date.substring(0,4)),
+      Number.parseFloat(date.substring(5,7))-1 ,
+      Number.parseFloat(date.substring(8))      
     );
     for (let index = 0; index < 5; index++) {
-      let dateToAdd = new Date(FormatedDate);
+      const dateToAdd = new Date(FormatedDate);
       dateToAdd.setDate(dateToAdd.getDate()+index);
-      this.dates.push(dateToAdd);      
+      this.dates.push(dateToAdd);
     }
     this.BuildDatesFormated();
   }
 
   private BuildDatesFormated(){
-    this.formatedDates = new Array<String>();
+    this.formatedDates = new Array<string>();
     this.dates.forEach(element => {
-      let toAdd = "";
-      toAdd += this.GetDayOfTheWeek(element) + " ";
-      toAdd += element.getFullYear() + "-";
-      toAdd += this.GetStringMonth(element) + "-";
-      toAdd += element.getDate()< 10 ? "0" + element.getDate() : element.getDate();
+      let toAdd = '';
+      toAdd += this.GetDayOfTheWeek(element) + ' ';
+      toAdd += element.getFullYear() + '-';
+      toAdd += this.GetStringMonth(element) + '-';
+      toAdd += element.getDate()< 10 ? '0' + element.getDate() : element.getDate();
       this.formatedDates.push(toAdd);
     });
   }

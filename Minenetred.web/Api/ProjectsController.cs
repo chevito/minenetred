@@ -12,7 +12,6 @@ using Minenetred.Web.Services;
 
 namespace Minenetred.Web.Api
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class ProjectsController : ControllerBase

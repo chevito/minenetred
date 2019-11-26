@@ -221,7 +221,7 @@ table {
       }
       &:active {
         background-color: darken($color: $backGround, $amount: 20%);
-    } 
+    }
 }
 @mixin centerer {
     position: relative;

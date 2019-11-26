@@ -6,16 +6,15 @@ import { Component, OnInit, Output, EventEmitter} from '@angular/core';
   styleUrls: ['./date-picker.component.scss']
 })
 export class DatePickerComponent implements OnInit {
-
+  
+  date : string;
+  @Output()
+  outString : EventEmitter<string> = new EventEmitter<string>();
+  
   constructor() { }
 
   ngOnInit() {
   }
-  
-  date : string;
-
-  @Output()
-  outString : EventEmitter<string> = new EventEmitter<string>();
 
   changedDate(){
     this.outString.emit(this.date);
