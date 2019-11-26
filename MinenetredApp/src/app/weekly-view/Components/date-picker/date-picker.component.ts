@@ -10,12 +10,9 @@ export class DatePickerComponent implements OnInit {
   date : string;
   @Output()
   outString : EventEmitter<string> = new EventEmitter<string>();
-  
   constructor() { }
-
   ngOnInit() {
   }
-
   changedDate(){
     this.outString.emit(this.date);
   }

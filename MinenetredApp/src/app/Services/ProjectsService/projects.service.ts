@@ -13,7 +13,7 @@ export class ProjectsService {
 
   GetOpenProjects() : Observable<IProject[]>{
     return this.httpClient.get<IProject[]>(
-      "https://localhost:44323/api/Projects",
+      'https://localhost:44323/api/Projects',
       { withCredentials: true });
   }
 }

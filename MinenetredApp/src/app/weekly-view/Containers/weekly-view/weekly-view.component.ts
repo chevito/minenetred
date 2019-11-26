@@ -33,8 +33,8 @@ export class WeeklyViewComponent implements OnInit {
     this.dates = new Array<Date>();
     const FormatedDate = new Date(
       Number.parseFloat(date.substring(0,4)),
-      Number.parseFloat(date.substring(5,7))-1 ,
-      Number.parseFloat(date.substring(8))      
+      Number.parseFloat(date.substring(5,7))-1,
+      Number.parseFloat(date.substring(8))  
     );
     for (let index = 0; index < 5; index++) {
       const dateToAdd = new Date(FormatedDate);
