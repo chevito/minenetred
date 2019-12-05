@@ -14,6 +14,7 @@ namespace Minenetred.Web.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectsController : ControllerBase
     {
         private readonly IUsersManagementService _usersManagementService;
