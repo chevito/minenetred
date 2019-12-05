@@ -7,7 +7,7 @@ import { WeeklyViewModule } from './weekly-view/weekly-view.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
