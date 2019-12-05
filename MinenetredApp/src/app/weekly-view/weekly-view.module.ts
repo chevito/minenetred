@@ -15,7 +15,7 @@ import {RouterModule} from '@angular/router';
       WeeklyTableComponent,
       WeeklyViewComponent,
       DatePickerComponent,
-      NavigationComponent, 
+      NavigationComponent,
       UserSettingsComponent
     ],
   imports: [
