@@ -79,20 +79,5 @@ namespace Minenetred.Web.Api
             }
             return BadRequest();
         }
-        /* [HttpGet]
-         public ActionResult ValidateUserSettings()
-         {
-             try
-             {
-
-                 return Ok();
-             }
-             catch (Exception)
-             {
-
-                 throw;
-             }
-         }*/
-
     }
 }
