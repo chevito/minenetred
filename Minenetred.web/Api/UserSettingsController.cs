@@ -12,7 +12,6 @@ using Minenetred.Web.Services;
 
 namespace Minenetred.Web.Api
 {
-    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class UserSettingsController : ControllerBase
@@ -26,6 +25,9 @@ namespace Minenetred.Web.Api
             _usersManagementService = usersManagementService;
             _logger = logger;
         }
+        [Route("settings/baseAddress")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200)]
         [HttpPost]
         public async Task<IActionResult> updateBaseAddressAsync(string address)
         {
@@ -51,8 +53,11 @@ namespace Minenetred.Web.Api
                 return BadRequest();
             }
         }
+        [Route("settings/key/{Redminekey}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200)]
         [HttpPost]
-        public async Task<IActionResult> updateRedmineKeyAsync(string Redminekey)
+        public async Task<IActionResult> updateRedmineKeyAsync([FromRoute] string Redminekey)
         {
             try
             {
