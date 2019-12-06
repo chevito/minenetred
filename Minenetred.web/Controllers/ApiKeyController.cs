@@ -10,7 +10,6 @@ using Minenetred.Web.Services;
 
 namespace Minenetred.Web.Controllers
 {
-
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ApiKeyController : Controller
     {
