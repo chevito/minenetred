@@ -29,46 +29,56 @@ namespace Minenetred.Web.Api
         [ProducesResponseType(400)]
         [ProducesResponseType(200)]
         [HttpPost]
-        public async Task<IActionResult> updateBaseAddressAsync(string address)
+        public async Task<IActionResult> UpdateBaseAddressAsync(string address)
         {
             try
             {
                 if (string.IsNullOrEmpty(address))
                 {
-                    _logger.LogError(new ArgumentNullException(nameof(address)), "Empty address");
-                    return BadRequest();
+                    throw new ArgumentNullException(nameof(address));
                 }
                 _usersManagementService.updateBaseAddress(address, UserPrincipal.Current.EmailAddress);
                 if (!await _usersManagementService.IsValidBaseAddressAsync())
                 {
                     _usersManagementService.updateBaseAddress("", UserPrincipal.Current.EmailAddress);
-                    _logger.LogError(new InvalidCastException("Invalid base address"), "Invalid Base address");
-                    return BadRequest();
+                    throw new InvalidCastException("Invalid base address");
                 }
                 return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "Missing data");
+            }
+            catch (InvalidCastException)
+            {
+                _logger.LogError(new InvalidCastException("Invalid base address"), "Invalid Base address");
             }
             catch (Exception)
             {
                 _logger.LogError(new FormatException("Invalid address format"), "Invalid address format");
-                return BadRequest();
             }
+            return BadRequest();
         }
         [Route("settings/key/{Redminekey}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(200)]
         [HttpPost]
-        public async Task<IActionResult> updateRedmineKeyAsync([FromRoute] string Redminekey)
+        public async Task<IActionResult> UpdateRedmineKeyAsync([FromRoute] string Redminekey)
         {
             try
             {
                 if (string.IsNullOrEmpty(Redminekey))
                 {
-                    _logger.LogError(new ArgumentNullException(nameof(Redminekey)), "Missing key");
-                    return BadRequest();
+                    throw new ArgumentNullException((nameof(Redminekey)));
                 }
                 _usersManagementService.UpdateKey(Redminekey, UserPrincipal.Current.EmailAddress);
                 await _usersManagementService.AddRedmineIdAsync(Redminekey, UserPrincipal.Current.EmailAddress);
                 return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogError(ex, "Missing key");
+
             }
             catch (UnauthorizedAccessException ex)
             {
