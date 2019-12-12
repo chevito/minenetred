@@ -53,9 +53,9 @@ namespace Minenetred.Web.Api
             {
                 _logger.LogError(new InvalidCastException("Invalid base address"), "Invalid Base address");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.LogError(new FormatException("Invalid address format"), "Invalid address format");
+                _logger.LogCritical(ex, "Unhandled exception");
             }
             return BadRequest();
         }
