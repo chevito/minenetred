@@ -78,7 +78,6 @@ namespace Minenetred.Web.Api
             catch (ArgumentException ex)
             {
                 _logger.LogError(ex, "Missing key");
-
             }
             catch (UnauthorizedAccessException ex)
             {
